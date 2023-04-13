@@ -21,6 +21,7 @@ router
     controllerExceptionWrapper(userController.login)
   )
   .post("/logout", authUser, controllerExceptionWrapper(userController.logout))
+  .post("/refresh", controllerExceptionWrapper(userController.refreshUser))
   .get(
     "/getAllUser",
     authUser,

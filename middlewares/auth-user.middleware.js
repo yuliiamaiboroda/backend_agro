@@ -14,10 +14,13 @@ const authUser = async (req, res, next) => {
       throw createHttpException(RESPONSE_ERRORS.unauthorized);
     }
     try {
-      const { userId } = verifyToken(token);
+      const { userId, sessionKey } = verifyToken(token);
 
       const userInstanse = await UserModel.findById(userId);
       if (!userInstanse || !userInstanse.sessionKey) {
+        throw createHttpException(RESPONSE_ERRORS.unauthorized);
+      }
+      if (sessionKey !== userInstanse.sessionKey) {
         throw createHttpException(RESPONSE_ERRORS.unauthorized);
       }
       req.user = userInstanse;
