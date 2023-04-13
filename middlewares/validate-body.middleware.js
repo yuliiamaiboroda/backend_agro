@@ -1,10 +1,10 @@
-const { createHttpException } = require("../helpers");
+const { createHttpException } = require("../helpers/utils");
 
 const validateBody = (schema) => {
   const fn = (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
-      next(createHttpException(400, error.message));
+      next(createHttpException({ status: 400, message: error.message }));
     }
 
     next();
