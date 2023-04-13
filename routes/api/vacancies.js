@@ -2,7 +2,10 @@ const express = require("express");
 const router = express.Router();
 const vacancyController = require("../../controllers/vacancies");
 const { controllerExceptionWrapper } = require("../../helpers/utils");
-const { createVacancySchema } = require("../../helpers/schemas");
+const {
+  createVacancySchema,
+  changeVacancyCategotySchema,
+} = require("../../helpers/schemas");
 const { validateBody, authUser } = require("../../middlewares");
 
 router
@@ -12,6 +15,12 @@ router
     authUser,
     validateBody(createVacancySchema),
     controllerExceptionWrapper(vacancyController.createVacancy)
+  )
+  .patch(
+    "/category/:id",
+    authUser,
+    validateBody(changeVacancyCategotySchema),
+    controllerExceptionWrapper(vacancyController.changeVacancyCategoty)
   )
   .delete(
     "/:id",
