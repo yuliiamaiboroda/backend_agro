@@ -5,6 +5,10 @@ const RESPONSE_ERRORS = {
     status: 409,
     message: "Email in use",
   },
+  accessDenied: {
+    status: 403,
+    message: "Do not have access rights to the content",
+  },
 };
 
 module.exports = { RESPONSE_ERRORS };

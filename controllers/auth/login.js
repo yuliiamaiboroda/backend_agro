@@ -1,12 +1,11 @@
 const { UserModel } = require("../../models");
 const bcrypt = require("bcrypt");
-const { createHttpException } = require("../../helpers");
+const { createHttpException } = require("../../helpers/utils");
+const { RESPONSE_ERRORS } = require("../../helpers/constants");
 const { createAccessToken } = require("../../services/auth");
 const crypto = require("crypto");
 
 const login = async (req, res, next) => {
-  const unauthorizedMessage = "Invalid email or password";
-
   const { email, password } = req.body;
 
   const userInstanseOrNull = await UserModel.findOne({
@@ -14,7 +13,7 @@ const login = async (req, res, next) => {
   });
 
   if (userInstanseOrNull === null) {
-    throw createHttpException(401, unauthorizedMessage);
+    throw createHttpException(RESPONSE_ERRORS.unauthorized);
   }
 
   const isValidPassword = await bcrypt.compare(
@@ -23,7 +22,7 @@ const login = async (req, res, next) => {
   );
 
   if (!isValidPassword) {
-    throw createHttpException(401, unauthorizedMessage);
+    throw createHttpException(RESPONSE_ERRORS.unauthorized);
   }
 
   const sessionKey = crypto.randomUUID();
