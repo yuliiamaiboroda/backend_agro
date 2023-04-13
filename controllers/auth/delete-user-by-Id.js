@@ -1,5 +1,6 @@
 const { UserModel } = require("../../models");
-const { createHttpException } = require("../../helpers");
+const { createHttpException } = require("../../helpers/utils");
+const { RESPONSE_ERRORS } = require("../../helpers/constants");
 const mongoose = require("mongoose");
 
 const deleteUserById = async (req, res, next) => {
@@ -7,7 +8,7 @@ const deleteUserById = async (req, res, next) => {
   const { id } = req.params;
 
   if (role !== "admin") {
-    throw createHttpException(403, "do not have access rights to the content");
+    throw createHttpException(RESPONSE_ERRORS.accessDenied);
   }
   const idUser = { _id: mongoose.Types.ObjectId(id) };
 

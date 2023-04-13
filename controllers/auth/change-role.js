@@ -1,5 +1,6 @@
 const { UserModel } = require("../../models");
-const { createHttpException } = require("../../helpers");
+const { createHttpException } = require("../../helpers/utils");
+const { RESPONSE_ERRORS } = require("../../helpers/constants");
 const mongoose = require("mongoose");
 
 const changeRoleOfUserById = async (req, res, next) => {
@@ -8,7 +9,7 @@ const changeRoleOfUserById = async (req, res, next) => {
   const { role } = req.body;
 
   if (currentRole !== "admin") {
-    throw createHttpException(403, "do not have access rights to the content");
+    throw createHttpException(RESPONSE_ERRORS.accessDenied);
   }
   const idUser = { _id: mongoose.Types.ObjectId(id) };
 

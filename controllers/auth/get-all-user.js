@@ -1,11 +1,12 @@
 const { UserModel } = require("../../models");
-const { createHttpException } = require("../../helpers");
+const { createHttpException } = require("../../helpers/utils");
+const { RESPONSE_ERRORS } = require("../../helpers/constants");
 
 const getAllUser = async (req, res, next) => {
   const { role } = req.user;
 
   if (role !== "admin") {
-    throw createHttpException(403, "do not have access rights to the content");
+    throw createHttpException(RESPONSE_ERRORS.accessDenied);
   }
   const listAllUsers = await UserModel.find();
 

@@ -1,26 +1,24 @@
 const { UserModel } = require("../../models");
 const bcrypt = require("bcrypt");
-const { createHttpException } = require("../../helpers");
+const { createHttpException } = require("../../helpers/utils");
+const { RESPONSE_ERRORS } = require("../../helpers/constants");
 const { createAccessToken } = require("../../services/auth");
 
 const register = async (req, res, next) => {
-  const unauthorizedMessage = "User already exists";
-
-  // const { role: currentRole } = req.user;
-
   const { email, password, name, surname, role } = req.body;
+
+  const userWithEmail = await UserModel.findOne({ email });
+  if (userWithEmail) {
+    throw createHttpException(RESPONSE_ERRORS.emailUsed);
+  }
+
   const passwordHash = await bcrypt.hash(password, 10);
-
-  // if(currentRole==="admin"){
-
   const userInstance = await UserModel.create({
     email,
     passwordHash,
     name,
     surname,
     role,
-  }).catch(() => {
-    throw createHttpException(409, unauthorizedMessage);
   });
 
   const accessToken = createAccessToken({
@@ -37,8 +35,6 @@ const register = async (req, res, next) => {
     },
   });
 };
-
-// };
 
 module.exports = {
   register,
