@@ -7,6 +7,12 @@ const {
 const {
   createVacancySchema,
 } = require("./vacancy-schemas/create-vacancy.shema");
+const {
+  createProductSchema,
+} = require("./products-schemas/create-product.schema");
+const {
+  updateProductSchema,
+} = require("./products-schemas/update-product.schema");
 
 module.exports = {
   userLogInSchema,
@@ -14,4 +20,6 @@ module.exports = {
   userChangeRoleSchema,
   createVacancySchema,
   changeVacancyCategotySchema,
+  createProductSchema,
+  updateProductSchema,
 };
