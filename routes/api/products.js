@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { controllerExceptionWrapper } = require("../../helpers/utils");
+const { createProductSchema } = require("../../helpers/schemas");
 const {
   getAll,
   getCertain,
@@ -8,15 +9,29 @@ const {
   update,
   remove,
 } = require("../../controllers/products");
+const { authUser, validateBody } = require("../../middlewares");
 
 router.get("/all", controllerExceptionWrapper(getAll));
 
-router.get("/:productId", controllerExceptionWrapper(getCertain));
+router.get("/certain/:productId", controllerExceptionWrapper(getCertain));
 
-router.post("/", controllerExceptionWrapper(create));
+router.post(
+  "/certain",
+  authUser,
+  validateBody(createProductSchema),
+  controllerExceptionWrapper(create)
+);
 
-router.patch("/:productId", controllerExceptionWrapper(update));
+router.patch(
+  "/certain/:productId",
+  authUser,
+  controllerExceptionWrapper(update)
+);
 
-router.delete("/:productId", controllerExceptionWrapper(remove));
+router.delete(
+  "/certain/:productId",
+  authUser,
+  controllerExceptionWrapper(remove)
+);
 
 module.exports = router;
