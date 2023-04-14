@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const { controllerExceptionWrapper } = require("../../helpers/utils");
-const { createProductSchema } = require("../../helpers/schemas");
+const {
+  createProductSchema,
+  updateProductSchema,
+} = require("../../helpers/schemas");
 const {
   getAll,
   getCertain,
@@ -30,6 +33,7 @@ router.post(
 router.patch(
   "/certain/:productId",
   // authUser,
+  validateBody(updateProductSchema),
   controllerExceptionWrapper(update)
 );
 

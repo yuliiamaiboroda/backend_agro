@@ -10,6 +10,9 @@ const {
 const {
   createProductSchema,
 } = require("./products-schemas/create-product.schema");
+const {
+  updateProductSchema,
+} = require("./products-schemas/update-product.schema");
 
 module.exports = {
   userLogInSchema,
@@ -18,4 +21,5 @@ module.exports = {
   createVacancySchema,
   changeVacancyCategotySchema,
   createProductSchema,
+  updateProductSchema,
 };
