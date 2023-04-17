@@ -4,7 +4,7 @@ const { NOTICE_CATEGORIES } = require("../helpers/constants");
 const vacanciesSchema = mongoose.Schema({
   category: {
     type: String,
-    required: [true, "Set name for contact"],
+    required: [true, "Set category for vacancy"],
     enum: Object.values(NOTICE_CATEGORIES),
   },
   title: {
