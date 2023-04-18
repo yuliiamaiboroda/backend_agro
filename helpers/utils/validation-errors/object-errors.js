@@ -20,6 +20,14 @@ class ObjectErrors extends ValidationErrors {
     this.messages["object.unknown"] = "Additional fields are present";
     return this;
   }
+
+  min(number) {
+    if (!this.fieldName) {
+      return this;
+    }
+    this.messages["object.min"] = `${this.fieldName} must have at least 1 key`;
+    return this;
+  }
 }
 
 module.exports = { ObjectErrors };

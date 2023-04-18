@@ -11,7 +11,7 @@ const getCertain = async (req, res) => {
     throw createHttpException(RESPONSE_ERRORS.notFound);
   }
 
-  res.status(200).json({ message: "Get certain success" });
+  res.status(200).json(product);
 };
 
 module.exports = { getCertain };

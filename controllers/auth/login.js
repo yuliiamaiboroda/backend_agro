@@ -2,7 +2,10 @@ const { UserModel } = require("../../models");
 const bcrypt = require("bcrypt");
 const { createHttpException } = require("../../helpers/utils");
 const { RESPONSE_ERRORS } = require("../../helpers/constants");
-const { createAccessToken } = require("../../services/auth");
+const {
+  createAccessToken,
+  createRefreshToken,
+} = require("../../services/auth");
 const crypto = require("crypto");
 
 const login = async (req, res, next) => {
@@ -37,9 +40,13 @@ const login = async (req, res, next) => {
     userId: userInstanseOrNull._id.toString(),
     sessionKey,
   });
+  const refreshToken = createRefreshToken({
+    userId: userInstanseOrNull._id.toString(),
+  });
 
   res.status(200).json({
-    token: accessToken,
+    accessToken,
+    refreshToken,
     user: {
       email: userInstanseOrNull.email,
       name: userInstanseOrNull.name,
