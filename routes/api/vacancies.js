@@ -10,6 +10,10 @@ const { validateBody, authUser } = require("../../middlewares");
 
 router
   .get("/all", controllerExceptionWrapper(vacancyController.getAllVacancies))
+  .get(
+    "/actual",
+    controllerExceptionWrapper(vacancyController.getActualVacancies)
+  )
   .post(
     "/create",
     authUser,
