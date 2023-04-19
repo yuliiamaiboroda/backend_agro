@@ -5,6 +5,7 @@ const {
   createProductSchema,
   updateProductSchema,
 } = require("../../helpers/schemas");
+const { ROLES_LIST } = require("../../helpers/constants");
 const {
   getAll,
   getCertain,
@@ -16,15 +17,22 @@ const {
   authUser,
   validateBody,
   productUploader,
+  checkAccessRight,
+  validateObjectId,
 } = require("../../middlewares");
 
 router.get("/all", controllerExceptionWrapper(getAll));
 
-router.get("/certain/:productId", controllerExceptionWrapper(getCertain));
+router.get(
+  "/certain/:productId",
+  validateObjectId,
+  controllerExceptionWrapper(getCertain)
+);
 
 router.post(
   "/certain",
   authUser,
+  checkAccessRight(ROLES_LIST.productsManager),
   productUploader.single("image"),
   validateBody(createProductSchema),
   controllerExceptionWrapper(create)
@@ -33,6 +41,8 @@ router.post(
 router.patch(
   "/certain/:productId",
   authUser,
+  checkAccessRight(ROLES_LIST.productsManager),
+  validateObjectId,
   productUploader.single("image"),
   validateBody(updateProductSchema),
   controllerExceptionWrapper(update)
@@ -41,6 +51,8 @@ router.patch(
 router.delete(
   "/certain/:productId",
   authUser,
+  checkAccessRight(ROLES_LIST.productsManager),
+  validateObjectId,
   controllerExceptionWrapper(remove)
 );
 
