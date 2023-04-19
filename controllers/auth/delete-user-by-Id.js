@@ -1,7 +1,6 @@
 const { UserModel } = require("../../models");
 const { createHttpException } = require("../../helpers/utils");
 const { RESPONSE_ERRORS } = require("../../helpers/constants");
-const mongoose = require("mongoose");
 
 const deleteUserById = async (req, res, next) => {
   const { role } = req.user;
@@ -10,9 +9,14 @@ const deleteUserById = async (req, res, next) => {
   if (role !== "admin") {
     throw createHttpException(RESPONSE_ERRORS.accessDenied);
   }
-  const idUser = { _id: mongoose.Types.ObjectId(id) };
 
-  await UserModel.findByIdAndRemove(idUser);
+  const user = await UserModel.findById(id);
+
+  if (!user || !id) {
+    throw createHttpException(RESPONSE_ERRORS.notFound);
+  }
+
+  await UserModel.findByIdAndRemove(id);
   res.status(204).send();
 };
 

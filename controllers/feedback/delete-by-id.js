@@ -9,12 +9,14 @@ const deleteById = async (req, res, next) => {
   if (role !== "admin") {
     throw createHttpException(RESPONSE_ERRORS.accessDenied);
   }
-  if (!id) {
+
+  const feedback = await FeedbackModel.findById(id);
+
+  if (!feedback || !id) {
     throw createHttpException(RESPONSE_ERRORS.notFound);
   }
 
   await FeedbackModel.findByIdAndRemove(id);
-
   res.status(204).send();
 };
 

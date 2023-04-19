@@ -10,6 +10,12 @@ const deleteVacancyById = async (req, res, next) => {
     throw createHttpException(RESPONSE_ERRORS.accessDenied);
   }
 
+  const vacancy = await VacancyModel.findById(id);
+
+  if (!vacancy || !id) {
+    throw createHttpException(RESPONSE_ERRORS.notFound);
+  }
+
   await VacancyModel.findByIdAndRemove(id);
   res.status(204).send();
 };
