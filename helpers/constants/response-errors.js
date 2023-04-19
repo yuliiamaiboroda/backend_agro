@@ -9,6 +9,7 @@ const RESPONSE_ERRORS = {
     status: 403,
     message: "Do not have access rights to the content",
   },
+  imageRequired: { status: 400, message: "Image required" },
 };
 
 module.exports = { RESPONSE_ERRORS };

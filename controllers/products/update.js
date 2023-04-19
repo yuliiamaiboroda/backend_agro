@@ -1,13 +1,13 @@
 const { ProductsModel } = require("../../models");
 
 const update = async (req, res) => {
-  const { title, imageURL, description } = req.body;
+  const { title, description } = req.body;
   const { productId } = req.params;
   const updatedProduct = await ProductsModel.findByIdAndUpdate(
     productId,
     {
       title,
-      imageURL,
+      imageURL: req.file?.path,
       description,
     },
     { returnDocument: "after", runValidators: true }

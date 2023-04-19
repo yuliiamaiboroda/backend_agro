@@ -6,7 +6,6 @@ const updateProductSchema = Joi.object({
     .min(2)
     .max(32)
     .messages(new FieldErrors("title").string().min(2).max(32).get()),
-  imageURL: Joi.string().messages(new FieldErrors("imageURL").string().get()),
   description: Joi.string()
     .min(2)
     .max(2000)
