@@ -13,6 +13,9 @@ const {
 const {
   updateProductSchema,
 } = require("./products-schemas/update-product.schema");
+const {
+  sendFeedBackSchema,
+} = require("./feedback-schemas/send-feedback.schema");
 
 module.exports = {
   userLogInSchema,
@@ -22,4 +25,5 @@ module.exports = {
   changeVacancyCategotySchema,
   createProductSchema,
   updateProductSchema,
+  sendFeedBackSchema,
 };
