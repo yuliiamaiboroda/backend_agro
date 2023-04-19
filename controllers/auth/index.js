@@ -3,6 +3,7 @@ const { deleteUserById } = require("./delete-user-by-Id");
 const { getAllUser } = require("./get-all-user");
 const { login } = require("./login");
 const { logout } = require("./logout");
+const { refreshUser } = require("./refresh-user");
 const { register } = require("./register");
 
 module.exports = {
@@ -12,4 +13,5 @@ module.exports = {
   getAllUser,
   deleteUserById,
   changeRoleOfUserById,
+  refreshUser,
 };
