@@ -1,12 +1,11 @@
 const { ProductsModel } = require("../../models");
-const { createHttpException } = require("../../helpers/utils");
-const { RESPONSE_ERRORS } = require("../../helpers/constants");
+const { NotFoundError } = require("../../helpers/utils");
 
 const getCertain = async (req, res) => {
   const { productId } = req.params;
   const product = await ProductsModel.findById(productId);
   if (!product) {
-    throw createHttpException(RESPONSE_ERRORS.notFound);
+    throw new NotFoundError();
   }
 
   res.status(200).json(product);

@@ -1,13 +1,12 @@
 const { VacancyModel } = require("../../models");
-const { createHttpException } = require("../../helpers/utils");
-const { RESPONSE_ERRORS } = require("../../helpers/constants");
+const { AccessDeniedError } = require("../../helpers/utils");
 
 const changeVacancyCategoty = async (req, res, next) => {
   const { role } = req.user;
   const { id } = req.params;
   const { category } = req.body;
   if (role !== "admin" && role !== "applyManager") {
-    throw createHttpException(RESPONSE_ERRORS.accessDenied);
+    throw new AccessDeniedError();
   }
   await VacancyModel.findByIdAndUpdate(id, { category });
 
