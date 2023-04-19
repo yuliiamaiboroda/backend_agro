@@ -1,6 +1,5 @@
 const { UserModel } = require("../../models");
-const { createHttpException } = require("../../helpers/utils");
-const { RESPONSE_ERRORS } = require("../../helpers/constants");
+const { AccessDeniedError, NotFoundError } = require("../../helpers/utils");
 
 const changeRoleOfUserById = async (req, res, next) => {
   const { role: currentRole } = req.user;
@@ -8,13 +7,13 @@ const changeRoleOfUserById = async (req, res, next) => {
   const { role } = req.body;
 
   if (currentRole !== "admin") {
-    throw createHttpException(RESPONSE_ERRORS.accessDenied);
+    throw new AccessDeniedError();
   }
 
   const oldUser = await UserModel.findById(id);
 
   if (!oldUser) {
-    throw createHttpException(RESPONSE_ERRORS.notFound);
+    throw new NotFoundError();
   }
 
   await UserModel.findOneAndUpdate(id, { role });

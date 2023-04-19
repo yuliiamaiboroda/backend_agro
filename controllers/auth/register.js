@@ -1,7 +1,6 @@
 const { UserModel } = require("../../models");
 const bcrypt = require("bcrypt");
-const { createHttpException } = require("../../helpers/utils");
-const { RESPONSE_ERRORS } = require("../../helpers/constants");
+const { EmailUsedError } = require("../../helpers/utils");
 const {
   createAccessToken,
   createRefreshToken,
@@ -13,7 +12,7 @@ const register = async (req, res, next) => {
 
   const userWithEmail = await UserModel.findOne({ email });
   if (userWithEmail) {
-    throw createHttpException(RESPONSE_ERRORS.emailUsed);
+    throw new EmailUsedError();
   }
   const sessionKey = crypto.randomUUID();
 

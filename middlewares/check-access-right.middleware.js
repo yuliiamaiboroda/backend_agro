@@ -1,5 +1,5 @@
-const { createHttpException } = require("../helpers/utils");
-const { RESPONSE_ERRORS, ROLES_LIST } = require("../helpers/constants");
+const { AccessDeniedError } = require("../helpers/utils");
+const { ROLES_LIST } = require("../helpers/constants");
 
 const checkAccessRight =
   (...userRoles) =>
@@ -7,7 +7,7 @@ const checkAccessRight =
     try {
       const { role } = req.user;
       if (role !== ROLES_LIST.admin && !userRoles.includes(role)) {
-        throw createHttpException(RESPONSE_ERRORS.accessDenied);
+        throw new AccessDeniedError();
       }
       next();
     } catch (error) {

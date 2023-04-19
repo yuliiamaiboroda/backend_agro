@@ -1,12 +1,11 @@
 const { FeedbackModel } = require("../../models");
-const { RESPONSE_ERRORS } = require("../../helpers/constants");
-const { createHttpException } = require("../../helpers/utils");
+const { AccessDeniedError } = require("../../helpers/utils");
 
 const getListOfFeedBack = async (req, res, next) => {
   const { role } = req.user;
 
   if (role !== "admin") {
-    throw createHttpException(RESPONSE_ERRORS.accessDenied);
+    throw new AccessDeniedError();
   }
   const listAllFeddBack = await FeedbackModel.find();
 

@@ -1,7 +1,6 @@
 const {
   controllerExceptionWrapper,
 } = require("./controller-exception-wrapper");
-const { createHttpException } = require("./create-http-exception");
 const { FieldErrors } = require("./validation-errors");
 const {
   UnauthorizedError,
@@ -14,7 +13,6 @@ const {
 
 module.exports = {
   controllerExceptionWrapper,
-  createHttpException,
   FieldErrors,
   UnauthorizedError,
   NotFoundError,

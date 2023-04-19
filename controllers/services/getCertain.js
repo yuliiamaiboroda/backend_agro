@@ -1,19 +1,18 @@
 const { ServicesModel } = require("../../models");
-const { createHttpException } = require("../../helpers/utils");
-const { RESPONSE_ERRORS } = require("../../helpers/constants");
+const { AccessDeniedError, NotFoundError } = require("../../helpers/utils");
 
 const getCertain = async (req, res, next) => {
   const { role } = req.user;
   const { serviceId } = req.params;
 
   if (role !== "admin") {
-    throw createHttpException(RESPONSE_ERRORS.accessDenied);
+    throw new AccessDeniedError();
   }
 
   const certainService = await ServicesModel.findById(serviceId);
   console.log("certainService: ", certainService);
   if (!certainService) {
-    throw createHttpException(RESPONSE_ERRORS.notFound);
+    throw new NotFoundError();
   }
 
   res.status(200).json(certainService);

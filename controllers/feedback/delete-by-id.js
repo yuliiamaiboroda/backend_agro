@@ -1,19 +1,18 @@
 const { FeedbackModel } = require("../../models");
-const { createHttpException } = require("../../helpers/utils");
-const { RESPONSE_ERRORS } = require("../../helpers/constants");
+const { AccessDeniedError, NotFoundError } = require("../../helpers/utils");
 
 const deleteById = async (req, res, next) => {
   const { role } = req.user;
   const { id } = req.params;
 
   if (role !== "admin") {
-    throw createHttpException(RESPONSE_ERRORS.accessDenied);
+    throw new AccessDeniedError();
   }
 
   const feedback = await FeedbackModel.findById(id);
 
   if (!feedback || !id) {
-    throw createHttpException(RESPONSE_ERRORS.notFound);
+    throw new NotFoundError();
   }
 
   await FeedbackModel.findByIdAndRemove(id);
