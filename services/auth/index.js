@@ -7,12 +7,14 @@ const {
 } = process.env;
 
 const createAccessToken = (payload) =>
-  jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRATION });
+  jwt.sign(payload, JWT_SECRET, { expiresIn: Number(JWT_EXPIRATION) });
 
 const verifyToken = (token) => jwt.verify(token, JWT_SECRET);
 
 const createRefreshToken = (payload) =>
-  jwt.sign(payload, JWT_SECRET_REFRESH, { expiresIn: JWT_REFRESH_EXPIRATION });
+  jwt.sign(payload, JWT_SECRET_REFRESH, {
+    expiresIn: Number(JWT_REFRESH_EXPIRATION),
+  });
 
 const verifyRefreshToken = (token) => jwt.verify(token, JWT_SECRET_REFRESH);
 

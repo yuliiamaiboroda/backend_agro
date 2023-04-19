@@ -13,11 +13,10 @@ const {
   remove,
 } = require("../../controllers/products");
 const {
-  // authUser,
+  authUser,
   validateBody,
+  productUploader,
 } = require("../../middlewares");
-
-// TODO:  add authorization to routes
 
 router.get("/all", controllerExceptionWrapper(getAll));
 
@@ -25,21 +24,23 @@ router.get("/certain/:productId", controllerExceptionWrapper(getCertain));
 
 router.post(
   "/certain",
-  // authUser,
+  authUser,
+  productUploader.single("image"),
   validateBody(createProductSchema),
   controllerExceptionWrapper(create)
 );
 
 router.patch(
   "/certain/:productId",
-  // authUser,
+  authUser,
+  productUploader.single("image"),
   validateBody(updateProductSchema),
   controllerExceptionWrapper(update)
 );
 
 router.delete(
   "/certain/:productId",
-  // authUser,
+  authUser,
   controllerExceptionWrapper(remove)
 );
 
