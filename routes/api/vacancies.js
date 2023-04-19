@@ -14,6 +14,7 @@ router
     "/actual",
     controllerExceptionWrapper(vacancyController.getActualVacancies)
   )
+  .get("/:id", controllerExceptionWrapper(vacancyController.getCertain))
   .post(
     "/create",
     authUser,

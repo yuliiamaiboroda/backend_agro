@@ -9,11 +9,12 @@ const getCertainFeedback = async (req, res, next) => {
   if (role !== "admin") {
     throw createHttpException(RESPONSE_ERRORS.accessDenied);
   }
-  if (!id) {
-    throw createHttpException(RESPONSE_ERRORS.notFound);
-  }
 
   const certainFeedback = await FeedbackModel.findById(id);
+
+  if (!id || !certainFeedback) {
+    throw createHttpException(RESPONSE_ERRORS.notFound);
+  }
 
   res.status(200).json(certainFeedback);
 };
