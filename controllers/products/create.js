@@ -1,11 +1,10 @@
 const { ProductsModel } = require("../../models");
-const { createHttpException } = require("../../helpers/utils");
-const { RESPONSE_ERRORS } = require("../../helpers/constants");
+const { ImageRequiredError } = require("../../helpers/utils");
 
 const create = async (req, res) => {
   const { title, description } = req.body;
   if (!req.file) {
-    throw createHttpException(RESPONSE_ERRORS.imageRequired);
+    throw new ImageRequiredError();
   }
   const { path } = req.file;
   const product = await ProductsModel.create({
