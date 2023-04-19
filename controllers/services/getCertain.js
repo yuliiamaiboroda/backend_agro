@@ -4,18 +4,19 @@ const { RESPONSE_ERRORS } = require("../../helpers/constants");
 
 const getCertain = async (req, res, next) => {
   const { role } = req.user;
-  const { _id } = req.params;
+  const { serviceId } = req.params;
 
   if (role !== "admin") {
     throw createHttpException(RESPONSE_ERRORS.accessDenied);
   }
 
-  const certainService = await ServicesModel.findById(_id);
+  const certainService = await ServicesModel.findById(serviceId);
+  console.log("certainService: ", certainService);
   if (!certainService) {
     throw createHttpException(RESPONSE_ERRORS.notFound);
   }
 
-  res.status(201).json({ message: "Get certain service was success" });
+  res.status(200).json(certainService);
 };
 
 module.exports = {
