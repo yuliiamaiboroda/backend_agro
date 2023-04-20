@@ -26,13 +26,13 @@ router
     controllerExceptionWrapper(getCertain)
   )
   .delete(
-    "/:serviceId/delete",
+    "/:serviceId",
     authUser,
     checkAccessRight(ROLES_LIST.servicesManager),
     controllerExceptionWrapper(remove)
   )
   .patch(
-    "/:serviceId/update",
+    "/:serviceId",
     authUser,
     checkAccessRight(ROLES_LIST.servicesManager),
     controllerExceptionWrapper(update)
