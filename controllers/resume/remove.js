@@ -1,13 +1,14 @@
-const { ProductsModel } = require("../../models");
+const { ResumeModel } = require("../../models");
 const { NotFoundError } = require("../../helpers/utils");
 
 const remove = async (req, res) => {
-  const { productId } = req.params;
-  const product = await ProductsModel.findByIdAndDelete(productId);
+  const { resumeId } = req.params;
+  const resume = await ResumeModel.findByIdAndDelete(resumeId);
 
-  if (!product) {
+  if (!resume) {
     throw new NotFoundError();
   }
+
   res.status(204).send();
 };
 
