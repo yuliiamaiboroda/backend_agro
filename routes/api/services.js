@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { controllerExceptionWrapper } = require("../../helpers/utils");
-const { authUser } = require("../../middlewares");
-
+const { authUser, checkAccessRight } = require("../../middlewares");
 const {
   getAll,
   create,
@@ -10,12 +9,33 @@ const {
   remove,
   update,
 } = require("../../controllers/services");
+const { ROLES_LIST } = require("../../helpers/constants");
 
 router
   .get("/getAll", controllerExceptionWrapper(getAll))
-  .post("/create", authUser, controllerExceptionWrapper(create))
-  .get("/:serviceId", authUser, controllerExceptionWrapper(getCertain))
-  .delete("/:serviceId/delete", authUser, controllerExceptionWrapper(remove))
-  .patch("/:serviceId/update", authUser, controllerExceptionWrapper(update));
+  .post(
+    "/create",
+    authUser,
+    checkAccessRight(ROLES_LIST.servicesManager),
+    controllerExceptionWrapper(create)
+  )
+  .get(
+    "/:serviceId",
+    authUser,
+    checkAccessRight(ROLES_LIST.servicesManager),
+    controllerExceptionWrapper(getCertain)
+  )
+  .delete(
+    "/:serviceId/delete",
+    authUser,
+    checkAccessRight(ROLES_LIST.servicesManager),
+    controllerExceptionWrapper(remove)
+  )
+  .patch(
+    "/:serviceId/update",
+    authUser,
+    checkAccessRight(ROLES_LIST.servicesManager),
+    controllerExceptionWrapper(update)
+  );
 
 module.exports = router;
