@@ -1,10 +1,11 @@
 const { ServicesModel } = require("../../models");
 
-const create = async (req, res, next) => {
+const update = async (req, res, next) => {
+  const { serviceId } = req.params;
   const { title, description, image, price, contactMail, contactPhone } =
     req.body;
 
-  const result = await ServicesModel.create({
+  await ServicesModel.findByIdAndUpdate(serviceId, {
     title,
     description,
     image,
@@ -12,10 +13,9 @@ const create = async (req, res, next) => {
     contactMail,
     contactPhone,
   });
-
-  res.status(201).json(result);
+  res.status(200).send();
 };
 
 module.exports = {
-  create,
+  update,
 };
