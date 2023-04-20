@@ -9,7 +9,11 @@ const {
   AccessDeniedError,
   ImageRequiredError,
   ValidationError,
+  CloudinaryFailedError,
 } = require("./http-exceptions");
+const {
+  removeCloudinaryFileByURL,
+} = require("./remove-cloudinary-file-by-url");
 
 module.exports = {
   controllerExceptionWrapper,
@@ -20,4 +24,6 @@ module.exports = {
   AccessDeniedError,
   ImageRequiredError,
   ValidationError,
+  CloudinaryFailedError,
+  removeCloudinaryFileByURL,
 };
