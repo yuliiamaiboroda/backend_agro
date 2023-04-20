@@ -16,6 +16,7 @@ const {
 const {
   sendFeedBackSchema,
 } = require("./feedback-schemas/send-feedback.schema");
+const { createResumeShema } = require("./resume-schemas/create-resume.schema");
 
 module.exports = {
   userLogInSchema,
@@ -26,4 +27,5 @@ module.exports = {
   createProductSchema,
   updateProductSchema,
   sendFeedBackSchema,
+  createResumeShema,
 };
