@@ -6,7 +6,7 @@ const getCertainFeedback = async (req, res, next) => {
 
   const certainFeedback = await FeedbackModel.findById(id);
 
-  if (!id || !certainFeedback) {
+  if (!certainFeedback) {
     throw new NotFoundError();
   }
 

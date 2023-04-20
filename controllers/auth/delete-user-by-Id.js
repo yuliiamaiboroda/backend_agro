@@ -6,7 +6,7 @@ const deleteUserById = async (req, res, next) => {
 
   const user = await UserModel.findById(id);
 
-  if (!user || !id) {
+  if (!user) {
     throw new NotFoundError();
   }
 

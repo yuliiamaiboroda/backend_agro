@@ -7,7 +7,7 @@ const getCertain = async (req, res, next) => {
 
   const vacancy = await VacancyModel.findById(id);
 
-  if (!vacancy || !id) {
+  if (!vacancy) {
     throw createHttpException(RESPONSE_ERRORS.notFound);
   }
 

@@ -6,6 +6,7 @@ const {
   validateBody,
   authUser,
   checkAccessRight,
+  validateObjectId,
 } = require("../../middlewares");
 const {
   userRegisterSchema,
@@ -38,6 +39,7 @@ router
     "/:id",
     authUser,
     checkAccessRight(),
+    validateObjectId,
     controllerExceptionWrapper(userController.deleteUserById)
   )
   .patch(
@@ -45,6 +47,7 @@ router
     authUser,
     checkAccessRight(),
     validateBody(userChangeRoleSchema),
+    validateObjectId,
     controllerExceptionWrapper(userController.changeRoleOfUserById)
   );
 

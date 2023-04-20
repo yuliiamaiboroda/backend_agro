@@ -10,6 +10,7 @@ const {
   validateBody,
   authUser,
   checkAccessRight,
+  validateObjectId,
 } = require("../../middlewares");
 const { ROLES_LIST } = require("../../helpers/constants");
 
@@ -19,7 +20,11 @@ router
     "/actual",
     controllerExceptionWrapper(vacancyController.getActualVacancies)
   )
-  .get("/:id", controllerExceptionWrapper(vacancyController.getCertain))
+  .get(
+    "/:id",
+    validateObjectId,
+    controllerExceptionWrapper(vacancyController.getCertain)
+  )
   .post(
     "/create",
     authUser,
@@ -31,6 +36,7 @@ router
     "/category/:id",
     authUser,
     checkAccessRight(ROLES_LIST.applyManager),
+    validateObjectId,
     validateBody(changeVacancyCategotySchema),
     controllerExceptionWrapper(vacancyController.changeVacancyCategoty)
   )
@@ -38,6 +44,7 @@ router
     "/:id",
     authUser,
     checkAccessRight(ROLES_LIST.applyManager),
+    validateObjectId,
     controllerExceptionWrapper(vacancyController.deleteVacancyById)
   );
 

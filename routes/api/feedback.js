@@ -5,6 +5,7 @@ const {
   validateBody,
   authUser,
   checkAccessRight,
+  validateObjectId,
 } = require("../../middlewares");
 const { sendFeedBackSchema } = require("../../helpers/schemas");
 const feedbackController = require("../../controllers/feedback");
@@ -25,12 +26,14 @@ router
     "/:id",
     authUser,
     checkAccessRight(),
+    validateObjectId,
     controllerExceptionWrapper(feedbackController.getCertainFeedback)
   )
   .delete(
     "/:id",
     authUser,
     checkAccessRight(),
+    validateObjectId,
     controllerExceptionWrapper(feedbackController.deleteById)
   );
 
