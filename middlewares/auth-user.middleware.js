@@ -1,5 +1,4 @@
-const { createHttpException } = require("../helpers/utils/");
-const { RESPONSE_ERRORS } = require("../helpers/constants");
+const { UnauthorizedError } = require("../helpers/utils/");
 const { UserModel } = require("../models");
 const { verifyToken } = require("../services/auth");
 
@@ -7,26 +6,26 @@ const authUser = async (req, res, next) => {
   try {
     const { authorization } = req.headers;
     if (!authorization) {
-      throw createHttpException(RESPONSE_ERRORS.unauthorized);
+      throw new UnauthorizedError();
     }
     const [bearer, token] = authorization.split(" ");
     if (bearer !== "Bearer" || !token) {
-      throw createHttpException(RESPONSE_ERRORS.unauthorized);
+      throw new UnauthorizedError();
     }
     try {
       const { userId, sessionKey } = verifyToken(token);
 
       const userInstanse = await UserModel.findById(userId);
       if (!userInstanse || !userInstanse.sessionKey) {
-        throw createHttpException(RESPONSE_ERRORS.unauthorized);
+        throw new UnauthorizedError();
       }
       if (sessionKey !== userInstanse.sessionKey) {
-        throw createHttpException(RESPONSE_ERRORS.unauthorized);
+        throw new UnauthorizedError();
       }
       req.user = userInstanse;
       next();
     } catch (error) {
-      throw createHttpException(RESPONSE_ERRORS.unauthorized);
+      throw new UnauthorizedError();
     }
   } catch (error) {
     next(error);

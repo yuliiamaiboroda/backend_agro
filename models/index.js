@@ -1,5 +1,5 @@
 const { AwardsModel } = require("./awards-model");
-const { ContactsModel } = require("./contacts-model");
+const { FeedbackModel } = require("./feedback-model");
 const { ProductsModel } = require("./products-model");
 const { ServicesModel } = require("./services-model");
 const { UserModel } = require("./user-model");
@@ -11,5 +11,5 @@ module.exports = {
   AwardsModel,
   ProductsModel,
   ServicesModel,
-  ContactsModel,
+  FeedbackModel,
 };

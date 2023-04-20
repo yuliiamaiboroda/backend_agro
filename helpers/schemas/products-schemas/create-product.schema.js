@@ -9,9 +9,6 @@ const createProductSchema = Joi.object({
     .messages(
       new FieldErrors("title").string().min(2).max(32).required().get()
     ),
-  imageURL: Joi.string()
-    .required()
-    .messages(new FieldErrors("imageURL").string().required().get()),
   description: Joi.string()
     .min(2)
     .max(2000)
