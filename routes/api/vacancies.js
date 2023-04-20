@@ -6,7 +6,12 @@ const {
   createVacancySchema,
   changeVacancyCategotySchema,
 } = require("../../helpers/schemas");
-const { validateBody, authUser } = require("../../middlewares");
+const {
+  validateBody,
+  authUser,
+  checkAccessRight,
+} = require("../../middlewares");
+const { ROLES_LIST } = require("../../helpers/constants");
 
 router
   .get("/all", controllerExceptionWrapper(vacancyController.getAllVacancies))
@@ -18,18 +23,21 @@ router
   .post(
     "/create",
     authUser,
+    checkAccessRight(ROLES_LIST.applyManager),
     validateBody(createVacancySchema),
     controllerExceptionWrapper(vacancyController.createVacancy)
   )
   .patch(
     "/category/:id",
     authUser,
+    checkAccessRight(ROLES_LIST.applyManager),
     validateBody(changeVacancyCategotySchema),
     controllerExceptionWrapper(vacancyController.changeVacancyCategoty)
   )
   .delete(
     "/:id",
     authUser,
+    checkAccessRight(ROLES_LIST.applyManager),
     controllerExceptionWrapper(vacancyController.deleteVacancyById)
   );
 

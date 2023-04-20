@@ -2,12 +2,7 @@ const { UserModel } = require("../../models");
 const { AccessDeniedError, NotFoundError } = require("../../helpers/utils");
 
 const deleteUserById = async (req, res, next) => {
-  const { role } = req.user;
   const { id } = req.params;
-
-  if (role !== "admin") {
-    throw new AccessDeniedError();
-  }
 
   const user = await UserModel.findById(id);
 

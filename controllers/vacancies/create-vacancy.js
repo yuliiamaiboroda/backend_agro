@@ -1,8 +1,6 @@
 const { VacancyModel } = require("../../models");
-const { AccessDeniedError } = require("../../helpers/utils");
 
 const createVacancy = async (req, res, next) => {
-  const { role } = req.user;
   const {
     category,
     title,
@@ -14,10 +12,6 @@ const createVacancy = async (req, res, next) => {
     workExperienceRequired,
     location,
   } = req.body;
-
-  if (role !== "admin" && role !== "applyManager") {
-    throw new AccessDeniedError();
-  }
 
   const result = await VacancyModel.create({
     category,

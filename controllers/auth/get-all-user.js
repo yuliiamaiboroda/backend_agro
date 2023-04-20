@@ -1,12 +1,6 @@
 const { UserModel } = require("../../models");
-const { AccessDeniedError } = require("../../helpers/utils");
 
 const getAllUser = async (req, res, next) => {
-  const { role } = req.user;
-
-  if (role !== "admin") {
-    throw new AccessDeniedError();
-  }
   const listAllUsers = await UserModel.find();
 
   const accessedDataList = listAllUsers.map(

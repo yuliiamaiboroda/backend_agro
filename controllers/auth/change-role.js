@@ -2,13 +2,9 @@ const { UserModel } = require("../../models");
 const { AccessDeniedError, NotFoundError } = require("../../helpers/utils");
 
 const changeRoleOfUserById = async (req, res, next) => {
-  const { role: currentRole } = req.user;
-  const { id } = req.params;
-  const { role } = req.body;
+  const { role } = req.user;
 
-  if (currentRole !== "admin") {
-    throw new AccessDeniedError();
-  }
+  const { id } = req.params;
 
   const oldUser = await UserModel.findById(id);
 
@@ -22,9 +18,7 @@ const changeRoleOfUserById = async (req, res, next) => {
 
   const { email, name, surname, role: updatedRole } = result;
 
-  res
-    .status(200)
-    .send({ email, name, surname, updatedRole, oldRole: oldUser.role });
+  res.status(200).send({ email, name, surname, updatedRole, oldRole: role });
 };
 
 module.exports = {

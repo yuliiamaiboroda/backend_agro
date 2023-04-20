@@ -1,13 +1,8 @@
 const { VacancyModel } = require("../../models");
-const { AccessDeniedError, NotFoundError } = require("../../helpers/utils");
+const { NotFoundError } = require("../../helpers/utils");
 
 const deleteVacancyById = async (req, res, next) => {
-  const { role } = req.user;
   const { id } = req.params;
-
-  if (role !== "admin" && role !== "applyManager") {
-    throw new AccessDeniedError();
-  }
 
   const vacancy = await VacancyModel.findById(id);
 
