@@ -1,7 +1,5 @@
 const { UserModel } = require("../../models");
-const { createHttpException } = require("../../helpers/utils");
-const { RESPONSE_ERRORS } = require("../../helpers/constants");
-const mongoose = require("mongoose");
+const { AccessDeniedError, NotFoundError } = require("../../helpers/utils");
 
 const changeRoleOfUserById = async (req, res, next) => {
   const { role: currentRole } = req.user;
@@ -9,14 +7,18 @@ const changeRoleOfUserById = async (req, res, next) => {
   const { role } = req.body;
 
   if (currentRole !== "admin") {
-    throw createHttpException(RESPONSE_ERRORS.accessDenied);
+    throw new AccessDeniedError();
   }
-  const idUser = { _id: mongoose.Types.ObjectId(id) };
 
-  const oldUser = await UserModel.findById(idUser);
+  const oldUser = await UserModel.findById(id);
 
-  await UserModel.findOneAndUpdate(idUser, { role });
-  const result = await UserModel.findOne(idUser);
+  if (!oldUser) {
+    throw new NotFoundError();
+  }
+
+  await UserModel.findOneAndUpdate(id, { role });
+
+  const result = await UserModel.findById(id);
 
   const { email, name, surname, role: updatedRole } = result;
 

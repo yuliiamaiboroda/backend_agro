@@ -1,6 +1,5 @@
 const { ServicesModel } = require("../../models");
-const { createHttpException } = require("../../helpers/utils");
-const { RESPONSE_ERRORS } = require("../../helpers/constants");
+const { AccessDeniedError } = require("../../helpers/utils");
 
 const create = async (req, res, next) => {
   const { role } = req.user;
@@ -8,7 +7,7 @@ const create = async (req, res, next) => {
     req.body;
 
   if (role !== "admin") {
-    throw createHttpException(RESPONSE_ERRORS.accessDenied);
+    throw new AccessDeniedError();
   }
 
   const result = await ServicesModel.create({

@@ -1,7 +1,6 @@
 const { UserModel } = require("../../models");
 const bcrypt = require("bcrypt");
-const { createHttpException } = require("../../helpers/utils");
-const { RESPONSE_ERRORS } = require("../../helpers/constants");
+const { UnauthorizedError } = require("../../helpers/utils");
 const {
   createAccessToken,
   createRefreshToken,
@@ -16,7 +15,7 @@ const login = async (req, res, next) => {
   });
 
   if (userInstanseOrNull === null) {
-    throw createHttpException(RESPONSE_ERRORS.unauthorized);
+    throw new UnauthorizedError();
   }
 
   const isValidPassword = await bcrypt.compare(
@@ -25,7 +24,7 @@ const login = async (req, res, next) => {
   );
 
   if (!isValidPassword) {
-    throw createHttpException(RESPONSE_ERRORS.unauthorized);
+    throw new UnauthorizedError();
   }
 
   const sessionKey = crypto.randomUUID();
