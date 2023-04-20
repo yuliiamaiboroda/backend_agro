@@ -21,12 +21,14 @@ const createResumeSchema = Joi.object({
   email: Joi.string()
     .email()
     .required()
-    .messages(new FieldErrors("email").string().emai().required().get()),
+    .messages(new FieldErrors("email").string().email().required().get()),
   position: Joi.string()
     .min(2)
     .max(62)
     .required()
-    .messages(new FieldErrors("position").min(2).max(62).required().get()),
+    .messages(
+      new FieldErrors("position").string().min(2).max(62).required().get()
+    ),
   comment: Joi.string()
     .min(2)
     .max(2000)
@@ -34,10 +36,13 @@ const createResumeSchema = Joi.object({
     .messages(
       new FieldErrors("comment").string().min(2).max(2000).required().get()
     ),
-  agreement: Joi.boolean()
+  agreement: Joi.string()
+    .valid("true")
     .required()
-    .messages(new FieldErrors("agreement").boolean().required()),
-}).messages(new FieldErrors("resume").object());
+    .messages(
+      new FieldErrors("agreement").string().valid("true").required().get()
+    ),
+}).messages(new FieldErrors("resume").object().get());
 
 module.exports = {
   createResumeSchema,

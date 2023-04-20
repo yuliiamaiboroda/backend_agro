@@ -3,10 +3,13 @@ const router = express.Router();
 
 const { controllerExceptionWrapper } = require("../../helpers/utils");
 const { ROLES_LIST } = require("../../helpers/constants");
+const { createResumeSchema } = require("../../helpers/schemas");
 const {
   authUser,
   checkAccessRight,
   validateObjectId,
+  validateBody,
+  resumeUploader,
 } = require("../../middlewares");
 const {
   create,
@@ -15,7 +18,12 @@ const {
   remove,
 } = require("../../controllers/resume");
 
-router.post("/", controllerExceptionWrapper(create));
+router.post(
+  "/",
+  resumeUploader.single("resume"),
+  validateBody(createResumeSchema),
+  controllerExceptionWrapper(create)
+);
 
 router.get(
   "/all",
