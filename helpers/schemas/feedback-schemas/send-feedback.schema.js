@@ -14,16 +14,30 @@ const sendFeedBackSchema = Joi.object({
     .messages(
       new FieldErrors("number")
         .string()
-        .pattern(/^\+380\d{9}$/)
+        .pattern("starts with +380", "9 numbers after country code")
         .required()
         .get()
     ),
   contactMail: Joi.string()
+    .trim()
+    .pattern(/^(\w+([.-]?\w+){1,})*@\w+([.-]?\w+)*(.\w{2,3})+$/)
     .min(10)
     .max(63)
+    .email()
     .required()
     .messages(
-      new FieldErrors("email").string().email().min(10).max(63).required().get()
+      new FieldErrors("email")
+        .string()
+        .pattern(
+          "latin letters",
+          "numbers and signs",
+          "at the beginning or end of the email there can be no hyphen, there must be at least 2 characters before the (@)"
+        )
+        .min(10)
+        .max(63)
+        .email()
+        .required()
+        .get()
     ),
   comment: Joi.string()
     .min(2)
