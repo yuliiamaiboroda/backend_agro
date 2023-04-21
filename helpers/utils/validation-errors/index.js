@@ -3,6 +3,7 @@ const { NumberErrors } = require("./number-errrors");
 const { DateErrors } = require("./date-errors");
 const { ObjectErrors } = require("./object-errors");
 const { ValidationErrors } = require("./validation-errors");
+const { BooleanErrors } = require("./boolean-errors");
 
 class FieldErrors {
   constructor(fieldName = null) {
@@ -36,6 +37,13 @@ class FieldErrors {
       return this.returnedError.get();
     }
     return new ObjectErrors(this.fieldName).object();
+  }
+
+  boolean() {
+    if (!this.fieldName) {
+      return this.returnedError.get();
+    }
+    return new BooleanErrors(this.fieldName).boolean();
   }
 }
 

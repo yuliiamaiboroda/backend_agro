@@ -8,10 +8,10 @@ const {
 const { ROLES_LIST } = require("../../helpers/constants");
 const {
   getAll,
-  getCertain,
+  getCertainById,
   create,
-  update,
-  remove,
+  updateById,
+  removeById,
 } = require("../../controllers/products");
 const {
   authUser,
@@ -21,39 +21,36 @@ const {
   validateObjectId,
 } = require("../../middlewares");
 
-router.get("/all", controllerExceptionWrapper(getAll));
-
-router.get(
-  "/certain/:productId",
-  validateObjectId,
-  controllerExceptionWrapper(getCertain)
-);
-
-router.post(
-  "/certain",
-  authUser,
-  checkAccessRight(ROLES_LIST.productsManager),
-  productUploader.single("image"),
-  validateBody(createProductSchema),
-  controllerExceptionWrapper(create)
-);
-
-router.patch(
-  "/certain/:productId",
-  authUser,
-  checkAccessRight(ROLES_LIST.productsManager),
-  validateObjectId,
-  productUploader.single("image"),
-  validateBody(updateProductSchema),
-  controllerExceptionWrapper(update)
-);
-
-router.delete(
-  "/certain/:productId",
-  authUser,
-  checkAccessRight(ROLES_LIST.productsManager),
-  validateObjectId,
-  controllerExceptionWrapper(remove)
-);
+router
+  .get("/all", controllerExceptionWrapper(getAll))
+  .get(
+    "/certain/:productId",
+    validateObjectId,
+    controllerExceptionWrapper(getCertainById)
+  )
+  .post(
+    "/certain",
+    authUser,
+    checkAccessRight(ROLES_LIST.productsManager),
+    productUploader,
+    validateBody(createProductSchema),
+    controllerExceptionWrapper(create)
+  )
+  .patch(
+    "/certain/:productId",
+    authUser,
+    checkAccessRight(ROLES_LIST.productsManager),
+    validateObjectId,
+    productUploader,
+    validateBody(updateProductSchema),
+    controllerExceptionWrapper(updateById)
+  )
+  .delete(
+    "/certain/:productId",
+    authUser,
+    checkAccessRight(ROLES_LIST.productsManager),
+    validateObjectId,
+    controllerExceptionWrapper(removeById)
+  );
 
 module.exports = router;

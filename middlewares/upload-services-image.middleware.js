@@ -7,7 +7,7 @@ const { uploadFileWithErrorHandling } = require("../helpers/utils");
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "products",
+    folder: "services",
     resource_type: "image",
     allowed_formats: ["jpg", "jpeg", "png"],
     public_id: async (req, file) => uuidv4(),
@@ -16,6 +16,6 @@ const storage = new CloudinaryStorage({
 
 const uploader = multer({ storage }).single("image");
 
-const productUploader = uploadFileWithErrorHandling(uploader);
+const servicesUploader = uploadFileWithErrorHandling(uploader)
 
-module.exports = { productUploader };
+module.exports = { servicesUploader };
