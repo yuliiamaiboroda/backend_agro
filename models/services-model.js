@@ -11,7 +11,7 @@ const servicesSchema = mongoose.Schema({
     required: [true, "title is required"],
     trim: true,
   },
-  image: {
+  imageURL: {
     type: String,
     required: [true, "image of service card is required"],
   },

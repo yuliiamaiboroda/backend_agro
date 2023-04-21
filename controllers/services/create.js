@@ -13,7 +13,7 @@ const create = async (req, res, next) => {
   const result = await ServicesModel.create({
     title,
     description,
-    image: path,
+    imageURL: path,
     price,
     contactMail,
     contactPhone,
