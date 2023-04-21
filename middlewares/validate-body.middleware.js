@@ -4,7 +4,6 @@ const validateBody = (schema) => {
   const fn = (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
-      console.log("error\n", error);
       next(new ValidationError(error.message));
     }
 

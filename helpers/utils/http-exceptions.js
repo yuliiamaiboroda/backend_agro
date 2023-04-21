@@ -40,6 +40,20 @@ class ValidationError extends Error {
   }
 }
 
+class CloudinaryFailedError extends Error {
+  constructor() {
+    super("File storage failed");
+    this.status = 503;
+  }
+}
+
+class CustomHttpException extends Error {
+  constructor({ status, message } = {}) {
+    super(message);
+    this.status = status;
+  }
+}
+
 module.exports = {
   UnauthorizedError,
   NotFoundError,
@@ -47,4 +61,6 @@ module.exports = {
   AccessDeniedError,
   ImageRequiredError,
   ValidationError,
+  CloudinaryFailedError,
+  CustomHttpException,
 };
