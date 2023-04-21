@@ -1,8 +1,13 @@
 const { ProductsModel } = require("../../models");
+const { removeCloudinaryFileByURL } = require("../../helpers/utils");
 
 const update = async (req, res) => {
   const { title, description } = req.body;
   const { productId } = req.params;
+  if (req.file) {
+    const { imageURL } = await ProductsModel.findById(productId);
+    await removeCloudinaryFileByURL(imageURL);
+  }
   const updatedProduct = await ProductsModel.findByIdAndUpdate(
     productId,
     {

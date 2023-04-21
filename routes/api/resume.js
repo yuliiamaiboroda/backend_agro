@@ -20,7 +20,7 @@ const {
 
 router.post(
   "/",
-  resumeUploader.single("resume"),
+  resumeUploader,
   validateBody(createResumeSchema),
   controllerExceptionWrapper(create)
 );

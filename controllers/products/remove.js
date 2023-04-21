@@ -1,5 +1,8 @@
 const { ProductsModel } = require("../../models");
-const { NotFoundError } = require("../../helpers/utils");
+const {
+  NotFoundError,
+  removeCloudinaryFileByURL,
+} = require("../../helpers/utils");
 
 const remove = async (req, res) => {
   const { productId } = req.params;
@@ -8,6 +11,9 @@ const remove = async (req, res) => {
   if (!product) {
     throw new NotFoundError();
   }
+
+  await removeCloudinaryFileByURL(product.imageURL);
+
   res.status(204).send();
 };
 
