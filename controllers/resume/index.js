@@ -1,6 +1,6 @@
 const { create } = require("./create");
 const { getAll } = require("./get-all");
-const { getCertain } = require("./get-certain");
-const { remove } = require("./remove");
+const { getCertainById } = require("./get-certain-by-id");
+const { removeById } = require("./remove-by-id");
 
-module.exports = { create, getAll, getCertain, remove };
+module.exports = { create, getAll, getCertainById, removeById };

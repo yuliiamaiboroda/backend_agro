@@ -1,7 +1,7 @@
 const { ProductsModel } = require("../../models");
 const { removeCloudinaryFileByURL } = require("../../helpers/utils");
 
-const update = async (req, res) => {
+const updateById = async (req, res) => {
   const { title, description } = req.body;
   const { productId } = req.params;
   if (req.file) {
@@ -20,4 +20,4 @@ const update = async (req, res) => {
   res.status(200).json(updatedProduct);
 };
 
-module.exports = { update };
+module.exports = { updateById };
