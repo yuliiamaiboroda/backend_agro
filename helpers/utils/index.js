@@ -10,6 +10,7 @@ const {
   ImageRequiredError,
   ValidationError,
   CloudinaryFailedError,
+  CustomHttpException,
 } = require("./http-exceptions");
 const {
   removeCloudinaryFileByURL,
@@ -25,5 +26,6 @@ module.exports = {
   ImageRequiredError,
   ValidationError,
   CloudinaryFailedError,
+  CustomHttpException,
   removeCloudinaryFileByURL,
 };

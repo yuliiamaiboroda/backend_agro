@@ -47,6 +47,13 @@ class CloudinaryFailedError extends Error {
   }
 }
 
+class CustomHttpException extends Error {
+  constructor({ status, message } = {}) {
+    super(message);
+    this.status = status;
+  }
+}
+
 module.exports = {
   UnauthorizedError,
   NotFoundError,
@@ -55,4 +62,5 @@ module.exports = {
   ImageRequiredError,
   ValidationError,
   CloudinaryFailedError,
+  CustomHttpException,
 };
