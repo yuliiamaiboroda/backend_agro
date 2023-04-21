@@ -1,7 +1,6 @@
 const { ResumeModel } = require("../../models");
 const {
   NotFoundError,
-  CloudinaryFailedError,
   removeCloudinaryFileByURL,
 } = require("../../helpers/utils");
 
@@ -13,11 +12,7 @@ const remove = async (req, res) => {
     throw new NotFoundError();
   }
 
-  const { result } = await removeCloudinaryFileByURL(resume.resumeFileURL);
-
-  if (result !== "ok") {
-    throw new CloudinaryFailedError();
-  }
+  await removeCloudinaryFileByURL(resume.resumeFileURL);
 
   res.status(204).send();
 };

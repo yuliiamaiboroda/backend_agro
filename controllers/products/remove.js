@@ -1,7 +1,6 @@
 const { ProductsModel } = require("../../models");
 const {
   NotFoundError,
-  CloudinaryFailedError,
   removeCloudinaryFileByURL,
 } = require("../../helpers/utils");
 
@@ -13,13 +12,7 @@ const remove = async (req, res) => {
     throw new NotFoundError();
   }
 
-  const { result } = await removeCloudinaryFileByURL(product.imageURL);
-
-  console.log("result\n", result);
-
-  if (result !== "ok") {
-    throw new CloudinaryFailedError();
-  }
+  await removeCloudinaryFileByURL(product.imageURL);
 
   res.status(204).send();
 };
