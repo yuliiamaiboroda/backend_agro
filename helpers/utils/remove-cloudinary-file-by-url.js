@@ -1,18 +1,18 @@
 const { cloudinary } = require("../constants");
 
-const getFileRelativePath = (url) => {
-  const splitedURL = url.split("/");
-  const publicId = splitedURL.pop().split(".")[0];
-  const folderName = splitedURL.pop();
-  return folderName + "/" + publicId;
-};
-
 const removeCloudinaryFileByURL = async (fileURL) => {
   if (!fileURL) {
     return { result: "ok" };
   }
-  const filePath = getFileRelativePath(fileURL);
-  return cloudinary.uploader.destroy(filePath);
+  const splitedURL = fileURL.split("/").slice(4);
+  const [resourceType, type, , folder, fileName] = splitedURL;
+  const filePath = folder + "/" + fileName.split(".")[0];
+
+  return cloudinary.uploader.destroy(filePath, {
+    resource_type: resourceType,
+    type,
+    invalidate: true,
+  });
 };
 
 module.exports = { removeCloudinaryFileByURL };

@@ -13,7 +13,9 @@ const remove = async (req, res) => {
     throw new NotFoundError();
   }
 
-  const { result } = removeCloudinaryFileByURL(product.imageURL);
+  const { result } = await removeCloudinaryFileByURL(product.imageURL);
+
+  console.log("result\n", result);
 
   if (result !== "ok") {
     throw new CloudinaryFailedError();
