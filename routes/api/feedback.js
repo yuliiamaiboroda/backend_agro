@@ -14,27 +14,27 @@ router
   .post(
     "/create",
     validateBody(sendFeedBackSchema),
-    controllerExceptionWrapper(feedbackController.sendFeedBack)
+    controllerExceptionWrapper(feedbackController.create)
   )
   .get(
     "/all",
     authUser,
     checkAccessRight(),
-    controllerExceptionWrapper(feedbackController.getListOfFeedBack)
+    controllerExceptionWrapper(feedbackController.getAll)
   )
   .get(
     "/:id",
     authUser,
     checkAccessRight(),
     validateObjectId,
-    controllerExceptionWrapper(feedbackController.getCertainFeedback)
+    controllerExceptionWrapper(feedbackController.getCertain)
   )
   .delete(
     "/:id",
     authUser,
     checkAccessRight(),
     validateObjectId,
-    controllerExceptionWrapper(feedbackController.deleteById)
+    controllerExceptionWrapper(feedbackController.removeById)
   );
 
 module.exports = router;

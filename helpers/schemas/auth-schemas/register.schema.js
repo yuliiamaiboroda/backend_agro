@@ -80,7 +80,7 @@ const userRegisterSchema = Joi.object({
         .required()
         .get()
     ),
-});
+}).messages(new FieldErrors("register").object().extraFields().get());
 
 module.exports = {
   userRegisterSchema,

@@ -1,7 +1,7 @@
 const { CATEGORY_LIST } = require("../../helpers/constants");
 const { VacancyModel } = require("../../models");
 
-const getActualVacancies = async (req, res, next) => {
+const getActual = async (req, res, next) => {
   const listActualVacanies = await VacancyModel.find({
     category: CATEGORY_LIST.actual,
   });
@@ -9,5 +9,5 @@ const getActualVacancies = async (req, res, next) => {
 };
 
 module.exports = {
-  getActualVacancies,
+  getActual,
 };

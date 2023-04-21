@@ -104,7 +104,7 @@ const createVacancySchema = Joi.object({
         .pattern("no spaces", "letters")
         .get()
     ),
-});
+}).messages(new FieldErrors("vacancy").object().extraFields().get());
 
 module.exports = {
   createVacancySchema,

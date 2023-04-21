@@ -47,6 +47,6 @@ const sendFeedBackSchema = Joi.object({
       new FieldErrors("comment").string().min(2).max(2000).required().get()
     ),
   agreement: Joi.boolean().invalid(false).required(),
-});
+}).messages(new FieldErrors("feedback").object().extraFields().get());
 
 module.exports = { sendFeedBackSchema };

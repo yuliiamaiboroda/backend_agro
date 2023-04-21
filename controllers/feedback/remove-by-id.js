@@ -1,7 +1,7 @@
 const { FeedbackModel } = require("../../models");
 const { NotFoundError } = require("../../helpers/utils");
 
-const deleteById = async (req, res, next) => {
+const removeById = async (req, res, next) => {
   const { id } = req.params;
   const feedback = await FeedbackModel.findById(id);
 
@@ -14,5 +14,5 @@ const deleteById = async (req, res, next) => {
 };
 
 module.exports = {
-  deleteById,
+  removeById,
 };

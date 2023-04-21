@@ -33,14 +33,14 @@ router
     "/getAllUser",
     authUser,
     checkAccessRight(),
-    controllerExceptionWrapper(userController.getAllUser)
+    controllerExceptionWrapper(userController.getAll)
   )
   .delete(
     "/:id",
     authUser,
     checkAccessRight(),
     validateObjectId,
-    controllerExceptionWrapper(userController.deleteUserById)
+    controllerExceptionWrapper(userController.removeById)
   )
   .patch(
     "/:id",
@@ -48,7 +48,7 @@ router
     checkAccessRight(),
     validateBody(userChangeRoleSchema),
     validateObjectId,
-    controllerExceptionWrapper(userController.changeRoleOfUserById)
+    controllerExceptionWrapper(userController.changeRoleById)
   );
 
 module.exports = router;

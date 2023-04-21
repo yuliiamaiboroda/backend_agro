@@ -1,6 +1,6 @@
 const { FeedbackModel } = require("../../models");
 
-const sendFeedBack = async (req, res, next) => {
+const create = async (req, res, next) => {
   const { name, contactPhone, contactMail, comment, agreement } = req.body;
   const result = await FeedbackModel.create({
     name,
@@ -13,5 +13,5 @@ const sendFeedBack = async (req, res, next) => {
 };
 
 module.exports = {
-  sendFeedBack,
+  create,
 };

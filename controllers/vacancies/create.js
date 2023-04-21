@@ -1,6 +1,6 @@
 const { VacancyModel } = require("../../models");
 
-const createVacancy = async (req, res, next) => {
+const create = async (req, res, next) => {
   const {
     category,
     title,
@@ -29,5 +29,5 @@ const createVacancy = async (req, res, next) => {
 };
 
 module.exports = {
-  createVacancy,
+  create,
 };

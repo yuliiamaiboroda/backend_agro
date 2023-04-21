@@ -1,7 +1,7 @@
 const { UserModel } = require("../../models");
-const { AccessDeniedError, NotFoundError } = require("../../helpers/utils");
+const { NotFoundError } = require("../../helpers/utils");
 
-const deleteUserById = async (req, res, next) => {
+const removeById = async (req, res, next) => {
   const { id } = req.params;
 
   const user = await UserModel.findById(id);
@@ -15,5 +15,5 @@ const deleteUserById = async (req, res, next) => {
 };
 
 module.exports = {
-  deleteUserById,
+  removeById,
 };

@@ -1,6 +1,6 @@
 const { UserModel } = require("../../models");
 
-const getAllUser = async (req, res, next) => {
+const getAll = async (req, res, next) => {
   const listAllUsers = await UserModel.find();
 
   const accessedDataList = listAllUsers.map(
@@ -17,5 +17,5 @@ const getAllUser = async (req, res, next) => {
 };
 
 module.exports = {
-  getAllUser,
+  getAll,
 };

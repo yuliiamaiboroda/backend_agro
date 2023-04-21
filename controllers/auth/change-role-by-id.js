@@ -1,7 +1,7 @@
 const { UserModel } = require("../../models");
-const { AccessDeniedError, NotFoundError } = require("../../helpers/utils");
+const { NotFoundError } = require("../../helpers/utils");
 
-const changeRoleOfUserById = async (req, res, next) => {
+const changeRoleById = async (req, res, next) => {
   const { role } = req.user;
 
   const { id } = req.params;
@@ -22,5 +22,5 @@ const changeRoleOfUserById = async (req, res, next) => {
 };
 
 module.exports = {
-  changeRoleOfUserById,
+  changeRoleById,
 };

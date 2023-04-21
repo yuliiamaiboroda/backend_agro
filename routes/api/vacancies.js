@@ -15,11 +15,8 @@ const {
 const { ROLES_LIST } = require("../../helpers/constants");
 
 router
-  .get("/all", controllerExceptionWrapper(vacancyController.getAllVacancies))
-  .get(
-    "/actual",
-    controllerExceptionWrapper(vacancyController.getActualVacancies)
-  )
+  .get("/all", controllerExceptionWrapper(vacancyController.getAll))
+  .get("/actual", controllerExceptionWrapper(vacancyController.getActual))
   .get(
     "/:id",
     validateObjectId,
@@ -30,7 +27,7 @@ router
     authUser,
     checkAccessRight(ROLES_LIST.applyManager),
     validateBody(createVacancySchema),
-    controllerExceptionWrapper(vacancyController.createVacancy)
+    controllerExceptionWrapper(vacancyController.create)
   )
   .patch(
     "/category/:id",
@@ -38,14 +35,14 @@ router
     checkAccessRight(ROLES_LIST.applyManager),
     validateObjectId,
     validateBody(changeVacancyCategotySchema),
-    controllerExceptionWrapper(vacancyController.changeVacancyCategoty)
+    controllerExceptionWrapper(vacancyController.updateCategoty)
   )
   .delete(
     "/:id",
     authUser,
     checkAccessRight(ROLES_LIST.applyManager),
     validateObjectId,
-    controllerExceptionWrapper(vacancyController.deleteVacancyById)
+    controllerExceptionWrapper(vacancyController.removeById)
   );
 
 module.exports = router;

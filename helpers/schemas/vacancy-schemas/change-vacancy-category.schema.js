@@ -14,7 +14,7 @@ const changeVacancyCategotySchema = Joi.object({
         .required()
         .get()
     ),
-});
+}).messages(new FieldErrors("vacancy").object().extraFields().get());
 
 module.exports = {
   changeVacancyCategotySchema,

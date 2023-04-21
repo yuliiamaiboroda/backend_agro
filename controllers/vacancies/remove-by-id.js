@@ -1,7 +1,7 @@
 const { VacancyModel } = require("../../models");
 const { NotFoundError } = require("../../helpers/utils");
 
-const deleteVacancyById = async (req, res, next) => {
+const removeById = async (req, res, next) => {
   const { id } = req.params;
 
   const vacancy = await VacancyModel.findById(id);
@@ -15,5 +15,5 @@ const deleteVacancyById = async (req, res, next) => {
 };
 
 module.exports = {
-  deleteVacancyById,
+  removeById,
 };
