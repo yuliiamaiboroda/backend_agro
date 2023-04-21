@@ -14,38 +14,36 @@ const {
 const {
   create,
   getAll,
-  getCertain,
-  remove,
+  getCertainById,
+  removeById,
 } = require("../../controllers/resume");
 
-router.post(
-  "/",
-  resumeUploader,
-  validateBody(createResumeSchema),
-  controllerExceptionWrapper(create)
-);
-
-router.get(
-  "/all",
-  authUser,
-  checkAccessRight(ROLES_LIST.applyManager),
-  controllerExceptionWrapper(getAll)
-);
-
-router.get(
-  "/certain/:resumeId",
-  authUser,
-  checkAccessRight(ROLES_LIST.applyManager),
-  validateObjectId,
-  controllerExceptionWrapper(getCertain)
-);
-
-router.delete(
-  "/certain/:resumeId",
-  authUser,
-  checkAccessRight(ROLES_LIST.applyManager),
-  validateObjectId,
-  controllerExceptionWrapper(remove)
-);
+router
+  .post(
+    "/",
+    resumeUploader,
+    validateBody(createResumeSchema),
+    controllerExceptionWrapper(create)
+  )
+  .get(
+    "/all",
+    authUser,
+    checkAccessRight(ROLES_LIST.applyManager),
+    controllerExceptionWrapper(getAll)
+  )
+  .get(
+    "/certain/:resumeId",
+    authUser,
+    checkAccessRight(ROLES_LIST.applyManager),
+    validateObjectId,
+    controllerExceptionWrapper(getCertainById)
+  )
+  .delete(
+    "/certain/:resumeId",
+    authUser,
+    checkAccessRight(ROLES_LIST.applyManager),
+    validateObjectId,
+    controllerExceptionWrapper(removeById)
+  );
 
 module.exports = router;
