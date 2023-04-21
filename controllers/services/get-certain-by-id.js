@@ -1,7 +1,7 @@
 const { ServicesModel } = require("../../models");
 const { NotFoundError } = require("../../helpers/utils");
 
-const getCertain = async (req, res, next) => {
+const getCertainById = async (req, res, next) => {
   const { serviceId } = req.params;
 
   const certainService = await ServicesModel.findById(serviceId);
@@ -13,5 +13,5 @@ const getCertain = async (req, res, next) => {
 };
 
 module.exports = {
-  getCertain,
+  getCertainById,
 };
