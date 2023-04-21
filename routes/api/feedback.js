@@ -27,7 +27,7 @@ router
     authUser,
     checkAccessRight(),
     validateObjectId,
-    controllerExceptionWrapper(feedbackController.getCertain)
+    controllerExceptionWrapper(feedbackController.getCertainById)
   )
   .delete(
     "/:id",

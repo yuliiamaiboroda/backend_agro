@@ -1,15 +1,15 @@
-const { updateCategoty } = require("./update-category");
+const { updateCategotyById } = require("./update-category-by-id");
 const { create } = require("./create");
 const { removeById } = require("./remove-by-id");
 const { getActual } = require("./get-actual");
 const { getAll } = require("./get-all");
-const { getCertain } = require("./get-certain");
+const { getCertainById } = require("./get-certain-by-id");
 
 module.exports = {
   create,
   getAll,
   removeById,
-  updateCategoty,
+  updateCategotyById,
   getActual,
-  getCertain,
+  getCertainById,
 };

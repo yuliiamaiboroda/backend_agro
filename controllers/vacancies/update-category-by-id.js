@@ -1,7 +1,7 @@
 const { VacancyModel } = require("../../models");
 const { NotFoundError } = require("../../helpers/utils");
 
-const updateCategoty = async (req, res, next) => {
+const updateCategotyById = async (req, res, next) => {
   const { id } = req.params;
   const { category } = req.body;
 
@@ -17,5 +17,5 @@ const updateCategoty = async (req, res, next) => {
 };
 
 module.exports = {
-  updateCategoty,
+  updateCategotyById,
 };

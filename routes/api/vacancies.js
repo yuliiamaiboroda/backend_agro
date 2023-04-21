@@ -20,7 +20,7 @@ router
   .get(
     "/:id",
     validateObjectId,
-    controllerExceptionWrapper(vacancyController.getCertain)
+    controllerExceptionWrapper(vacancyController.getCertainById)
   )
   .post(
     "/create",
@@ -35,7 +35,7 @@ router
     checkAccessRight(ROLES_LIST.applyManager),
     validateObjectId,
     validateBody(changeVacancyCategotySchema),
-    controllerExceptionWrapper(vacancyController.updateCategoty)
+    controllerExceptionWrapper(vacancyController.updateCategotyById)
   )
   .delete(
     "/:id",
