@@ -1,13 +1,19 @@
 const { ServicesModel } = require("../../models");
+const { ImageRequiredError } = require("../../helpers/utils");
 
 const create = async (req, res, next) => {
-  const { title, description, image, price, contactMail, contactPhone } =
+  const { title, description, price, contactMail, contactPhone } =
     req.body;
+
+  if (!req.file) {
+    throw new ImageRequiredError();
+  }
+  const { path } = req.file;
 
   const result = await ServicesModel.create({
     title,
     description,
-    image,
+    image: path,
     price,
     contactMail,
     contactPhone,

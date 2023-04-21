@@ -10,6 +10,7 @@ const {
   update,
 } = require("../../controllers/services");
 const { ROLES_LIST } = require("../../helpers/constants");
+const { servicesUploader } = require("../../middlewares/upload-services-image.middleware");
 
 router
   .get("/getAll", controllerExceptionWrapper(getAll))
@@ -17,6 +18,7 @@ router
     "/create",
     authUser,
     checkAccessRight(ROLES_LIST.servicesManager),
+    servicesUploader.single("image"),
     controllerExceptionWrapper(create)
   )
   .get(
@@ -35,6 +37,7 @@ router
     "/:serviceId",
     authUser,
     checkAccessRight(ROLES_LIST.servicesManager),
+    servicesUploader.single("image"),
     controllerExceptionWrapper(update)
   );
 
