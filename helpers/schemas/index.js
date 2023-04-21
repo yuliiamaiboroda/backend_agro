@@ -17,6 +17,12 @@ const {
   sendFeedBackSchema,
 } = require("./feedback-schemas/send-feedback.schema");
 const { createResumeSchema } = require("./resume-schemas/create-resume.schema");
+const {
+  createServiceSchema,
+} = require("./services-schemas/create-service-schema");
+const {
+  updateServiceSchema,
+} = require("./services-schemas/update-service-schema copy");
 
 module.exports = {
   userLogInSchema,
@@ -28,4 +34,6 @@ module.exports = {
   updateProductSchema,
   sendFeedBackSchema,
   createResumeSchema,
+  createServiceSchema,
+  updateServiceSchema,
 };

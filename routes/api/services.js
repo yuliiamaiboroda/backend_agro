@@ -5,6 +5,7 @@ const {
   authUser,
   checkAccessRight,
   validateObjectId,
+  validateBody,
 } = require("../../middlewares");
 const {
   getAll,
@@ -17,6 +18,7 @@ const { ROLES_LIST } = require("../../helpers/constants");
 const {
   servicesUploader,
 } = require("../../middlewares/upload-services-image.middleware");
+const { createServiceSchema, updateServiceSchema } = require("../../helpers/schemas");
 
 router
   .get("/getAll", controllerExceptionWrapper(getAll))
@@ -25,6 +27,7 @@ router
     authUser,
     checkAccessRight(ROLES_LIST.servicesManager),
     servicesUploader,
+    validateBody(createServiceSchema),
     controllerExceptionWrapper(create)
   )
   .get(
@@ -47,7 +50,9 @@ router
     checkAccessRight(ROLES_LIST.servicesManager),
     validateObjectId,
     servicesUploader,
+    validateBody(updateServiceSchema),
     controllerExceptionWrapper(updateById)
   );
 
 module.exports = router;
+
