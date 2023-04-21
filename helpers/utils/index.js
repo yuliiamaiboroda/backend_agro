@@ -15,6 +15,9 @@ const {
 const {
   removeCloudinaryFileByURL,
 } = require("./remove-cloudinary-file-by-url");
+const {
+  uploadFileWithErrorHandling,
+} = require("./upload-file-with-error-handling");
 
 module.exports = {
   controllerExceptionWrapper,
@@ -28,4 +31,5 @@ module.exports = {
   CloudinaryFailedError,
   CustomHttpException,
   removeCloudinaryFileByURL,
+  uploadFileWithErrorHandling,
 };

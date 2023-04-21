@@ -33,7 +33,7 @@ router.post(
   "/certain",
   authUser,
   checkAccessRight(ROLES_LIST.productsManager),
-  productUploader.single("image"),
+  productUploader,
   validateBody(createProductSchema),
   controllerExceptionWrapper(create)
 );
@@ -43,7 +43,7 @@ router.patch(
   authUser,
   checkAccessRight(ROLES_LIST.productsManager),
   validateObjectId,
-  productUploader.single("image"),
+  productUploader,
   validateBody(updateProductSchema),
   controllerExceptionWrapper(update)
 );

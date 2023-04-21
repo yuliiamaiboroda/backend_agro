@@ -2,6 +2,7 @@ const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
 const { cloudinary } = require("../helpers/constants");
+const { uploadFileWithErrorHandling } = require("../helpers/utils");
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
@@ -13,6 +14,8 @@ const storage = new CloudinaryStorage({
   },
 });
 
-const productUploader = multer({ storage });
+const uploader = multer({ storage }).single("image");
+
+const productUploader = uploadFileWithErrorHandling(uploader);
 
 module.exports = { productUploader };
