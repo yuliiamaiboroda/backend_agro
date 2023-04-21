@@ -2,7 +2,12 @@ const express = require("express");
 const router = express.Router();
 const userController = require("../../controllers/auth");
 const { controllerExceptionWrapper } = require("../../helpers/utils");
-const { validateBody, authUser } = require("../../middlewares");
+const {
+  validateBody,
+  authUser,
+  checkAccessRight,
+  validateObjectId,
+} = require("../../middlewares");
 const {
   userRegisterSchema,
   userLogInSchema,
@@ -13,6 +18,8 @@ router
   .post(
     "/register",
     validateBody(userRegisterSchema),
+    authUser,
+    checkAccessRight(),
     controllerExceptionWrapper(userController.register)
   )
   .post(
@@ -25,18 +32,23 @@ router
   .get(
     "/getAllUser",
     authUser,
-    controllerExceptionWrapper(userController.getAllUser)
+    checkAccessRight(),
+    controllerExceptionWrapper(userController.getAll)
   )
   .delete(
     "/:id",
     authUser,
-    controllerExceptionWrapper(userController.deleteUserById)
+    checkAccessRight(),
+    validateObjectId,
+    controllerExceptionWrapper(userController.removeById)
   )
   .patch(
     "/:id",
     authUser,
+    checkAccessRight(),
     validateBody(userChangeRoleSchema),
-    controllerExceptionWrapper(userController.changeRoleOfUserById)
+    validateObjectId,
+    controllerExceptionWrapper(userController.changeRoleById)
   );
 
 module.exports = router;

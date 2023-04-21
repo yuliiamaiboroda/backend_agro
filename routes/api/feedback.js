@@ -1,7 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const { controllerExceptionWrapper } = require("../../helpers/utils");
-const { validateBody, authUser } = require("../../middlewares");
+const {
+  validateBody,
+  authUser,
+  checkAccessRight,
+  validateObjectId,
+} = require("../../middlewares");
 const { sendFeedBackSchema } = require("../../helpers/schemas");
 const feedbackController = require("../../controllers/feedback");
 
@@ -9,22 +14,27 @@ router
   .post(
     "/create",
     validateBody(sendFeedBackSchema),
-    controllerExceptionWrapper(feedbackController.sendFeedBack)
+    controllerExceptionWrapper(feedbackController.create)
   )
   .get(
     "/all",
     authUser,
-    controllerExceptionWrapper(feedbackController.getListOfFeedBack)
+    checkAccessRight(),
+    controllerExceptionWrapper(feedbackController.getAll)
   )
   .get(
     "/:id",
     authUser,
-    controllerExceptionWrapper(feedbackController.getCertainFeedback)
+    checkAccessRight(),
+    validateObjectId,
+    controllerExceptionWrapper(feedbackController.getCertainById)
   )
   .delete(
     "/:id",
     authUser,
-    controllerExceptionWrapper(feedbackController.deleteById)
+    checkAccessRight(),
+    validateObjectId,
+    controllerExceptionWrapper(feedbackController.removeById)
   );
 
 module.exports = router;

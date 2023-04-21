@@ -15,7 +15,7 @@ const feedbacksSchema = mongoose.Schema(
     },
     comment: {
       type: String,
-      required: [true, "coment is required"],
+      required: [true, "comment is required"],
       trim: true,
     },
     agreement: {
@@ -26,7 +26,7 @@ const feedbacksSchema = mongoose.Schema(
   { versionKey: false }
 );
 
-const FeedbackModel = mongoose.model("contacts", feedbacksSchema);
+const FeedbackModel = mongoose.model("feedbacks", feedbacksSchema);
 
 module.exports = {
   FeedbackModel,

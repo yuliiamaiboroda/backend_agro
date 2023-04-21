@@ -14,7 +14,7 @@ const userChangeRoleSchema = Joi.object({
         .required()
         .get()
     ),
-});
+}).messages(new FieldErrors("user").object().extraFields().get());
 
 module.exports = {
   userChangeRoleSchema,
