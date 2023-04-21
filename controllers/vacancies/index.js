@@ -1,15 +1,15 @@
-const { changeVacancyCategoty } = require("./change-vacancy-category");
-const { createVacancy } = require("./create-vacancy");
-const { deleteVacancyById } = require("./delete-vacancy-dy-id");
-const { getActualVacancies } = require("./get-actual-vacancy");
-const { getAllVacancies } = require("./get-all-vacancy");
-const { getCertain } = require("./get-certain");
+const { updateCategotyById } = require("./update-category-by-id");
+const { create } = require("./create");
+const { removeById } = require("./remove-by-id");
+const { getActual } = require("./get-actual");
+const { getAll } = require("./get-all");
+const { getCertainById } = require("./get-certain-by-id");
 
 module.exports = {
-  createVacancy,
-  getAllVacancies,
-  deleteVacancyById,
-  changeVacancyCategoty,
-  getActualVacancies,
-  getCertain,
+  create,
+  getAll,
+  removeById,
+  updateCategotyById,
+  getActual,
+  getCertainById,
 };

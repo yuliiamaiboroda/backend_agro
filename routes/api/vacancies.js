@@ -6,31 +6,43 @@ const {
   createVacancySchema,
   changeVacancyCategotySchema,
 } = require("../../helpers/schemas");
-const { validateBody, authUser } = require("../../middlewares");
+const {
+  validateBody,
+  authUser,
+  checkAccessRight,
+  validateObjectId,
+} = require("../../middlewares");
+const { ROLES_LIST } = require("../../helpers/constants");
 
 router
-  .get("/all", controllerExceptionWrapper(vacancyController.getAllVacancies))
+  .get("/all", controllerExceptionWrapper(vacancyController.getAll))
+  .get("/actual", controllerExceptionWrapper(vacancyController.getActual))
   .get(
-    "/actual",
-    controllerExceptionWrapper(vacancyController.getActualVacancies)
+    "/:id",
+    validateObjectId,
+    controllerExceptionWrapper(vacancyController.getCertainById)
   )
-  .get("/:id", controllerExceptionWrapper(vacancyController.getCertain))
   .post(
     "/create",
     authUser,
+    checkAccessRight(ROLES_LIST.applyManager),
     validateBody(createVacancySchema),
-    controllerExceptionWrapper(vacancyController.createVacancy)
+    controllerExceptionWrapper(vacancyController.create)
   )
   .patch(
     "/category/:id",
     authUser,
+    checkAccessRight(ROLES_LIST.applyManager),
+    validateObjectId,
     validateBody(changeVacancyCategotySchema),
-    controllerExceptionWrapper(vacancyController.changeVacancyCategoty)
+    controllerExceptionWrapper(vacancyController.updateCategotyById)
   )
   .delete(
     "/:id",
     authUser,
-    controllerExceptionWrapper(vacancyController.deleteVacancyById)
+    checkAccessRight(ROLES_LIST.applyManager),
+    validateObjectId,
+    controllerExceptionWrapper(vacancyController.removeById)
   );
 
 module.exports = router;

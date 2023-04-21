@@ -1,7 +1,7 @@
 const { ResumeModel } = require("../../models");
 const { NotFoundError } = require("../../helpers/utils");
 
-const getCertain = async (req, res) => {
+const getCertainById = async (req, res) => {
   const { resumeId } = req.params;
   const resume = await ResumeModel.findById(resumeId);
 
@@ -12,4 +12,4 @@ const getCertain = async (req, res) => {
   res.status(200).json(resume);
 };
 
-module.exports = { getCertain };
+module.exports = { getCertainById };

@@ -4,7 +4,7 @@ const {
   removeCloudinaryFileByURL,
 } = require("../../helpers/utils");
 
-const remove = async (req, res) => {
+const removeById = async (req, res) => {
   const { productId } = req.params;
   const product = await ProductsModel.findByIdAndDelete(productId);
 
@@ -17,4 +17,4 @@ const remove = async (req, res) => {
   res.status(204).send();
 };
 
-module.exports = { remove };
+module.exports = { removeById };
