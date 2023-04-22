@@ -5,6 +5,7 @@ const getAll = async (req, res, next) => {
 
   res.status(200).json(listAllFeddBack);
 };
+
 module.exports = {
   getAll,
 };

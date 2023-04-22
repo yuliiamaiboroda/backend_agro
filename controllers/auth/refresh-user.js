@@ -10,10 +10,13 @@ const crypto = require("crypto");
 const refreshUser = async (req, res, next) => {
   try {
     const { authorization } = req.headers;
+
     if (!authorization) {
       throw new UnauthorizedError();
     }
+
     const [bearer, token] = authorization.split(" ");
+
     if (bearer !== "Bearer" || !token) {
       throw new UnauthorizedError();
     }
@@ -21,6 +24,7 @@ const refreshUser = async (req, res, next) => {
     try {
       const { userId } = verifyRefreshToken(token);
       const userInstanse = await UserModel.findById(userId);
+
       if (!userInstanse) {
         throw new UnauthorizedError();
       }
@@ -33,6 +37,7 @@ const refreshUser = async (req, res, next) => {
         userId: userInstanse._id.toString(),
         sessionKey,
       });
+
       const refreshToken = createRefreshToken({
         userId: userInstanse._id.toString(),
       });
