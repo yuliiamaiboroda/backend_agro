@@ -6,39 +6,18 @@ const updateCategotyById = async (req, res, next) => {
   const { category } = req.body;
 
   const vacancy = await VacancyModel.findById(id);
-  const { category: oldCategory } = vacancy;
 
   if (!vacancy) {
     throw new NotFoundError();
   }
 
-  await VacancyModel.findByIdAndUpdate(id, { category });
-
-  const {
-    category: updatedCategory,
-    title,
-    description,
-    sallary,
-    education,
-    contactMail,
-    contactPhone,
-    workExperienceRequired,
-    location,
-  } = await VacancyModel.findById(id);
-
-  res.status(200).json({
-    oldCategory,
-    updatedCategory,
-    title,
-    description,
-    sallary,
-    education,
-    contactMail,
-    contactPhone,
-    workExperienceRequired,
-    location,
+  const updatedVacancy = await VacancyModel.findByIdAndUpdate(
     id,
-  });
+    { category },
+    { returnDocument: "after", runValidators: true }
+  );
+
+  res.status(200).json(updatedVacancy);
 };
 
 module.exports = {
