@@ -30,7 +30,15 @@ const servicesSchema = mongoose.Schema({
     required: [true, "contact phone is required"],
     trim: true,
   },
-});
+},
+{
+  versionKey: false,
+  timestamps: {
+    createdAt: true,
+    updatedAt: false,
+  },
+}
+);
 
 const ServicesModel = mongoose.model("services", servicesSchema);
 
