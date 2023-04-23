@@ -11,9 +11,13 @@ const updateCategotyById = async (req, res, next) => {
     throw new NotFoundError();
   }
 
-  await VacancyModel.findByIdAndUpdate(id, { category });
+  const updatedVacancy = await VacancyModel.findByIdAndUpdate(
+    id,
+    { category },
+    { returnDocument: "after", runValidators: true }
+  );
 
-  res.status(200).send();
+  res.status(200).json(updatedVacancy);
 };
 
 module.exports = {
