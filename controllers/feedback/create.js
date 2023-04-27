@@ -9,6 +9,7 @@ const create = async (req, res, next) => {
     comment,
     agreement,
   });
+
   res.status(201).json(result);
 };
 

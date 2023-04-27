@@ -2,9 +2,8 @@ const { UserModel } = require("../../models");
 const { NotFoundError } = require("../../helpers/utils");
 
 const changeRoleById = async (req, res, next) => {
-  const { role } = req.user;
-
   const { id } = req.params;
+  const { role } = req.body;
 
   const oldUser = await UserModel.findById(id);
 
@@ -12,13 +11,21 @@ const changeRoleById = async (req, res, next) => {
     throw new NotFoundError();
   }
 
-  await UserModel.findOneAndUpdate(id, { role });
+  const { role: oldRole } = oldUser;
 
-  const result = await UserModel.findById(id);
+  const {
+    email,
+    name,
+    surname,
+    role: updatedRole,
+    id: userId,
+  } = await UserModel.findByIdAndUpdate(
+    id,
+    { role },
+    { returnDocument: "after", runValidators: true }
+  );
 
-  const { email, name, surname, role: updatedRole } = result;
-
-  res.status(200).send({ email, name, surname, updatedRole, oldRole: role });
+  res.status(200).json({ email, name, surname, oldRole, updatedRole, userId });
 };
 
 module.exports = {
