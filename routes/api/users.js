@@ -49,6 +49,11 @@ router
     validateBody(userChangeRoleSchema),
     validateObjectId,
     controllerExceptionWrapper(userController.changeRoleById)
+  )
+  .get(
+    "/current",
+    authUser,
+    controllerExceptionWrapper(userController.current)
   );
 
 module.exports = router;
