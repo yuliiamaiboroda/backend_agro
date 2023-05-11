@@ -3,7 +3,10 @@ const { UserModel } = require("../../models");
 const logout = async (req, res, next) => {
   const { _id } = req.user;
 
-  await UserModel.findByIdAndUpdate(_id, { sessionKey: null });
+  await UserModel.findByIdAndUpdate(_id, {
+    sessionKey: null,
+    refreshKey: null,
+  });
 
   res.status(204).send();
 };

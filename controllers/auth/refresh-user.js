@@ -24,16 +24,24 @@ const refreshUser = async (req, res, next) => {
     const token = req.cookies.jwt;
 
     try {
-      const { userId } = verifyRefreshToken(token);
+      const { userId, refreshKey } = verifyRefreshToken(token);
       const userInstanse = await UserModel.findById(userId);
 
-      if (!userInstanse) {
+      if (!userInstanse || !userInstanse.refreshKey) {
+        throw new UnauthorizedError();
+      }
+
+      if (refreshKey !== userInstanse.refreshKey) {
         throw new UnauthorizedError();
       }
 
       const sessionKey = crypto.randomUUID();
+      const updatedRefreshKey = crypto.randomUUID();
 
-      await UserModel.findByIdAndUpdate(userInstanse._id, { sessionKey });
+      await UserModel.findByIdAndUpdate(userInstanse._id, {
+        sessionKey,
+        refreshKey: updatedRefreshKey,
+      });
 
       const accessToken = createAccessToken({
         userId: userInstanse._id.toString(),
@@ -42,6 +50,7 @@ const refreshUser = async (req, res, next) => {
 
       const refreshToken = createRefreshToken({
         userId: userInstanse._id.toString(),
+        refreshKey: updatedRefreshKey,
       });
 
       res.cookie("jwt", refreshToken, {

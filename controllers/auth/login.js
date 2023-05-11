@@ -28,10 +28,12 @@ const login = async (req, res, next) => {
   }
 
   const sessionKey = crypto.randomUUID();
+  const refreshKey = crypto.randomUUID();
 
   await UserModel.findOneAndUpdate(
     { email },
-    { sessionKey },
+    { sessionKey, refreshKey },
+
     { runValidators: true }
   );
 
@@ -41,6 +43,7 @@ const login = async (req, res, next) => {
   });
   const refreshToken = createRefreshToken({
     userId: userInstanseOrNull._id.toString(),
+    refreshKey,
   });
 
   res.cookie("jwt", refreshToken, {
