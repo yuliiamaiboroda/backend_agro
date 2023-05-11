@@ -9,17 +9,19 @@ const crypto = require("crypto");
 
 const refreshUser = async (req, res, next) => {
   try {
-    const { authorization } = req.headers;
+    const { cookies } = req;
 
-    if (!authorization) {
+    if (!cookies) {
       throw new UnauthorizedError();
     }
 
-    const [bearer, token] = authorization.split(" ");
+    const { jwt } = cookies;
 
-    if (bearer !== "Bearer" || !token) {
+    if (!jwt) {
       throw new UnauthorizedError();
     }
+
+    const token = req.cookies.jwt;
 
     try {
       const { userId } = verifyRefreshToken(token);
@@ -42,11 +44,17 @@ const refreshUser = async (req, res, next) => {
         userId: userInstanse._id.toString(),
       });
 
+      res.cookie("jwt", refreshToken, {
+        httpOnly: true,
+        sameSite: "None",
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+
       res.status(200).json({
         accessToken,
-        refreshToken,
       });
-    } catch (error) {
+    } catch (err) {
       throw new UnauthorizedError();
     }
   } catch (error) {

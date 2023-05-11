@@ -2,10 +2,12 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
+const cookieparser = require("cookie-parser");
 
 const { globalErrorHandler } = require("./middlewares");
 
 const app = express();
+app.use(cookieparser());
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
