@@ -26,23 +26,12 @@ const register = async (req, res, next) => {
     sessionKey,
   });
 
-  const accessToken = createAccessToken({
-    userId: userInstance._id.toString(),
-    sessionKey,
-  });
-  const refreshToken = createRefreshToken({
-    userId: userInstance._id.toString(),
-  });
-
   res.status(201).json({
-    accessToken,
-    refreshToken,
-    user: {
-      email: userInstance.email,
-      name: userInstance.name,
-      surname: userInstance.surname,
-      role: userInstance.role,
-    },
+    email: userInstance.email,
+    name: userInstance.name,
+    surname: userInstance.surname,
+    role: userInstance.role,
+    _id: userInstance._id,
   });
 };
 

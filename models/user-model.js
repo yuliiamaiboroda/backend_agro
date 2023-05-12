@@ -35,6 +35,11 @@ const userSchema = mongoose.Schema(
       default: null,
       trim: true,
     },
+    refreshKey: {
+      type: String,
+      default: null,
+      trim: true,
+    },
   },
 
   {
