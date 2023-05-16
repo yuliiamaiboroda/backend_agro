@@ -22,6 +22,7 @@ router
     checkAccessRight(),
     controllerExceptionWrapper(userController.register)
   )
+  .get("/current", authUser, controllerExceptionWrapper(userController.current))
   .post(
     "/login",
     validateBody(userLogInSchema),
@@ -49,11 +50,6 @@ router
     validateBody(userChangeRoleSchema),
     validateObjectId,
     controllerExceptionWrapper(userController.changeRoleById)
-  )
-  .get(
-    "/current",
-    authUser,
-    controllerExceptionWrapper(userController.current)
   );
 
 module.exports = router;
