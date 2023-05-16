@@ -6,6 +6,17 @@ const cookieparser = require("cookie-parser");
 
 const { globalErrorHandler } = require("./middlewares");
 
+const corsOptions = {
+  //To allow requests from client
+  origin: [
+    "http://localhost:3000",
+    "http://127.0.0.1",
+    "http://104.142.122.231",
+  ],
+  credentials: true,
+  exposedHeaders: ["set-cookie"],
+};
+
 const app = express();
 app.use(cookieparser());
 
@@ -21,7 +32,7 @@ const {
 } = require("./routes/api");
 
 app.use(logger(formatsLogger));
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.static("public"));
 
