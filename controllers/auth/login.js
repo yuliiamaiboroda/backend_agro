@@ -28,10 +28,12 @@ const login = async (req, res, next) => {
   }
 
   const sessionKey = crypto.randomUUID();
+  const refreshKey = crypto.randomUUID();
 
   await UserModel.findOneAndUpdate(
     { email },
-    { sessionKey },
+    { sessionKey, refreshKey },
+
     { runValidators: true }
   );
 
@@ -41,11 +43,18 @@ const login = async (req, res, next) => {
   });
   const refreshToken = createRefreshToken({
     userId: userInstanseOrNull._id.toString(),
+    refreshKey,
+  });
+
+  res.cookie("jwt", refreshToken, {
+    httpOnly: true,
+    sameSite: "None",
+    secure: true,
+    maxAge: 24 * 60 * 60 * 1000,
   });
 
   res.status(200).json({
     accessToken,
-    refreshToken,
     user: {
       email: userInstanseOrNull.email,
       name: userInstanseOrNull.name,
