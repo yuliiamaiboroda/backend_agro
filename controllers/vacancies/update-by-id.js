@@ -1,9 +1,19 @@
 const { VacancyModel } = require("../../models");
 const { NotFoundError } = require("../../helpers/utils");
 
-const updateCategotyById = async (req, res, next) => {
+const updateById = async (req, res, next) => {
   const { id } = req.params;
-  const { category } = req.body;
+  const {
+    category,
+    title,
+    description,
+    sallary,
+    education,
+    contactMail,
+    contactPhone,
+    workExperienceRequired,
+    location,
+  } = req.body;
 
   const vacancy = await VacancyModel.findById(id);
 
@@ -13,7 +23,17 @@ const updateCategotyById = async (req, res, next) => {
 
   const updatedVacancy = await VacancyModel.findByIdAndUpdate(
     id,
-    { category },
+    {
+      category,
+      title,
+      description,
+      sallary,
+      education,
+      contactMail,
+      contactPhone,
+      workExperienceRequired,
+      location,
+    },
     { returnDocument: "after", runValidators: true }
   );
 
@@ -21,5 +41,5 @@ const updateCategotyById = async (req, res, next) => {
 };
 
 module.exports = {
-  updateCategotyById,
+  updateById,
 };

@@ -11,7 +11,7 @@ const {
 const {
   userRegisterSchema,
   userLogInSchema,
-  userChangeRoleSchema,
+  updateUserSchema,
 } = require("../../helpers/schemas");
 
 router
@@ -47,9 +47,9 @@ router
     "/:id",
     authUser,
     checkAccessRight(),
-    validateBody(userChangeRoleSchema),
+    validateBody(updateUserSchema),
     validateObjectId,
-    controllerExceptionWrapper(userController.changeRoleById)
+    controllerExceptionWrapper(userController.updateById)
   );
 
 module.exports = router;
