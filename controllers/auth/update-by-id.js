@@ -36,7 +36,7 @@ const updateById = async (req, res, next) => {
       { returnDocument: "after", runValidators: true }
     );
 
-    res.status(200).json({ email, name, surname, role, userId });
+    res.status(200).json({ email, name, surname, role, _id: userId });
   } catch (error) {
     throw new EmailUsedError();
   }
