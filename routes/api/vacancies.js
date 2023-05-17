@@ -36,7 +36,7 @@ router
     checkAccessRight(ROLES_LIST.applyManager),
     validateObjectId,
     validateBody(createVacancySchema),
-    controllerExceptionWrapper(vacancyController.updateVacancyById)
+    controllerExceptionWrapper(vacancyController.updateById)
   )
   .delete(
     "/:id",
