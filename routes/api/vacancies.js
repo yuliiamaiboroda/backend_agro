@@ -2,10 +2,7 @@ const express = require("express");
 const router = express.Router();
 const vacancyController = require("../../controllers/vacancies");
 const { controllerExceptionWrapper } = require("../../helpers/utils");
-const {
-  createVacancySchema,
-  changeVacancyCategotySchema,
-} = require("../../helpers/schemas");
+const { createVacancySchema } = require("../../helpers/schemas");
 const {
   validateBody,
   authUser,
@@ -29,13 +26,13 @@ router
     validateBody(createVacancySchema),
     controllerExceptionWrapper(vacancyController.create)
   )
-  .patch(
-    "/category/:id",
+  .put(
+    "/:id",
     authUser,
     checkAccessRight(ROLES_LIST.applyManager),
     validateObjectId,
-    validateBody(changeVacancyCategotySchema),
-    controllerExceptionWrapper(vacancyController.updateCategotyById)
+    validateBody(createVacancySchema),
+    controllerExceptionWrapper(vacancyController.updateVacancyById)
   )
   .delete(
     "/:id",

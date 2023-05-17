@@ -1,4 +1,4 @@
-const { updateCategotyById } = require("./update-category-by-id");
+const { updateVacancyById } = require("./update-by-id");
 const { create } = require("./create");
 const { removeById } = require("./remove-by-id");
 const { getActual } = require("./get-actual");
@@ -9,7 +9,7 @@ module.exports = {
   create,
   getAll,
   removeById,
-  updateCategotyById,
+  updateVacancyById,
   getActual,
   getCertainById,
 };
