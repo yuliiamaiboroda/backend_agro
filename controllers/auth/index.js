@@ -1,4 +1,4 @@
-const { changeRoleById } = require("./change-role-by-id");
+const { updateById } = require("./update-by-id");
 const { current } = require("./current");
 const { getAll } = require("./get-all");
 const { login } = require("./login");
@@ -13,7 +13,7 @@ module.exports = {
   logout,
   getAll,
   removeById,
-  changeRoleById,
+  updateById,
   refreshUser,
   current,
 };
