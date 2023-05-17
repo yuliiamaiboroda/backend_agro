@@ -15,6 +15,10 @@ router
   .get("/all", controllerExceptionWrapper(vacancyController.getAll))
   .get("/actual", controllerExceptionWrapper(vacancyController.getActual))
   .get(
+    "/irrelevant",
+    controllerExceptionWrapper(vacancyController.getIrrelevant)
+  )
+  .get(
     "/:id",
     validateObjectId,
     controllerExceptionWrapper(vacancyController.getCertainById)
