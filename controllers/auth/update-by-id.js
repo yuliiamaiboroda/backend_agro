@@ -17,12 +17,6 @@ const updateById = async (req, res, next) => {
     throw new NotFoundError();
   }
 
-  const { id: idFromUserModel } = await UserModel.findOne({ newEmail });
-
-  if (idFromUserModel !== id) {
-    throw new EmailUsedError();
-  }
-
   try {
     const {
       email,
