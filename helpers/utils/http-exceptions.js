@@ -47,6 +47,15 @@ class CloudinaryFailedError extends Error {
   }
 }
 
+class DeleteTheLastAdminAccountError extends Error {
+  constructor() {
+    super(
+      "It is forbidden to delete the last account with these access rights"
+    );
+    this.status = 403;
+  }
+}
+
 class CustomHttpException extends Error {
   constructor({ status, message } = {}) {
     super(message);
@@ -63,4 +72,5 @@ module.exports = {
   ValidationError,
   CloudinaryFailedError,
   CustomHttpException,
+  DeleteTheLastAdminAccountError,
 };
