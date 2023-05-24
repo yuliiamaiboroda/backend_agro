@@ -56,6 +56,13 @@ class DeleteTheLastAdminAccountError extends Error {
   }
 }
 
+class UpdateOwnPasswordError extends Error {
+  constructor() {
+    super("A wrong password has been entered");
+    this.status = 401;
+  }
+}
+
 class CustomHttpException extends Error {
   constructor({ status, message } = {}) {
     super(message);
@@ -73,4 +80,5 @@ module.exports = {
   CloudinaryFailedError,
   CustomHttpException,
   DeleteTheLastAdminAccountError,
+  UpdateOwnPasswordError,
 };

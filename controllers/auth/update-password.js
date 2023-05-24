@@ -1,6 +1,9 @@
 const bcrypt = require("bcrypt");
 const { UserModel } = require("../../models");
-const { UnauthorizedError } = require("../../helpers/utils");
+const {
+  UnauthorizedError,
+  UpdateOwnPasswordError,
+} = require("../../helpers/utils");
 
 const updatePassword = async (req, res, next) => {
   const { id } = req.user;
@@ -18,7 +21,7 @@ const updatePassword = async (req, res, next) => {
   );
 
   if (!isValidPassword) {
-    throw new UnauthorizedError();
+    throw new UpdateOwnPasswordError();
   }
 
   const passwordHash = await bcrypt.hash(newPassword, 10);

@@ -12,6 +12,7 @@ const {
   CloudinaryFailedError,
   CustomHttpException,
   DeleteTheLastAdminAccountError,
+  UpdateOwnPasswordError,
 } = require("./http-exceptions");
 const {
   removeCloudinaryFileByURL,
@@ -32,6 +33,7 @@ module.exports = {
   CloudinaryFailedError,
   CustomHttpException,
   DeleteTheLastAdminAccountError,
+  UpdateOwnPasswordError,
   removeCloudinaryFileByURL,
   uploadFileWithErrorHandling,
 };
