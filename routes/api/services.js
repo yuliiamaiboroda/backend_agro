@@ -33,7 +33,6 @@ router
   .get(
     "/:serviceId",
     authUser,
-    checkAccessRight(ROLES_LIST.servicesManager),
     validateObjectId,
     controllerExceptionWrapper(getCertainById)
   )
