@@ -1,4 +1,4 @@
-const { userChangeRoleSchema } = require("./auth-schemas/change-role.schema");
+const { updateUserSchema } = require("./auth-schemas/update-user.schema");
 const { userLogInSchema } = require("./auth-schemas/login.schema");
 const { userRegisterSchema } = require("./auth-schemas/register.schema");
 const {
@@ -27,7 +27,7 @@ const {
 module.exports = {
   userLogInSchema,
   userRegisterSchema,
-  userChangeRoleSchema,
+  updateUserSchema,
   createVacancySchema,
   changeVacancyCategotySchema,
   createProductSchema,
