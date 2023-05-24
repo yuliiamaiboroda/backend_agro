@@ -65,6 +65,19 @@ const updateUserSchema = Joi.object({
         .required()
         .get()
     ),
+  password: Joi.string()
+    .trim()
+    .pattern(/^\d*(?=.*[a-z])(?=.*[A-Z])\S+\D*\d*$/)
+    .min(7)
+    .max(32)
+    .messages(
+      new FieldErrors("password")
+        .string()
+        .pattern("capital letter", "small letter and number")
+        .min(7)
+        .max(32)
+        .get()
+    ),
 }).messages(new FieldErrors("user").object().extraFields().get());
 
 module.exports = {

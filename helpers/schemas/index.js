@@ -23,10 +23,14 @@ const {
 const {
   updateServiceSchema,
 } = require("./services-schemas/update-service-schema copy");
+const {
+  updateUsersPasswordSchema,
+} = require("./auth-schemas/update-password.schema");
 
 module.exports = {
   userLogInSchema,
   userRegisterSchema,
+  updateUsersPasswordSchema,
   updateUserSchema,
   createVacancySchema,
   changeVacancyCategotySchema,
