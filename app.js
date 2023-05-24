@@ -7,7 +7,7 @@ const cookieparser = require("cookie-parser");
 const { globalErrorHandler } = require("./middlewares");
 
 const corsOptions = {
-  //To allow requests from client
+  // To allow requests from client
   origin: [
     "http://localhost:3000",
     "http://127.0.0.1",
