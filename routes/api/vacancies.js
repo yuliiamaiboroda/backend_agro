@@ -13,10 +13,9 @@ const { ROLES_LIST } = require("../../helpers/constants");
 
 router
   .get("/all", controllerExceptionWrapper(vacancyController.getAll))
-  .get("/actual", controllerExceptionWrapper(vacancyController.getActual))
   .get(
-    "/irrelevant",
-    controllerExceptionWrapper(vacancyController.getIrrelevant)
+    "/:categoryName",
+    controllerExceptionWrapper(vacancyController.getByCategory)
   )
   .get(
     "/:id",

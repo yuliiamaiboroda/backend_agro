@@ -1,5 +1,5 @@
 const CATEGORY_LIST = Object.freeze({
-  all: "all-vacancies",
+  irrelevant: "irrelevant-vacancies",
   actual: "actual-vacancies",
 });
 
