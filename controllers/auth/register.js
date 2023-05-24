@@ -1,10 +1,6 @@
 const { UserModel } = require("../../models");
 const bcrypt = require("bcrypt");
 const { EmailUsedError } = require("../../helpers/utils");
-const {
-  createAccessToken,
-  createRefreshToken,
-} = require("../../services/auth");
 const crypto = require("crypto");
 
 const register = async (req, res, next) => {
