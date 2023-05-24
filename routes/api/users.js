@@ -12,6 +12,7 @@ const {
   userRegisterSchema,
   userLogInSchema,
   updateUserSchema,
+  updateUsersPasswordSchema,
 } = require("../../helpers/schemas");
 
 router
@@ -30,6 +31,12 @@ router
   )
   .post("/logout", authUser, controllerExceptionWrapper(userController.logout))
   .post("/refresh", controllerExceptionWrapper(userController.refreshUser))
+  .post(
+    "/updatePassword",
+    validateBody(updateUsersPasswordSchema),
+    authUser,
+    controllerExceptionWrapper(userController.updatePassword)
+  )
   .get(
     "/getAllUser",
     authUser,
