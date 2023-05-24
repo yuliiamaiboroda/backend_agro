@@ -29,7 +29,7 @@ const {
   productsRouter,
   feedbackRouter,
   servicesRouter,
-  resumeRouter,
+  resumesRouter,
 } = require("./routes/api");
 
 app.use(logger(formatsLogger));
@@ -42,7 +42,7 @@ app.use("/api/vacancies", vacanciesRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/services", servicesRouter);
 app.use("/api/feedback", feedbackRouter);
-app.use("/api/resumes", resumeRouter);
+app.use("/api/resumes", resumesRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

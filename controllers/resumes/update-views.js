@@ -27,7 +27,7 @@ const updateViews = async (req, res) => {
     { runValidators: true }
   );
 
-  return res.status(204).send();
+  res.status(204).send();
 };
 
 module.exports = { updateViews };
