@@ -10,8 +10,6 @@ const create = async (req, res, next) => {
   }
   const { path } = req.file;
 
-  console.log('test line')
-
   const result = await ServicesModel.create({
     title,
     description,
