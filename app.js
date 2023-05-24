@@ -42,7 +42,7 @@ app.use("/api/vacancies", vacanciesRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/services", servicesRouter);
 app.use("/api/feedback", feedbackRouter);
-app.use("/api/resume", resumeRouter);
+app.use("/api/resumes", resumeRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

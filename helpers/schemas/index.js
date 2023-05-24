@@ -18,14 +18,14 @@ const {
 } = require("./feedback-schemas/send-feedback.schema");
 const { createResumeSchema } = require("./resume-schemas/create-resume.schema");
 const {
+  updateUsersPasswordSchema,
+} = require("./auth-schemas/update-password.schema");
+const {
   createServiceSchema,
 } = require("./services-schemas/create-service-schema");
 const {
   updateServiceSchema,
 } = require("./services-schemas/update-service-schema copy");
-const {
-  updateUsersPasswordSchema,
-} = require("./auth-schemas/update-password.schema");
 
 module.exports = {
   userLogInSchema,

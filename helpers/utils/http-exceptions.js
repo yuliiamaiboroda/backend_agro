@@ -63,6 +63,13 @@ class UpdateOwnPasswordError extends Error {
   }
 }
 
+class IsAlreadyViewedError extends Error {
+  constructor() {
+    super("The item has already been reviewed");
+    this.status = 400;
+  }
+}
+
 class CustomHttpException extends Error {
   constructor({ status, message } = {}) {
     super(message);
@@ -81,4 +88,5 @@ module.exports = {
   CustomHttpException,
   DeleteTheLastAdminAccountError,
   UpdateOwnPasswordError,
+  IsAlreadyViewedError,
 };
