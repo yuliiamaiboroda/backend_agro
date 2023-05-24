@@ -1,6 +1,5 @@
-const { RESPONSE_ERRORS } = require("../../helpers/constants");
-const { createHttpException } = require("../../helpers/utils");
 const { VacancyModel } = require("../../models");
+const { NotFoundError } = require("../../helpers/utils");
 
 const getCertainById = async (req, res, next) => {
   const { id } = req.params;
@@ -8,7 +7,7 @@ const getCertainById = async (req, res, next) => {
   const vacancy = await VacancyModel.findById(id);
 
   if (!vacancy) {
-    throw createHttpException(RESPONSE_ERRORS.notFound);
+    throw new NotFoundError();
   }
 
   res.status(200).json(vacancy);
