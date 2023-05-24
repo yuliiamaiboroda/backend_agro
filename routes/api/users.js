@@ -43,6 +43,13 @@ router
     checkAccessRight(),
     controllerExceptionWrapper(userController.getAll)
   )
+  .get(
+    "/certain/:userId",
+    authUser,
+    checkAccessRight(),
+    validateObjectId,
+    controllerExceptionWrapper(userController.getCertainById)
+  )
   .delete(
     "/:id",
     authUser,
