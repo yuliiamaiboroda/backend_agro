@@ -3,7 +3,7 @@ const vacanciesRouter = require("./vacancies");
 const productsRouter = require("./products");
 const servicesRouter = require("./services");
 const feedbackRouter = require("./feedback");
-const resumeRouter = require("./resume");
+const resumesRouter = require("./resumes");
 
 module.exports = {
   authRouter,
@@ -11,5 +11,5 @@ module.exports = {
   productsRouter,
   feedbackRouter,
   servicesRouter,
-  resumeRouter,
+  resumesRouter,
 };

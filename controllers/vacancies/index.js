@@ -6,6 +6,7 @@ const { getAll } = require("./get-all");
 const { getCertainById } = require("./get-certain-by-id");
 
 const { getByCategory } = require("./get-by-category");
+const { getTitles } = require("./get-titles");
 
 module.exports = {
   create,
@@ -14,4 +15,5 @@ module.exports = {
   updateById,
   getCertainById,
   getByCategory,
+  getTitles,
 };
