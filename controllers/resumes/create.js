@@ -3,7 +3,7 @@ const { ResumeModel } = require("../../models");
 const create = async (req, res) => {
   const { name, phone, email, position, comment, agreement } = req.body;
 
-  const resume = await ResumeModel.create({
+  const newResume = await ResumeModel.create({
     name,
     phone,
     email,
@@ -11,6 +11,12 @@ const create = async (req, res) => {
     resumeFileURL: req.file?.path || null,
     comment,
     agreement,
+  });
+
+  const resume = await ResumeModel.findById(newResume._id, {
+    agreement: 0,
+    viewedBy: 0,
+    createdAt: 0,
   });
 
   res.status(201).json(resume);

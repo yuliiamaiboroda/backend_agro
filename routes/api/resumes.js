@@ -13,10 +13,11 @@ const {
 } = require("../../middlewares");
 const {
   create,
+  updateViews,
   getAll,
   getCertainById,
   removeById,
-} = require("../../controllers/resume");
+} = require("../../controllers/resumes");
 
 router
   .post(
@@ -44,6 +45,13 @@ router
     checkAccessRight(ROLES_LIST.applyManager),
     validateObjectId,
     controllerExceptionWrapper(removeById)
+  )
+  .patch(
+    "/certain/views/:resumeId",
+    authUser,
+    checkAccessRight(ROLES_LIST.applyManager),
+    validateObjectId,
+    controllerExceptionWrapper(updateViews)
   );
 
 module.exports = router;
