@@ -40,7 +40,7 @@ const getAll = async (req, res) => {
       },
     })
     .sort({ createdAt: sort })
-    .project({ viewedBy: 0, createdAt: 0 })
+    .project({ name: 1, position: 1, comment: 1, isReviewed: 1 })
     .skip(Number(skip))
     .limit(Number(limit));
 
