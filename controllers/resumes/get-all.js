@@ -2,22 +2,22 @@ const { ResumeModel, VacancyModel } = require("../../models");
 
 const getAll = async (req, res) => {
   const { _id: userId } = req.user;
-
-  const { position, sort = "desc" } = req.query;
-
+  const { position, sort = "desc", skip = 0, limit = 20 } = req.query;
   const matchQuery = {};
 
-  if (position && position !== "other") {
-    matchQuery.position = position;
-  }
+  const vacancies = await VacancyModel.find({}, { title: 1, _id: 0 });
+  const vacancyTitleList = vacancies.reduce(
+    (acc, { title }) => [...acc, title],
+    []
+  );
 
-  if (position === "other") {
-    const vacancies = await VacancyModel.find({}, { title: 1, _id: 0 });
-    const vacancyList = vacancies.reduce(
-      (acc, { title }) => [...acc, title],
-      []
-    );
-    matchQuery.position = { $nin: vacancyList };
+  if (position) {
+    console.log("position", position);
+    matchQuery.position = vacancyTitleList.includes(position)
+      ? position
+      : { $nin: vacancyTitleList };
+
+    console.log("matchQuery", matchQuery);
   }
 
   const resumes = await ResumeModel.aggregate()
@@ -40,9 +40,15 @@ const getAll = async (req, res) => {
       },
     })
     .sort({ createdAt: sort })
-    .project({ viewedBy: 0, createdAt: 0 });
+    .project({ viewedBy: 0, createdAt: 0 })
+    .skip(Number(skip))
+    .limit(Number(limit));
 
-  res.status(200).json(resumes);
+  const total = await ResumeModel.find(matchQuery)
+    .sort({ createdAt: sort })
+    .count("total");
+
+  res.status(200).json({ resumes, total, skip, limit });
 };
 
 module.exports = { getAll };
