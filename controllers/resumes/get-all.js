@@ -48,7 +48,9 @@ const getAll = async (req, res) => {
     .sort({ createdAt: sort })
     .count("total");
 
-  res.status(200).json({ resumes, total, skip, limit });
+  res
+    .status(200)
+    .json({ resumes, total, skip: Number(skip), limit: Number(limit) });
 };
 
 module.exports = { getAll };
