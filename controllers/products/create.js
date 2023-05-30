@@ -1,10 +1,10 @@
 const { ProductsModel } = require("../../models");
-const { ImageRequiredError } = require("../../helpers/utils");
+const { FileRequiredError } = require("../../helpers/utils");
 
 const create = async (req, res) => {
   const { title, description } = req.body;
   if (!req.file) {
-    throw new ImageRequiredError();
+    throw new FileRequiredError();
   }
   const { path } = req.file;
   const product = await ProductsModel.create({
