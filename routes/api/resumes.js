@@ -17,6 +17,7 @@ const {
   getAll,
   getCertainById,
   removeById,
+  updateIsFavorite,
 } = require("../../controllers/resumes");
 
 router
@@ -26,32 +27,27 @@ router
     validateBody(createResumeSchema),
     controllerExceptionWrapper(create)
   )
-  .get(
-    "/all",
-    authUser,
-    checkAccessRight(ROLES_LIST.applyManager),
-    controllerExceptionWrapper(getAll)
-  )
+  .use(authUser, checkAccessRight(ROLES_LIST.applyManager))
+  .get("/all", controllerExceptionWrapper(getAll))
   .get(
     "/certain/:resumeId",
-    authUser,
-    checkAccessRight(ROLES_LIST.applyManager),
     validateObjectId,
     controllerExceptionWrapper(getCertainById)
   )
   .delete(
     "/certain/:resumeId",
-    authUser,
-    checkAccessRight(ROLES_LIST.applyManager),
     validateObjectId,
     controllerExceptionWrapper(removeById)
   )
   .patch(
     "/certain/views/:resumeId",
-    authUser,
-    checkAccessRight(ROLES_LIST.applyManager),
     validateObjectId,
     controllerExceptionWrapper(updateViews)
+  )
+  .patch(
+    "/certain/favorite/:resumeId",
+    validateObjectId,
+    controllerExceptionWrapper(updateIsFavorite)
   );
 
 module.exports = router;

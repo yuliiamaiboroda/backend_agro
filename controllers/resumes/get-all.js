@@ -2,7 +2,13 @@ const { ResumeModel, VacancyModel } = require("../../models");
 
 const getAll = async (req, res) => {
   const { _id: userId } = req.user;
-  const { position, sort = "desc", skip = 0, limit = 20 } = req.query;
+  const {
+    isFavorite,
+    position,
+    sort = "desc",
+    skip = 0,
+    limit = 20,
+  } = req.query;
   const matchQuery = {};
 
   const vacancies = await VacancyModel.find({}, { title: 1, _id: 0 });
@@ -11,13 +17,14 @@ const getAll = async (req, res) => {
     []
   );
 
+  if (isFavorite) {
+    matchQuery.isFavorite = true;
+  }
+
   if (position) {
-    console.log("position", position);
     matchQuery.position = vacancyTitleList.includes(position)
       ? position
       : { $nin: vacancyTitleList };
-
-    console.log("matchQuery", matchQuery);
   }
 
   const resumes = await ResumeModel.aggregate()
@@ -40,7 +47,7 @@ const getAll = async (req, res) => {
       },
     })
     .sort({ createdAt: sort })
-    .project({ name: 1, position: 1, comment: 1, isReviewed: 1 })
+    .project({ name: 1, position: 1, comment: 1, isFavorite: 1, isReviewed: 1 })
     .skip(Number(skip))
     .limit(Number(limit));
 

@@ -9,6 +9,7 @@ const resumeShema = mongoose.Schema(
     resumeFileURL: { type: String, trim: true },
     comment: { type: String, trim: true, require: true },
     agreement: { type: Boolean, require: true },
+    isFavorite: { type: Boolean, default: false, require: true },
     viewedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
   },
 
