@@ -26,9 +26,9 @@ class AccessDeniedError extends Error {
   }
 }
 
-class ImageRequiredError extends Error {
+class FileRequiredError extends Error {
   constructor() {
-    super("Image required");
+    super("File required");
     this.status = 400;
   }
 }
@@ -82,7 +82,7 @@ module.exports = {
   NotFoundError,
   EmailUsedError,
   AccessDeniedError,
-  ImageRequiredError,
+  FileRequiredError,
   ValidationError,
   CloudinaryFailedError,
   CustomHttpException,
