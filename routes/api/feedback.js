@@ -12,7 +12,7 @@ const feedbackController = require("../../controllers/feedback");
 
 router
   .post(
-    "/create",
+    "/",
     validateBody(sendFeedBackSchema),
     controllerExceptionWrapper(feedbackController.create)
   )
@@ -35,6 +35,13 @@ router
     checkAccessRight(),
     validateObjectId,
     controllerExceptionWrapper(feedbackController.removeById)
+  )
+  .patch(
+    "/:id",
+    authUser,
+    checkAccessRight(),
+    validateObjectId,
+    controllerExceptionWrapper(feedbackController.updateViews)
   );
 
 module.exports = router;
