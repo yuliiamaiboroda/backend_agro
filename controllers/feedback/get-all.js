@@ -29,9 +29,17 @@ const getAll = async (req, res, next) => {
       comment: 1,
       isReviewed: 1,
       createdAt: 1,
-    });
+    })
+    .skip(Number(skip))
+    .limit(Number(limit));
 
-  res.status(200).json(feedbacks);
+  const total = await FeedbackModel.find()
+    .sort({ createdAt: sort })
+    .count("total");
+
+  res
+    .status(200)
+    .json({ feedbacks, total, skip: Number(skip), limit: Number(limit) });
 };
 
 module.exports = {
