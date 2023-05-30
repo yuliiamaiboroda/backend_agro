@@ -1,9 +1,45 @@
 const { FeedbackModel } = require("../../models");
 
 const getAll = async (req, res, next) => {
-  const listAllFeddBack = await FeedbackModel.find();
+  const { _id: userId } = req.user;
+  const { sort = "desc", skip = 0, limit = 20 } = req.query;
 
-  res.status(200).json(listAllFeddBack);
+  const feedbacks = await FeedbackModel.aggregate()
+    .addFields({
+      isReviewed: {
+        $cond: {
+          if: {
+            $first: {
+              $filter: {
+                input: "$viewedBy",
+                as: "viewedUserId",
+                cond: { $eq: ["$$viewedUserId", userId] },
+              },
+            },
+          },
+          then: true,
+          else: false,
+        },
+      },
+    })
+    .sort({ createdAt: sort })
+    .project({
+      name: 1,
+      position: 1,
+      comment: 1,
+      isReviewed: 1,
+      createdAt: 1,
+    })
+    .skip(Number(skip))
+    .limit(Number(limit));
+
+  const total = await FeedbackModel.find()
+    .sort({ createdAt: sort })
+    .count("total");
+
+  res
+    .status(200)
+    .json({ feedbacks, total, skip: Number(skip), limit: Number(limit) });
 };
 
 module.exports = {

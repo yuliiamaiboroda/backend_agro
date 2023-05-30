@@ -22,8 +22,15 @@ const feedbacksSchema = mongoose.Schema(
       type: Boolean,
       required: [true, "agreement is required"],
     },
+    viewedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
   },
-  { versionKey: false }
+  {
+    versionKey: false,
+    timestamps: {
+      createdAt: true,
+      updatedAt: false,
+    },
+  }
 );
 
 const FeedbackModel = mongoose.model("feedbacks", feedbacksSchema);
