@@ -24,7 +24,7 @@ app.use(cookieparser());
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 const {
-  authRouter,
+  usersRouter,
   vacanciesRouter,
   productsRouter,
   feedbackRouter,
@@ -37,7 +37,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.static("public"));
 
-app.use("/api/users", authRouter);
+app.use("/api/users", usersRouter);
 app.use("/api/vacancies", vacanciesRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/services", servicesRouter);

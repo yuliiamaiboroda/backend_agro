@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const userController = require("../../controllers/auth");
+const userController = require("../../controllers/users");
 const { controllerExceptionWrapper } = require("../../helpers/utils");
 const {
   validateBody,
