@@ -42,6 +42,13 @@ router
     checkAccessRight(),
     validateObjectId,
     controllerExceptionWrapper(feedbackController.updateViews)
+  )
+  .patch(
+    "/favorite/:id",
+    authUser,
+    checkAccessRight(),
+    validateObjectId,
+    controllerExceptionWrapper(feedbackController.updateIsFavorite)
   );
 
 module.exports = router;
