@@ -25,7 +25,7 @@ const restorePassword = async (req, res, next) => {
     sendEmail(
       email,
       "Тимчасовий пароль",
-      `Це ваш тимчасовий пароль: ${newPassword}. Будь ласка змінить його при настопному вході в аккаунт`
+      `Це ваш тимчасовий пароль: ${newPassword}. Будь ласка змінить його при наступному вході в аккаунт`
     );
     await UserModel.findByIdAndUpdate(
       id,
