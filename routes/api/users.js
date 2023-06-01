@@ -36,6 +36,7 @@ router
     validateBody(userRegisterSchema),
     controllerExceptionWrapper(userController.register)
   )
+  .patch("/restore", controllerExceptionWrapper(userController.restorePassword))
   .get("/", controllerExceptionWrapper(userController.getAll))
   .use(validateObjectId)
   .get("/:id", controllerExceptionWrapper(userController.getCertainById))

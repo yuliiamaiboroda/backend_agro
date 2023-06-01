@@ -21,6 +21,8 @@ const {
 const {
   uploadFileWithErrorHandling,
 } = require("./upload-file-with-error-handling");
+const sendEmail = require("./restore-password-with-email");
+const { randomPassword } = require("./random-passwors");
 
 module.exports = {
   controllerExceptionWrapper,
@@ -38,4 +40,6 @@ module.exports = {
   IsAlreadyViewedError,
   removeCloudinaryFileByURL,
   uploadFileWithErrorHandling,
+  sendEmail,
+  randomPassword,
 };
