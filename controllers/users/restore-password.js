@@ -13,6 +13,12 @@ const restorePassword = async (req, res, next) => {
     throw new NotFoundError();
   }
 
+  const userInstanseOrNull = await UserModel.findById();
+
+  if (!userInstanseOrNull) {
+    throw new NotFoundError();
+  }
+
   const newPassword = randomPassword();
   const passwordHash = await bcrypt.hash(newPassword, 10);
   try {
