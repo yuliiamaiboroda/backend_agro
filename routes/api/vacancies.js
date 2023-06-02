@@ -23,25 +23,20 @@ router
     validateObjectId,
     controllerExceptionWrapper(vacancyController.getCertainById)
   )
+  .use(authUser, checkAccessRight(ROLES_LIST.applyManager))
   .post(
     "/create",
-    authUser,
-    checkAccessRight(ROLES_LIST.applyManager),
     validateBody(createVacancySchema),
     controllerExceptionWrapper(vacancyController.create)
   )
   .put(
     "/:id",
-    authUser,
-    checkAccessRight(ROLES_LIST.applyManager),
     validateObjectId,
     validateBody(createVacancySchema),
     controllerExceptionWrapper(vacancyController.updateById)
   )
   .delete(
     "/:id",
-    authUser,
-    checkAccessRight(ROLES_LIST.applyManager),
     validateObjectId,
     controllerExceptionWrapper(vacancyController.removeById)
   );
