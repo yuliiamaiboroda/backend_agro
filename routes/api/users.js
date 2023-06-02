@@ -38,11 +38,19 @@ router
   )
   .patch("/restore", controllerExceptionWrapper(userController.restorePassword))
   .get("/", controllerExceptionWrapper(userController.getAll))
-  .use(validateObjectId)
-  .get("/:id", controllerExceptionWrapper(userController.getCertainById))
-  .delete("/:id", controllerExceptionWrapper(userController.removeById))
+  .get(
+    "/:id",
+    validateObjectId,
+    controllerExceptionWrapper(userController.getCertainById)
+  )
+  .delete(
+    "/:id",
+    validateObjectId,
+    controllerExceptionWrapper(userController.removeById)
+  )
   .patch(
     "/:id",
+    validateObjectId,
     validateBody(updateUserSchema),
     controllerExceptionWrapper(userController.updateById)
   );
