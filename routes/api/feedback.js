@@ -16,32 +16,27 @@ router
     validateBody(sendFeedBackSchema),
     controllerExceptionWrapper(feedbackController.create)
   )
-  .get(
-    "/all",
-    authUser,
-    checkAccessRight(),
-    controllerExceptionWrapper(feedbackController.getAll)
-  )
+  .use(authUser, checkAccessRight())
+  .get("/all", controllerExceptionWrapper(feedbackController.getAll))
   .get(
     "/:id",
-    authUser,
-    checkAccessRight(),
     validateObjectId,
     controllerExceptionWrapper(feedbackController.getCertainById)
   )
   .delete(
     "/:id",
-    authUser,
-    checkAccessRight(),
     validateObjectId,
     controllerExceptionWrapper(feedbackController.removeById)
   )
   .patch(
     "/:id",
-    authUser,
-    checkAccessRight(),
     validateObjectId,
     controllerExceptionWrapper(feedbackController.updateViews)
+  )
+  .patch(
+    "/favorite/:id",
+    validateObjectId,
+    controllerExceptionWrapper(feedbackController.updateIsFavorite)
   );
 
 module.exports = router;

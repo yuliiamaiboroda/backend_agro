@@ -8,6 +8,7 @@ const { register } = require("./register");
 const { removeById } = require("./remove-by-id");
 const { updatePassword } = require("./update-password");
 const { getCertainById } = require("./get-certain-by-id");
+const { restorePassword } = require("./restore-password");
 
 module.exports = {
   register,
@@ -20,4 +21,5 @@ module.exports = {
   current,
   updatePassword,
   getCertainById,
+  restorePassword,
 };

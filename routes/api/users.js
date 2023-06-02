@@ -17,52 +17,33 @@ const {
 
 router
   .post(
-    "/register",
-    validateBody(userRegisterSchema),
-    authUser,
-    checkAccessRight(),
-    controllerExceptionWrapper(userController.register)
-  )
-  .get("/current", authUser, controllerExceptionWrapper(userController.current))
-  .post(
     "/login",
     validateBody(userLogInSchema),
     controllerExceptionWrapper(userController.login)
   )
-  .post("/logout", authUser, controllerExceptionWrapper(userController.logout))
   .post("/refresh", controllerExceptionWrapper(userController.refreshUser))
+  .use(authUser)
+  .get("/current", controllerExceptionWrapper(userController.current))
+  .post("/logout", controllerExceptionWrapper(userController.logout))
   .post(
     "/updatePassword",
     validateBody(updateUsersPasswordSchema),
-    authUser,
     controllerExceptionWrapper(userController.updatePassword)
   )
-  .get(
-    "/getAllUser",
-    authUser,
-    checkAccessRight(),
-    controllerExceptionWrapper(userController.getAll)
+  .use(checkAccessRight())
+  .post(
+    "/register",
+    validateBody(userRegisterSchema),
+    controllerExceptionWrapper(userController.register)
   )
-  .get(
-    "/certain/:userId",
-    authUser,
-    checkAccessRight(),
-    validateObjectId,
-    controllerExceptionWrapper(userController.getCertainById)
-  )
-  .delete(
-    "/:id",
-    authUser,
-    checkAccessRight(),
-    validateObjectId,
-    controllerExceptionWrapper(userController.removeById)
-  )
+  .patch("/restore", controllerExceptionWrapper(userController.restorePassword))
+  .get("/", controllerExceptionWrapper(userController.getAll))
+  .use(validateObjectId)
+  .get("/:id", controllerExceptionWrapper(userController.getCertainById))
+  .delete("/:id", controllerExceptionWrapper(userController.removeById))
   .patch(
     "/:id",
-    authUser,
-    checkAccessRight(),
     validateBody(updateUserSchema),
-    validateObjectId,
     controllerExceptionWrapper(userController.updateById)
   );
 

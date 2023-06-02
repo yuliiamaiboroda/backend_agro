@@ -22,6 +22,7 @@ const feedbacksSchema = mongoose.Schema(
       type: Boolean,
       required: [true, "agreement is required"],
     },
+    isFavorite: { type: Boolean, default: false, require: true },
     viewedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
   },
   {
