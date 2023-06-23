@@ -13,6 +13,7 @@ const {
   userLogInSchema,
   updateUserSchema,
   updateUsersPasswordSchema,
+  restorePasswordSchema,
 } = require("../../helpers/schemas");
 
 router
@@ -22,6 +23,11 @@ router
     controllerExceptionWrapper(userController.login)
   )
   .post("/refresh", controllerExceptionWrapper(userController.refreshUser))
+  .patch(
+    "/restore",
+    validateBody(restorePasswordSchema),
+    controllerExceptionWrapper(userController.restorePassword)
+  )
   .use(authUser)
   .get("/current", controllerExceptionWrapper(userController.current))
   .post("/logout", controllerExceptionWrapper(userController.logout))
@@ -36,7 +42,7 @@ router
     validateBody(userRegisterSchema),
     controllerExceptionWrapper(userController.register)
   )
-  .patch("/restore", controllerExceptionWrapper(userController.restorePassword))
+  // .patch("/restore", controllerExceptionWrapper(userController.restorePassword))
   .get("/", controllerExceptionWrapper(userController.getAll))
   .get(
     "/:id",
