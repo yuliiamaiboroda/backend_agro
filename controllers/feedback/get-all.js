@@ -2,9 +2,15 @@ const { FeedbackModel } = require("../../models");
 
 const getAll = async (req, res, next) => {
   const { _id: userId } = req.user;
-  const { sort = "desc", skip = 0, limit = 20 } = req.query;
+  const { isFavorite, sort = "desc", skip = 0, limit = 20 } = req.query;
+  const matchQuery = {};
+
+  if (isFavorite) {
+    matchQuery.isFavorite = true;
+  }
 
   const feedbacks = await FeedbackModel.aggregate()
+    .match(matchQuery)
     .addFields({
       isReviewed: {
         $cond: {
@@ -32,7 +38,7 @@ const getAll = async (req, res, next) => {
     .skip(Number(skip))
     .limit(Number(limit));
 
-  const total = await FeedbackModel.find()
+  const total = await FeedbackModel.find(matchQuery)
     .sort({ createdAt: sort })
     .count("total");
 

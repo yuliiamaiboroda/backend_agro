@@ -1,40 +1,10 @@
-const {
-  NotFoundError,
-  randomPassword,
-  sendEmail,
-} = require("../../helpers/utils");
-const { UserModel } = require("../../models");
-const bcrypt = require("bcrypt");
+const { sendRandomPassword } = require("../../services/send-password");
 
 const restorePassword = async (req, res, next) => {
-  const { email, id } = req.user;
+  const { email } = req.body;
 
-  if (!email) {
-    throw new NotFoundError();
-  }
+  await sendRandomPassword(email);
 
-  const userInstanseOrNull = await UserModel.findById();
-
-  if (!userInstanseOrNull) {
-    throw new NotFoundError();
-  }
-
-  const newPassword = randomPassword();
-  const passwordHash = await bcrypt.hash(newPassword, 10);
-  try {
-    sendEmail(
-      email,
-      "Тимчасовий пароль",
-      `Це ваш тимчасовий пароль: ${newPassword}. Будь ласка, змініть його при наступному вході в аккаунт`
-    );
-    await UserModel.findByIdAndUpdate(
-      id,
-      { passwordHash },
-      { runValidators: true }
-    );
-  } catch (err) {
-    next(err);
-  }
   res.status(200).send("your new password sent via email");
 };
 

@@ -26,6 +26,9 @@ const {
 const {
   updateServiceSchema,
 } = require("./services-schemas/update-service-schema copy");
+const {
+  restorePasswordSchema,
+} = require("./auth-schemas/restore-password.schema");
 
 module.exports = {
   userLogInSchema,
@@ -40,4 +43,5 @@ module.exports = {
   createResumeSchema,
   createServiceSchema,
   updateServiceSchema,
+  restorePasswordSchema,
 };
