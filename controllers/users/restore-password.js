@@ -5,7 +5,9 @@ const restorePassword = async (req, res, next) => {
 
   await sendRandomPassword(email)
     .then(res.status(200).send("your new password sent via email"))
-    .catch((err) => next(err));
+    .catch((err) => {
+      throw new Error(`${err}`);
+    });
 };
 
 module.exports = {
