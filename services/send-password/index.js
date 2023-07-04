@@ -6,7 +6,9 @@ const {
 const { UserModel } = require("../../models");
 const bcrypt = require("bcrypt");
 
-const sendRandomPassword = async (email) => {
+// TODO:  refactor next(), check is it correct?
+
+const sendRandomPassword = async (email, next) => {
   if (!email) {
     throw new NotFoundError();
   }
