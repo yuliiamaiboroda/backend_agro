@@ -10,7 +10,10 @@ const updateServiceSchema = Joi.object({
     .min(2)
     .max(2000)
     .messages(new FieldErrors("description").string().min(2).max(2000).get()),
-  price: Joi.number().messages(new FieldErrors("price").number().get()),
+  price: Joi.string()
+    .min(2)
+    .max(32)
+    .messages(new FieldErrors("title").string().min(2).max(32).get()),
   contactMail: Joi.string()
     .trim()
     .pattern(/^(\w+([.-]?\w+){1,})*@\w+([.-]?\w+)*(.\w{2,3})+$/)
