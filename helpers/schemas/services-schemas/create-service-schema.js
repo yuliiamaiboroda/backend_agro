@@ -16,13 +16,12 @@ const createServiceSchema = Joi.object({
     .messages(
       new FieldErrors("description").string().min(2).max(2000).required().get()
     ),
-  price: Joi.number()
+  price: Joi.string()
+    .min(2)
+    .max(32)
     .required()
     .messages(
-      new FieldErrors("price")
-        .number()
-        .required()
-        .get()
+      new FieldErrors("title").string().min(2).max(32).required().get()
     ),
   contactMail: Joi.string()
     .trim()
