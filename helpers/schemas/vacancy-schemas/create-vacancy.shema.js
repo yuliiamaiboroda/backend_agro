@@ -1,26 +1,33 @@
 const Joi = require("joi");
 const { FieldErrors } = require("../../utils");
-const { NOTICE_CATEGORIES } = require("../../constants");
+const { CATEGORY_LIST } = require("../../constants");
 
 const createVacancySchema = Joi.object({
   category: Joi.string()
     .trim()
-    .valid(...NOTICE_CATEGORIES)
+    .valid(CATEGORY_LIST.actual, CATEGORY_LIST.irrelevant)
     .required()
     .messages(
       new FieldErrors("category")
         .string()
-        .valid(...NOTICE_CATEGORIES)
+        .valid(CATEGORY_LIST.actual, CATEGORY_LIST.irrelevant)
         .required()
         .get()
     ),
   title: Joi.string()
     .trim()
+    .pattern(/^(?![-' ]+$)[a-zA-Zа-яА-ЯіІїЇєЄ0-9-'‘ʼ,./ ]+$/)
     .min(5)
     .max(30)
     .required()
     .messages(
-      new FieldErrors("title").string().min(5).max(30).required().get()
+      new FieldErrors("title")
+        .string()
+        .pattern("letters, numbers, hyphens and apostrophes")
+        .min(5)
+        .max(30)
+        .required()
+        .get()
     ),
   description: Joi.string()
     .trim()
@@ -48,7 +55,8 @@ const createVacancySchema = Joi.object({
   education: Joi.string()
     .trim()
     .max(60)
-    .messages(new FieldErrors("education").string().max(60).get()),
+    .required()
+    .messages(new FieldErrors("education").string().max(60).required().get()),
   contactMail: Joi.string()
     .trim()
     .pattern(/^(\w+([.-]?\w+){1,})*@\w+([.-]?\w+)*(.\w{2,3})+$/)
