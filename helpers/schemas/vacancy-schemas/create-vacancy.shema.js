@@ -65,7 +65,7 @@ const createVacancySchema = Joi.object({
     .email()
     .required()
     .messages(
-      new FieldErrors("email")
+      new FieldErrors("contactMail")
         .string()
         .pattern(
           "latin letters",
@@ -83,7 +83,7 @@ const createVacancySchema = Joi.object({
     .pattern(/^\+380\d{9}$/)
     .required()
     .messages(
-      new FieldErrors("phone")
+      new FieldErrors("contactPhone")
         .string()
         .pattern("starts with +380", "9 numbers after country code")
         .required()
@@ -93,7 +93,7 @@ const createVacancySchema = Joi.object({
     .trim()
     .pattern(/^\d+(-\d+)*$/)
     .messages(
-      new FieldErrors("work expirience")
+      new FieldErrors("workExperienceRequired")
         .string()
         .pattern("numbers", "- between numbers", "no spaces")
         .get()

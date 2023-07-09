@@ -28,18 +28,15 @@ router
     validateObjectId,
     controllerExceptionWrapper(getCertainById)
   )
+  .use(authUser, checkAccessRight(ROLES_LIST.productsManager))
   .post(
     "/certain",
-    authUser,
-    checkAccessRight(ROLES_LIST.productsManager),
     productUploader,
     validateBody(createProductSchema),
     controllerExceptionWrapper(create)
   )
   .patch(
     "/certain/:productId",
-    authUser,
-    checkAccessRight(ROLES_LIST.productsManager),
     validateObjectId,
     productUploader,
     validateBody(updateProductSchema),
@@ -47,8 +44,6 @@ router
   )
   .delete(
     "/certain/:productId",
-    authUser,
-    checkAccessRight(ROLES_LIST.productsManager),
     validateObjectId,
     controllerExceptionWrapper(removeById)
   );
