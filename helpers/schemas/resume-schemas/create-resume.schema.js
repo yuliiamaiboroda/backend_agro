@@ -40,7 +40,7 @@ const createResumeSchema = Joi.object({
     .messages(
       new FieldErrors("position")
         .string()
-        .pattern("latin letters", "numbers", "hyphens and apostrophes")
+        .pattern("letters", "numbers", "hyphens and apostrophes")
         .min(2)
         .max(62)
         .required()

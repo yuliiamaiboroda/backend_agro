@@ -5,6 +5,8 @@ const removeById = async (req, res, next) => {
   const { id } = req.params;
   const feedback = await FeedbackModel.findById(id);
 
+  console.log("feedback", feedback);
+
   if (!feedback) {
     throw new NotFoundError();
   }
