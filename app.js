@@ -1,3 +1,5 @@
+/** @format */
+
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
@@ -13,6 +15,7 @@ const corsOptions = {
     "http://127.0.0.1",
     "http://104.142.122.231",
     "https://yuliiamaiboroda.github.io",
+    "https://ahrokhimpromtsentr.vercel.app",
   ],
   credentials: true,
   exposedHeaders: ["set-cookie"],
