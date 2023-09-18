@@ -5,8 +5,18 @@ const sendFeedBackSchema = Joi.object({
   name: Joi.string()
     .min(4)
     .max(30)
+    .trim()
+    .pattern(/^[a-zA-Zа-яА-ЯіІїЇєЄ ]*$/)
     .required()
-    .messages(new FieldErrors("name").string().min(4).max(30).required().get()),
+    .messages(
+      new FieldErrors("name")
+        .string()
+        .min(4)
+        .max(30)
+        .pattern("letters and spaces")
+        .required()
+        .get()
+    ),
   contactPhone: Joi.string()
     .trim()
     .pattern(/^\+380\d{9}$/)

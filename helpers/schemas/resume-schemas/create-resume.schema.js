@@ -4,10 +4,18 @@ const { FieldErrors } = require("../../utils");
 const createResumeSchema = Joi.object({
   name: Joi.string()
     .trim()
+    .pattern(/^[a-zA-Zа-яА-ЯіІїЇєЄ ]*$/)
     .min(2)
     .max(62)
-    .required()
-    .messages(new FieldErrors("name").string().min(2).max(62).required().get()),
+    .messages(
+      new FieldErrors("name")
+        .string()
+        .min(2)
+        .max(62)
+        .pattern("letters and spaces")
+        .required()
+        .get()
+    ),
   phone: Joi.string()
     .pattern(/^\+380\d{9}$/)
     .required()
