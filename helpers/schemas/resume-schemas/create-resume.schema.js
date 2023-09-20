@@ -1,13 +1,22 @@
 const Joi = require("joi");
 const { FieldErrors } = require("../../utils");
+const { FORBIDDEN_DOMAINS } = require("../../constants");
 
 const createResumeSchema = Joi.object({
   name: Joi.string()
     .trim()
+    .pattern(/^[a-zA-Zа-яА-ЯіІїЇєЄ ]*$/)
     .min(2)
     .max(62)
-    .required()
-    .messages(new FieldErrors("name").string().min(2).max(62).required().get()),
+    .messages(
+      new FieldErrors("name")
+        .string()
+        .min(2)
+        .max(62)
+        .pattern("letters and spaces")
+        .required()
+        .get()
+    ),
   phone: Joi.string()
     .pattern(/^\+380\d{9}$/)
     .required()
@@ -19,7 +28,20 @@ const createResumeSchema = Joi.object({
         .get()
     ),
   email: Joi.string()
+    .trim()
     .pattern(/^(\w+([.-]?\w+){1,})*@\w+([.-]?\w+)*(.\w{2,3})+$/)
+    .min(10)
+    .max(63)
+    .email()
+    .custom((value, helper) => {
+      const domain = value.split("@")[1].split(".")[1];
+
+      if (FORBIDDEN_DOMAINS.includes(domain)) {
+        return helper.message("Invalid email");
+      }
+
+      return true;
+    })
     .required()
     .messages(
       new FieldErrors("email")
@@ -29,6 +51,9 @@ const createResumeSchema = Joi.object({
           "numbers and signs",
           "at the beginning or end of the email there can be no hyphen, there must be at least 2 characters before the (@)"
         )
+        .min(10)
+        .max(63)
+        .email()
         .required()
         .get()
     ),
@@ -53,11 +78,11 @@ const createResumeSchema = Joi.object({
     .messages(
       new FieldErrors("comment").string().min(2).max(2000).required().get()
     ),
-  agreement: Joi.string()
-    .valid("true")
+  agreement: Joi.boolean()
+    .valid(true)
     .required()
     .messages(
-      new FieldErrors("agreement").string().valid("true").required().get()
+      new FieldErrors("agreement").boolean().valid("true").required().get()
     ),
 }).messages(new FieldErrors("resume").object().extraFields().get());
 
