@@ -1,5 +1,6 @@
 const { FeedbackModel } = require("../../models");
 
+// added
 const create = async (req, res, next) => {
   const { name, contactPhone, contactMail, comment, agreement } = req.body;
   const newFeedback = await FeedbackModel.create({
