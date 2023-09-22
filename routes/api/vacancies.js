@@ -12,33 +12,36 @@ const {
 const { ROLES_LIST } = require("../../helpers/constants");
 
 router
-  .get("/all", controllerExceptionWrapper(vacancyController.getAll))
-  .get("/titles", controllerExceptionWrapper(vacancyController.getTitles))
+  .get("/", controllerExceptionWrapper(vacancyController.getAllVacancies))
+  .get(
+    "/titles",
+    controllerExceptionWrapper(vacancyController.getVacanciesTitles)
+  )
   .get(
     "/category/:categoryName",
-    controllerExceptionWrapper(vacancyController.getByCategory)
+    controllerExceptionWrapper(vacancyController.getVacanciesByCategory)
   )
   .get(
-    "/certain/:id",
+    "/:id",
     validateObjectId,
-    controllerExceptionWrapper(vacancyController.getCertainById)
+    controllerExceptionWrapper(vacancyController.getVacancyById)
   )
   .use(authUser, checkAccessRight(ROLES_LIST.applyManager))
-  .post(
-    "/create",
-    validateBody(createVacancySchema),
-    controllerExceptionWrapper(vacancyController.create)
-  )
   .put(
+    "/",
+    validateBody(createVacancySchema),
+    controllerExceptionWrapper(vacancyController.createVacancy)
+  )
+  .post(
     "/:id",
     validateObjectId,
     validateBody(createVacancySchema),
-    controllerExceptionWrapper(vacancyController.updateById)
+    controllerExceptionWrapper(vacancyController.updateVacancyById)
   )
   .delete(
     "/:id",
     validateObjectId,
-    controllerExceptionWrapper(vacancyController.removeById)
+    controllerExceptionWrapper(vacancyController.removeVacancyById)
   );
 
 module.exports = router;
