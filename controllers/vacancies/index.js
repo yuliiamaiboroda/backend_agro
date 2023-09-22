@@ -1,7 +1,6 @@
 const vacanciesServices = require("../../services/vacancies");
 
 const getAllVacancies = async (req, res) => {
-  console.log(vacanciesServices);
   const vacancies = await vacanciesServices.getAllVacancies();
 
   res.status(200).json(vacancies);
