@@ -1,5 +1,9 @@
 const { FeedbackModel } = require('../../models');
-const { NotFoundError, IsAlreadyViewedError } = require('../../helpers/utils');
+const {
+  NotFoundError,
+  IsAlreadyViewedError,
+  renameIdField,
+} = require('../../helpers/utils');
 const mongoose = require('mongoose');
 const { UPDATE_DEFAULT_CONFIG } = require('../../helpers/constants');
 
@@ -14,12 +18,14 @@ const createFeeback = async body => {
     agreement,
   });
 
-  return await FeedbackModel.findById(newFeedback._id, {
+  const feedback = await FeedbackModel.findById(newFeedback._id, {
     agreement: 0,
     viewedBy: 0,
     createdAt: 0,
     isFavorite: 0,
   });
+
+  return renameIdField(feedback);
 };
 
 const getAllFeedbacks = async (id, query) => {
@@ -28,7 +34,7 @@ const getAllFeedbacks = async (id, query) => {
 
   isFavorite && (matchQuery.isFavorite = true);
 
-  const feedbacks = await FeedbackModel.aggregate()
+  const filtredFeedbacks = await FeedbackModel.aggregate()
     .match(matchQuery)
     .addFields({
       isReviewed: {
@@ -63,7 +69,16 @@ const getAllFeedbacks = async (id, query) => {
     .sort({ createdAt: sort })
     .count('total');
 
-  return { feedbacks, total, skip: Number(skip), limit: Number(limit) };
+  const feedbacks = filtredFeedbacks.map(feedback =>
+    renameIdField(feedback, true)
+  );
+
+  return {
+    feedbacks,
+    total,
+    skip: Number(skip),
+    limit: Number(limit),
+  };
 };
 
 const getFeedbackById = async id => {
@@ -71,7 +86,7 @@ const getFeedbackById = async id => {
 
   if (!feedback) throw new NotFoundError();
 
-  return feedback;
+  return renameIdField(feedback);
 };
 
 const removeFeedbackById = async id => {
