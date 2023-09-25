@@ -1,6 +1,7 @@
 const { FeedbackModel } = require('../../models');
 const { NotFoundError, IsAlreadyViewedError } = require('../../helpers/utils');
 const mongoose = require('mongoose');
+const { UPDATE_DEFAULT_CONFIG } = require('../../helpers/constants');
 
 const createFeeback = async body => {
   const { name, contactPhone, contactMail, comment, agreement } = body;
@@ -93,7 +94,7 @@ const updateFeedbackIsFavorite = async id => {
     {
       isFavorite: !feedback.isFavorite,
     },
-    { runValidators: true }
+    UPDATE_DEFAULT_CONFIG
   );
 
   return { message: 'Feedback isFavorite status updated' };
@@ -115,7 +116,7 @@ const updateFeedbackIsViewed = async (feedbackId, userId) => {
     {
       $push: { viewedBy: userId },
     },
-    { runValidators: true }
+    UPDATE_DEFAULT_CONFIG
   );
 
   return { message: 'Feedback isViewed status updated' };

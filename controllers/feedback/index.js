@@ -1,5 +1,4 @@
-const feedbackServices = require("../../services/feedback");
-const { getAll } = require("./get-all");
+const feedbackServices = require('../../services/feedback');
 
 const getAllFeedbacks = async (req, res) => {
   const feedbacks = await feedbackServices.getAllFeedbacks(
@@ -41,7 +40,6 @@ const updateFeedbackIsViewed = async (req, res) => {
 };
 
 module.exports = {
-  getAll,
   getAllFeedbacks,
   createFeedback,
   removeFeedbackById,

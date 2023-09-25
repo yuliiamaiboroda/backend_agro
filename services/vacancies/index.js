@@ -1,6 +1,7 @@
 const { VacancyModel } = require('../../models');
 const { NOTICE_CATEGORIES, CATEGORY_LIST } = require('../../helpers/constants');
 const { NotFoundError } = require('../../helpers/utils');
+const { UPDATE_DEFAULT_CONFIG } = require('../../helpers/constants');
 
 const createVacancy = async body => {
   const {
@@ -92,17 +93,21 @@ const updateVacancyById = async (id, body) => {
 
   if (!vacancy) throw new NotFoundError();
 
-  const updatedVacancy = await VacancyModel.findByIdAndUpdate(id, {
-    category,
-    title,
-    description,
-    sallary,
-    education,
-    contactMail,
-    contactPhone,
-    workExperienceRequired,
-    location,
-  });
+  const updatedVacancy = await VacancyModel.findByIdAndUpdate(
+    id,
+    {
+      category,
+      title,
+      description,
+      sallary,
+      education,
+      contactMail,
+      contactPhone,
+      workExperienceRequired,
+      location,
+    },
+    UPDATE_DEFAULT_CONFIG
+  );
 
   return {
     id: updatedVacancy._id,
