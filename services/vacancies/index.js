@@ -1,7 +1,10 @@
 const { VacancyModel } = require('../../models');
-const { NOTICE_CATEGORIES, CATEGORY_LIST } = require('../../helpers/constants');
+const {
+  NOTICE_CATEGORIES,
+  CATEGORY_LIST,
+  UPDATE_DEFAULT_CONFIG,
+} = require('../../helpers/constants');
 const { NotFoundError, renameIdField } = require('../../helpers/utils');
-const { UPDATE_DEFAULT_CONFIG } = require('../../helpers/constants');
 
 const createVacancy = async body => {
   const {
