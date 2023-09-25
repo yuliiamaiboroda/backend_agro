@@ -11,32 +11,32 @@ const { sendFeedBackSchema } = require("../../helpers/schemas");
 const feedbackController = require("../../controllers/feedback");
 
 router
-  .post(
+  .put(
     "/",
     validateBody(sendFeedBackSchema),
-    controllerExceptionWrapper(feedbackController.create)
+    controllerExceptionWrapper(feedbackController.createFeedback)
   )
   .use(authUser, checkAccessRight())
-  .get("/all", controllerExceptionWrapper(feedbackController.getAll))
+  .get("/", controllerExceptionWrapper(feedbackController.getAllFeedbacks))
   .get(
     "/:id",
     validateObjectId,
-    controllerExceptionWrapper(feedbackController.getCertainById)
+    controllerExceptionWrapper(feedbackController.getFeedbackById)
   )
   .delete(
     "/:id",
     validateObjectId,
-    controllerExceptionWrapper(feedbackController.removeById)
+    controllerExceptionWrapper(feedbackController.removeFeedbackById)
   )
   .patch(
     "/:id",
     validateObjectId,
-    controllerExceptionWrapper(feedbackController.updateViews)
+    controllerExceptionWrapper(feedbackController.updateFeedbackIsViewed)
   )
   .patch(
     "/favorite/:id",
     validateObjectId,
-    controllerExceptionWrapper(feedbackController.updateIsFavorite)
+    controllerExceptionWrapper(feedbackController.updateFeedbackIsFavorite)
   );
 
 module.exports = router;

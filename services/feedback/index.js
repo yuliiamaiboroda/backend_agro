@@ -1,7 +1,8 @@
-const { FeedbackModel } = require("../../models");
-const { NotFoundError, IsAlreadyViewedError } = require("../../helpers/utils");
+const { FeedbackModel } = require('../../models');
+const { NotFoundError, IsAlreadyViewedError } = require('../../helpers/utils');
+const mongoose = require('mongoose');
 
-const createFeeback = async (body) => {
+const createFeeback = async body => {
   const { name, contactPhone, contactMail, comment, agreement } = body;
 
   const newFeedback = await FeedbackModel.create({
@@ -16,11 +17,12 @@ const createFeeback = async (body) => {
     agreement: 0,
     viewedBy: 0,
     createdAt: 0,
+    isFavorite: 0,
   });
 };
 
 const getAllFeedbacks = async (id, query) => {
-  const { isFavorite, sort = "desc", skip = 0, limit = 20 } = query;
+  const { isFavorite, sort = 'desc', skip = 0, limit = 20 } = query;
   const matchQuery = {};
 
   isFavorite && (matchQuery.isFavorite = true);
@@ -33,9 +35,11 @@ const getAllFeedbacks = async (id, query) => {
           if: {
             $first: {
               $filter: {
-                input: "$viewedBy",
-                as: "viewedUserId",
-                cond: { $eq: ["$$viewedUserId", id] },
+                input: '$viewedBy',
+                as: 'viewedUserId',
+                cond: {
+                  $eq: ['$$viewedUserId', new mongoose.Types.ObjectId(id)],
+                },
               },
             },
           },
@@ -56,12 +60,12 @@ const getAllFeedbacks = async (id, query) => {
 
   const total = await FeedbackModel.find(matchQuery)
     .sort({ createdAt: sort })
-    .count("total");
+    .count('total');
 
   return { feedbacks, total, skip: Number(skip), limit: Number(limit) };
 };
 
-const getFeedbackById = async (id) => {
+const getFeedbackById = async id => {
   const feedback = await FeedbackModel.findById(id, { viewedBy: 0 });
 
   if (!feedback) throw new NotFoundError();
@@ -69,17 +73,17 @@ const getFeedbackById = async (id) => {
   return feedback;
 };
 
-const removeFeedbackById = async (id) => {
+const removeFeedbackById = async id => {
   const feedback = await FeedbackModel.findById(id);
 
   if (!feedback) throw new NotFoundError();
 
   await FeedbackModel.findByIdAndRemove(id);
 
-  return { message: "Feedback deleted" };
+  return { message: 'Feedback deleted' };
 };
 
-const updateFeedbackIsFavorite = async (id) => {
+const updateFeedbackIsFavorite = async id => {
   const feedback = await FeedbackModel.findById(id);
 
   if (!feedback) throw new NotFoundError();
@@ -92,7 +96,7 @@ const updateFeedbackIsFavorite = async (id) => {
     { runValidators: true }
   );
 
-  return { message: "Feedback isFavorite status updated" };
+  return { message: 'Feedback isFavorite status updated' };
 };
 
 const updateFeedbackIsViewed = async (feedbackId, userId) => {
@@ -101,7 +105,7 @@ const updateFeedbackIsViewed = async (feedbackId, userId) => {
   if (!feedback) throw new NotFoundError();
 
   const isViewedFeedback = feedback.viewedBy.some(
-    (el) => el.valueOf() === userId.valueOf()
+    el => el.valueOf() === userId.valueOf()
   );
 
   if (isViewedFeedback) throw new IsAlreadyViewedError();
@@ -114,7 +118,7 @@ const updateFeedbackIsViewed = async (feedbackId, userId) => {
     { runValidators: true }
   );
 
-  return { message: "Feedback isViewed status updated" };
+  return { message: 'Feedback isViewed status updated' };
 };
 
 module.exports = {

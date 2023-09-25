@@ -33,9 +33,9 @@ const getVacanciesTitles = async (req, res) => {
 };
 
 const removeVacancyById = async (req, res) => {
-  const message = await vacanciesServices.removeVacancyById(req.params.id);
+  await vacanciesServices.removeVacancyById(req.params.id);
 
-  res.status(204).send(message);
+  res.status(204).send();
 };
 
 const updateVacancyById = async (req, res) => {
