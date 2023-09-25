@@ -16,30 +16,30 @@ const {
 } = require('../../middlewares');
 
 router
-  .get('/', controllerExceptionWrapper(productController.getAll))
+  .get('/', controllerExceptionWrapper(productController.getAllProducts))
   .get(
-    '/certain/:productId',
+    '/:productId',
     validateObjectId,
-    controllerExceptionWrapper(productController.getCertainById)
+    controllerExceptionWrapper(productController.getCertainProductById)
   )
   .use(authUser, checkAccessRight(ROLES_LIST.productsManager))
-  .post(
-    '/certain',
+  .put(
+    '/',
     productUploader,
     validateBody(createProductSchema),
-    controllerExceptionWrapper(productController.create)
+    controllerExceptionWrapper(productController.addNewProduct)
   )
-  .patch(
-    '/certain/:productId',
+  .post(
+    '/:productId',
     validateObjectId,
     productUploader,
     validateBody(updateProductSchema),
-    controllerExceptionWrapper(productController.updateById)
+    controllerExceptionWrapper(productController.updateCertainProductById)
   )
   .delete(
-    '/certain/:productId',
+    '/:productId',
     validateObjectId,
-    controllerExceptionWrapper(productController.removeById)
+    controllerExceptionWrapper(productController.removeCertainProductById)
   );
 
 module.exports = router;
