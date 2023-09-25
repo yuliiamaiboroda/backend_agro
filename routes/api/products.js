@@ -20,21 +20,21 @@ router
   .get(
     '/:productId',
     validateObjectId,
-    controllerExceptionWrapper(productController.getCertainProductById)
+    controllerExceptionWrapper(productController.getProductById)
   )
   .use(authUser, checkAccessRight(ROLES_LIST.productsManager))
   .put(
     '/',
     productUploader,
     validateBody(createProductSchema),
-    controllerExceptionWrapper(productController.addNewProduct)
+    controllerExceptionWrapper(productController.createProduct)
   )
   .post(
     '/:productId',
     validateObjectId,
     productUploader,
     validateBody(updateProductSchema),
-    controllerExceptionWrapper(productController.updateCertainProductById)
+    controllerExceptionWrapper(productController.updateProductById)
   )
   .delete(
     '/:productId',

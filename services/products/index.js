@@ -6,7 +6,7 @@ const {
   removeCloudinaryFileByURL,
 } = require('../../helpers/utils');
 const { UPDATE_DEFAULT_CONFIG } = require('../../helpers/constants');
-const getProducts = async () => {
+const getAllProducts = async () => {
   const products = await ProductsModel.find();
 
   return products.map(product => renameIdField(product));
@@ -20,7 +20,7 @@ const getProductById = async productId => {
   return renameIdField(product);
 };
 
-const addProduct = async ({ title, description, imageURL }) => {
+const createProduct = async ({ title, description, imageURL }) => {
   if (!imageURL) throw new FileRequiredError();
   const product = await ProductsModel.create({ title, description, imageURL });
 
@@ -60,9 +60,9 @@ const removeProductById = async productId => {
 };
 
 module.exports = {
-  getProducts,
+  getAllProducts,
   getProductById,
-  addProduct,
+  createProduct,
   updateProductById,
   removeProductById,
 };
