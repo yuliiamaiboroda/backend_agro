@@ -1,5 +1,5 @@
-const { ProductsModel } = require("../../models");
-const { FileRequiredError } = require("../../helpers/utils");
+const { ProductsModel } = require('../../models');
+const { FileRequiredError } = require('../../helpers/utils');
 
 const create = async (req, res) => {
   const { title, description } = req.body;

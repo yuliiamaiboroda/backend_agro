@@ -1,8 +1,8 @@
-const { VacancyModel } = require("../../models");
-const { NOTICE_CATEGORIES, CATEGORY_LIST } = require("../../helpers/constants");
-const { NotFoundError } = require("../../helpers/utils");
+const { VacancyModel } = require('../../models');
+const { NOTICE_CATEGORIES, CATEGORY_LIST } = require('../../helpers/constants');
+const { NotFoundError } = require('../../helpers/utils');
 
-const createVacancy = async (body) => {
+const createVacancy = async body => {
   const {
     category,
     title,
@@ -45,7 +45,7 @@ const getAllVacancies = async () => {
   return await VacancyModel.find();
 };
 
-const getVacancyById = async (id) => {
+const getVacancyById = async id => {
   const vacancy = await VacancyModel.findById(id);
 
   if (!vacancy) throw new NotFoundError();
@@ -53,7 +53,7 @@ const getVacancyById = async (id) => {
   return vacancy;
 };
 
-const getVacanciesByCategory = async (category) => {
+const getVacanciesByCategory = async category => {
   if (!NOTICE_CATEGORIES.includes(category)) throw new NotFoundError();
 
   return category === CATEGORY_LIST.all
@@ -65,14 +65,14 @@ const getVacanciesTitles = async () => {
   return await VacancyModel.find({}, { title: 1 });
 };
 
-const removeVacancyById = async (id) => {
+const removeVacancyById = async id => {
   const vacancy = await VacancyModel.findById(id);
 
   if (!vacancy) throw new NotFoundError();
 
   await VacancyModel.findByIdAndRemove(id);
 
-  return { message: "Vacancy deleted" };
+  return { message: 'Vacancy deleted' };
 };
 
 const updateVacancyById = async (id, body) => {

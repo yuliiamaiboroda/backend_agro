@@ -1,7 +1,7 @@
 const {
   controllerExceptionWrapper,
-} = require("./controller-exception-wrapper");
-const { FieldErrors } = require("./validation-errors");
+} = require('./controller-exception-wrapper');
+const { FieldErrors } = require('./validation-errors');
 const {
   UnauthorizedError,
   NotFoundError,
@@ -14,15 +14,16 @@ const {
   DeleteTheLastAdminAccountError,
   UpdateOwnPasswordError,
   IsAlreadyViewedError,
-} = require("./http-exceptions");
+} = require('./http-exceptions');
 const {
   removeCloudinaryFileByURL,
-} = require("./remove-cloudinary-file-by-url");
+} = require('./remove-cloudinary-file-by-url');
 const {
   uploadFileWithErrorHandling,
-} = require("./upload-file-with-error-handling");
-const sendEmail = require("./restore-password-with-email");
-const { randomPassword } = require("./random-passwors");
+} = require('./upload-file-with-error-handling');
+const sendEmail = require('./restore-password-with-email');
+const { randomPassword } = require('./random-passwors');
+const { renameIdField } = require('./renameIdField');
 
 module.exports = {
   controllerExceptionWrapper,
@@ -42,4 +43,5 @@ module.exports = {
   uploadFileWithErrorHandling,
   sendEmail,
   randomPassword,
+  renameIdField,
 };
