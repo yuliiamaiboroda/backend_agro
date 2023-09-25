@@ -1,7 +1,6 @@
 const vacanciesServices = require("../../services/vacancies");
 
 const getAllVacancies = async (req, res) => {
-  console.log(vacanciesServices);
   const vacancies = await vacanciesServices.getAllVacancies();
 
   res.status(200).json(vacancies);
@@ -34,9 +33,9 @@ const getVacanciesTitles = async (req, res) => {
 };
 
 const removeVacancyById = async (req, res) => {
-  const message = await vacanciesServices.removeVacancyById(req.params.id);
+  await vacanciesServices.removeVacancyById(req.params.id);
 
-  res.status(204).send(message);
+  res.status(204).send();
 };
 
 const updateVacancyById = async (req, res) => {

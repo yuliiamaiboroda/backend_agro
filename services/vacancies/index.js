@@ -1,6 +1,10 @@
 const { VacancyModel } = require('../../models');
-const { NOTICE_CATEGORIES, CATEGORY_LIST } = require('../../helpers/constants');
-const { NotFoundError } = require('../../helpers/utils');
+const {
+  NOTICE_CATEGORIES,
+  CATEGORY_LIST,
+  UPDATE_DEFAULT_CONFIG,
+} = require('../../helpers/constants');
+const { NotFoundError, renameIdField } = require('../../helpers/utils');
 
 const createVacancy = async body => {
   const {
@@ -42,7 +46,9 @@ const createVacancy = async body => {
 };
 
 const getAllVacancies = async () => {
-  return await VacancyModel.find();
+  const vacancies = await VacancyModel.find();
+
+  return vacancies.map(vacancy => renameIdField(vacancy));
 };
 
 const getVacancyById = async id => {
@@ -50,19 +56,25 @@ const getVacancyById = async id => {
 
   if (!vacancy) throw new NotFoundError();
 
-  return vacancy;
+  return renameIdField(vacancy);
 };
 
 const getVacanciesByCategory = async category => {
   if (!NOTICE_CATEGORIES.includes(category)) throw new NotFoundError();
 
-  return category === CATEGORY_LIST.all
-    ? await VacancyModel.find()
-    : await VacancyModel.find({ category });
+  let vacancies;
+
+  category === CATEGORY_LIST.all
+    ? (vacancies = await VacancyModel.find())
+    : (vacancies = await VacancyModel.find({ category }));
+
+  return vacancies.map(vacancy => renameIdField(vacancy));
 };
 
 const getVacanciesTitles = async () => {
-  return await VacancyModel.find({}, { title: 1 });
+  const titles = await VacancyModel.find({}, { title: 1 });
+
+  return titles.map(title => renameIdField(title));
 };
 
 const removeVacancyById = async id => {
@@ -92,17 +104,21 @@ const updateVacancyById = async (id, body) => {
 
   if (!vacancy) throw new NotFoundError();
 
-  const updatedVacancy = await VacancyModel.findByIdAndUpdate(id, {
-    category,
-    title,
-    description,
-    sallary,
-    education,
-    contactMail,
-    contactPhone,
-    workExperienceRequired,
-    location,
-  });
+  const updatedVacancy = await VacancyModel.findByIdAndUpdate(
+    id,
+    {
+      category,
+      title,
+      description,
+      sallary,
+      education,
+      contactMail,
+      contactPhone,
+      workExperienceRequired,
+      location,
+    },
+    UPDATE_DEFAULT_CONFIG
+  );
 
   return {
     id: updatedVacancy._id,
