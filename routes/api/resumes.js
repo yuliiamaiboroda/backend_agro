@@ -1,53 +1,46 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const { controllerExceptionWrapper } = require("../../helpers/utils");
-const { ROLES_LIST } = require("../../helpers/constants");
-const { createResumeSchema } = require("../../helpers/schemas");
+const { controllerExceptionWrapper } = require('../../helpers/utils');
+const { ROLES_LIST } = require('../../helpers/constants');
+const { createResumeSchema } = require('../../helpers/schemas');
 const {
   authUser,
   checkAccessRight,
   validateObjectId,
   validateBody,
   resumeUploader,
-} = require("../../middlewares");
-const {
-  create,
-  updateViews,
-  getAll,
-  getCertainById,
-  removeById,
-  updateIsFavorite,
-} = require("../../controllers/resumes");
+} = require('../../middlewares');
+const resumesController = require('../../controllers/resumes');
 
 router
-  .post(
-    "/",
+  .put(
+    '/',
     resumeUploader,
     validateBody(createResumeSchema),
-    controllerExceptionWrapper(create)
+    controllerExceptionWrapper(resumesController.createResume)
   )
   .use(authUser, checkAccessRight(ROLES_LIST.applyManager))
-  .get("/all", controllerExceptionWrapper(getAll))
+  .get('/', controllerExceptionWrapper(resumesController.getAll))
   .get(
-    "/certain/:resumeId",
+    '/certain/:resumeId',
     validateObjectId,
-    controllerExceptionWrapper(getCertainById)
+    controllerExceptionWrapper(resumesController.getCertainById)
   )
   .delete(
-    "/certain/:resumeId",
+    '/certain/:resumeId',
     validateObjectId,
-    controllerExceptionWrapper(removeById)
+    controllerExceptionWrapper(resumesController.removeById)
   )
   .patch(
-    "/certain/views/:resumeId",
+    '/certain/views/:resumeId',
     validateObjectId,
-    controllerExceptionWrapper(updateViews)
+    controllerExceptionWrapper(resumesController.updateViews)
   )
   .patch(
-    "/certain/favorite/:resumeId",
+    '/certain/favorite/:resumeId',
     validateObjectId,
-    controllerExceptionWrapper(updateIsFavorite)
+    controllerExceptionWrapper(resumesController.updateIsFavorite)
   );
 
 module.exports = router;
