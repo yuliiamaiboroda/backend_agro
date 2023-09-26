@@ -1,5 +1,4 @@
 const { updateViews } = require('./update-views');
-const { getAll } = require('./get-all');
 const { getCertainById } = require('./get-certain-by-id');
 const { removeById } = require('./remove-by-id');
 const { updateIsFavorite } = require('./update-is-favorite');
@@ -20,10 +19,31 @@ const createResume = async (req, res) => {
   res.status(201).json(resume);
 };
 
+const getAllResumes = async (req, res) => {
+  const { _id: userId } = req.user;
+  const {
+    isFavorite,
+    position,
+    sort = 'desc',
+    skip = 0,
+    limit = 20,
+  } = req.query;
+
+  const resumes = await resumesService.getAllResumes({
+    userId,
+    isFavorite,
+    position,
+    sort,
+    skip,
+    limit,
+  });
+  res.status(200).json(resumes);
+};
+
 module.exports = {
   createResume,
   updateViews,
-  getAll,
+  getAllResumes,
   getCertainById,
   removeById,
   updateIsFavorite,

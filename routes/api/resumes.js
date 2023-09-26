@@ -21,7 +21,7 @@ router
     controllerExceptionWrapper(resumesController.createResume)
   )
   .use(authUser, checkAccessRight(ROLES_LIST.applyManager))
-  .get('/', controllerExceptionWrapper(resumesController.getAll))
+  .get('/', controllerExceptionWrapper(resumesController.getAllResumes))
   .get(
     '/certain/:resumeId',
     validateObjectId,

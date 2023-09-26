@@ -1,11 +1,11 @@
-const { ResumeModel, VacancyModel } = require("../../models");
+const { ResumeModel, VacancyModel } = require('../../models');
 
 const getAll = async (req, res) => {
   const { _id: userId } = req.user;
   const {
     isFavorite,
     position,
-    sort = "desc",
+    sort = 'desc',
     skip = 0,
     limit = 20,
   } = req.query;
@@ -35,9 +35,9 @@ const getAll = async (req, res) => {
           if: {
             $first: {
               $filter: {
-                input: "$viewedBy",
-                as: "viewedUserId",
-                cond: { $eq: ["$$viewedUserId", userId] },
+                input: '$viewedBy',
+                as: 'viewedUserId',
+                cond: { $eq: ['$$viewedUserId', userId] },
               },
             },
           },
@@ -53,7 +53,7 @@ const getAll = async (req, res) => {
 
   const total = await ResumeModel.find(matchQuery)
     .sort({ createdAt: sort })
-    .count("total");
+    .count('total');
 
   res
     .status(200)
