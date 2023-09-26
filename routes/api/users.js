@@ -17,7 +17,7 @@ router
   .use(authUser)
   .use(checkAccessRight())
   .put(
-    '/register',
+    '/',
     validateBody(userRegisterSchema),
     controllerExceptionWrapper(userController.createUser)
   )

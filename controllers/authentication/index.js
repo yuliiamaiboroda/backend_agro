@@ -58,7 +58,7 @@ const restorePassword = async (req, res) => {
 const updateOwnPassword = async (req, res) => {
   await authenticationServices.updateOwnPassword(req.user.id, req.body);
 
-  res.status(200).send('Password changed successfully');
+  res.status(204).send();
 };
 
 module.exports = {
