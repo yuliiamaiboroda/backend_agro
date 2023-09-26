@@ -1,7 +1,9 @@
-const { UserModel } = require("../../models");
-const bcrypt = require("bcrypt");
-const { EmailUsedError } = require("../../helpers/utils");
-const crypto = require("crypto");
+const { UserModel } = require('../../models');
+const bcrypt = require('bcrypt');
+const { EmailUsedError } = require('../../helpers/utils');
+const crypto = require('crypto');
+
+// added
 
 const register = async (req, res, next) => {
   const { email, password, name, surname, role } = req.body;

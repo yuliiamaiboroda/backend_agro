@@ -1,6 +1,6 @@
-const { UserModel } = require("../../models");
-const { NotFoundError } = require("../../helpers/utils");
-
+const { UserModel } = require('../../models');
+const { NotFoundError } = require('../../helpers/utils');
+// ADDED
 const getCertainById = async (req, res, next) => {
   const { id } = req.params;
 

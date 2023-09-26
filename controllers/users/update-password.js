@@ -1,10 +1,10 @@
-const bcrypt = require("bcrypt");
-const { UserModel } = require("../../models");
+const bcrypt = require('bcrypt');
+const { UserModel } = require('../../models');
 const {
   UnauthorizedError,
   UpdateOwnPasswordError,
-} = require("../../helpers/utils");
-
+} = require('../../helpers/utils');
+// added;
 const updatePassword = async (req, res, next) => {
   const { id } = req.user;
   const { oldPassword, newPassword } = req.body;
@@ -28,7 +28,7 @@ const updatePassword = async (req, res, next) => {
 
   await UserModel.findByIdAndUpdate(id, { passwordHash });
 
-  res.status(200).send("Password changed successfully");
+  res.status(200).send('Password changed successfully');
 };
 
 module.exports = {

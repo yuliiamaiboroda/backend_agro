@@ -1,5 +1,5 @@
-const { UserModel } = require("../../models");
-const mongoose = require("mongoose");
+const { UserModel } = require('../../models');
+const mongoose = require('mongoose');
 
 const getAll = async (req, res, next) => {
   const { id } = req.user;

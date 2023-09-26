@@ -1,10 +1,10 @@
-const { UserModel } = require("../../models");
+const { UserModel } = require('../../models');
 const {
   NotFoundError,
   DeleteTheLastAdminAccountError,
-} = require("../../helpers/utils");
-const { ROLES_LIST } = require("../../helpers/constants");
-
+} = require('../../helpers/utils');
+const { ROLES_LIST } = require('../../helpers/constants');
+// added
 const removeById = async (req, res, next) => {
   const { id } = req.params;
 

@@ -1,11 +1,12 @@
-const { UserModel } = require("../../models");
-const bcrypt = require("bcrypt");
-const { UnauthorizedError } = require("../../helpers/utils");
+const { UserModel } = require('../../models');
+const bcrypt = require('bcrypt');
+const { UnauthorizedError } = require('../../helpers/utils');
 const {
   createAccessToken,
   createRefreshToken,
-} = require("../../services/auth");
-const crypto = require("crypto");
+} = require('../../services/auth');
+const crypto = require('crypto');
+// added
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
@@ -46,9 +47,9 @@ const login = async (req, res, next) => {
     refreshKey,
   });
 
-  res.cookie("jwt", refreshToken, {
+  res.cookie('jwt', refreshToken, {
     httpOnly: true,
-    sameSite: "None",
+    sameSite: 'None',
     secure: true,
     maxAge: 24 * 60 * 60 * 1000,
   });

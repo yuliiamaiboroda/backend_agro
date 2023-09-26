@@ -1,7 +1,7 @@
-const { UserModel } = require("../../models");
-const { NotFoundError, EmailUsedError } = require("../../helpers/utils");
-const bcrypt = require("bcrypt");
-
+const { UserModel } = require('../../models');
+const { NotFoundError, EmailUsedError } = require('../../helpers/utils');
+const bcrypt = require('bcrypt');
+// added
 const updateById = async (req, res, next) => {
   const { id } = req.params;
 
@@ -41,7 +41,7 @@ const updateById = async (req, res, next) => {
         role: newRole,
         passwordHash: password ? passwordHash : oldUser.passwordHash,
       },
-      { returnDocument: "after", runValidators: true }
+      { returnDocument: 'after', runValidators: true }
     );
 
     res.status(200).json({ email, name, surname, role, _id: userId });

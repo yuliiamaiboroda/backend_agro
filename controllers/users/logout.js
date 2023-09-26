@@ -1,5 +1,5 @@
-const { UserModel } = require("../../models");
-
+const { UserModel } = require('../../models');
+// added
 const logout = async (req, res, next) => {
   const { _id } = req.user;
 
@@ -8,7 +8,7 @@ const logout = async (req, res, next) => {
     refreshKey: null,
   });
 
-  res.cookie("jwt", "none", {
+  res.cookie('jwt', 'none', {
     expires: new Date(Date.now() + 5 * 1000),
     httpOnly: true,
   });

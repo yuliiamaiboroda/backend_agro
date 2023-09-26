@@ -1,12 +1,13 @@
-const { UnauthorizedError } = require("../../helpers/utils");
-const { UserModel } = require("../../models");
+const { UnauthorizedError } = require('../../helpers/utils');
+const { UserModel } = require('../../models');
 const {
   verifyRefreshToken,
   createAccessToken,
   createRefreshToken,
-} = require("../../services/auth");
-const crypto = require("crypto");
+} = require('../../services/auth');
+const crypto = require('crypto');
 
+// added
 const refreshUser = async (req, res, next) => {
   try {
     const { cookies } = req;
@@ -53,9 +54,9 @@ const refreshUser = async (req, res, next) => {
         refreshKey: updatedRefreshKey,
       });
 
-      res.cookie("jwt", refreshToken, {
+      res.cookie('jwt', refreshToken, {
         httpOnly: true,
-        sameSite: "None",
+        sameSite: 'None',
         secure: true,
         maxAge: 24 * 60 * 60 * 1000,
       });
