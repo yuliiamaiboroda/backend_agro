@@ -1,63 +1,42 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const userController = require("../../controllers/users");
-const { controllerExceptionWrapper } = require("../../helpers/utils");
+const userController = require('../../controllers/users');
+const { controllerExceptionWrapper } = require('../../helpers/utils');
 const {
   validateBody,
   authUser,
   checkAccessRight,
   validateObjectId,
-} = require("../../middlewares");
+} = require('../../middlewares');
 const {
   userRegisterSchema,
-  userLogInSchema,
   updateUserSchema,
-  updateUsersPasswordSchema,
-  restorePasswordSchema,
-} = require("../../helpers/schemas");
+} = require('../../helpers/schemas');
 
 router
-  .post(
-    "/login",
-    validateBody(userLogInSchema),
-    controllerExceptionWrapper(userController.login)
-  )
-  .post("/refresh", controllerExceptionWrapper(userController.refreshUser))
-  .patch(
-    "/restore",
-    validateBody(restorePasswordSchema),
-    controllerExceptionWrapper(userController.restorePassword)
-  )
   .use(authUser)
-  .get("/current", controllerExceptionWrapper(userController.current))
-  .post("/logout", controllerExceptionWrapper(userController.logout))
-  .post(
-    "/updatePassword",
-    validateBody(updateUsersPasswordSchema),
-    controllerExceptionWrapper(userController.updatePassword)
-  )
   .use(checkAccessRight())
-  .post(
-    "/register",
+  .put(
+    '/',
     validateBody(userRegisterSchema),
-    controllerExceptionWrapper(userController.register)
+    controllerExceptionWrapper(userController.createUser)
   )
-  .get("/", controllerExceptionWrapper(userController.getAll))
+  .get('/', controllerExceptionWrapper(userController.getAllUsers))
   .get(
-    "/:id",
+    '/:id',
     validateObjectId,
-    controllerExceptionWrapper(userController.getCertainById)
+    controllerExceptionWrapper(userController.getUserById)
   )
   .delete(
-    "/:id",
+    '/:id',
     validateObjectId,
-    controllerExceptionWrapper(userController.removeById)
+    controllerExceptionWrapper(userController.removeUserById)
   )
   .patch(
-    "/:id",
+    '/:id',
     validateObjectId,
     validateBody(updateUserSchema),
-    controllerExceptionWrapper(userController.updateById)
+    controllerExceptionWrapper(userController.updateUserById)
   );
 
 module.exports = router;
