@@ -34,9 +34,10 @@ const getAllFeedbacks = async (id, query) => {
 
   isFavorite && (matchQuery.isFavorite = true);
 
-  const filtredFeedbacks = await FeedbackModel.aggregate()
+  const feedbacks = await FeedbackModel.aggregate()
     .match(matchQuery)
     .addFields({
+      id: '$_id',
       isReviewed: {
         $cond: {
           if: {
@@ -61,6 +62,8 @@ const getAllFeedbacks = async (id, query) => {
       comment: 1,
       isReviewed: 1,
       isFavorite: 1,
+      _id: 0,
+      id: 1,
     })
     .skip(Number(skip))
     .limit(Number(limit));
@@ -68,10 +71,6 @@ const getAllFeedbacks = async (id, query) => {
   const total = await FeedbackModel.find(matchQuery)
     .sort({ createdAt: sort })
     .count('total');
-
-  const feedbacks = filtredFeedbacks.map(feedback =>
-    renameIdField(feedback, true)
-  );
 
   return {
     feedbacks,
