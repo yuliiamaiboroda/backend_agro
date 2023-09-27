@@ -11,7 +11,7 @@ const {
 
 router
   .post(
-    '/',
+    '/login',
     validateBody(userLogInSchema),
     controllerExceptionWrapper(authenticationController.login)
   )
@@ -20,12 +20,15 @@ router
     controllerExceptionWrapper(authenticationController.refreshUser)
   )
   .patch(
-    '/',
+    '/restore-password',
     validateBody(restorePasswordSchema),
     controllerExceptionWrapper(authenticationController.restorePassword)
   )
   .use(authUser)
-  .get('/', controllerExceptionWrapper(authenticationController.getCurrentUser))
+  .get(
+    '/current-user',
+    controllerExceptionWrapper(authenticationController.getCurrentUser)
+  )
   .post('/logout', controllerExceptionWrapper(authenticationController.logout))
   .post(
     '/updatePassword',
