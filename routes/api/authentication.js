@@ -31,7 +31,7 @@ router
   )
   .post('/logout', controllerExceptionWrapper(authenticationController.logout))
   .post(
-    '/updatePassword',
+    '/update-password',
     validateBody(updateUsersPasswordSchema),
     controllerExceptionWrapper(authenticationController.updateOwnPassword)
   );
