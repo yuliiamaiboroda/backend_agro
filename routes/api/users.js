@@ -14,8 +14,7 @@ const {
 } = require('../../helpers/schemas');
 
 router
-  .use(authUser)
-  .use(checkAccessRight())
+  .use(authUser, checkAccessRight())
   .put(
     '/',
     validateBody(userRegisterSchema),
