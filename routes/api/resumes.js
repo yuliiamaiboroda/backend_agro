@@ -23,24 +23,24 @@ router
   .use(authUser, checkAccessRight(ROLES_LIST.applyManager))
   .get('/', controllerExceptionWrapper(resumesController.getAllResumes))
   .get(
-    '/certain/:resumeId',
+    '/:resumeId',
     validateObjectId,
-    controllerExceptionWrapper(resumesController.getCertainById)
+    controllerExceptionWrapper(resumesController.getResumeById)
   )
   .delete(
-    '/certain/:resumeId',
+    '/:resumeId',
     validateObjectId,
-    controllerExceptionWrapper(resumesController.removeById)
+    controllerExceptionWrapper(resumesController.removeResumeById)
   )
-  .patch(
-    '/certain/views/:resumeId',
+  .post(
+    '/:resumeId/views',
     validateObjectId,
-    controllerExceptionWrapper(resumesController.updateViews)
+    controllerExceptionWrapper(resumesController.updateResumeIsViewed)
   )
-  .patch(
-    '/certain/favorite/:resumeId',
+  .post(
+    '/:resumeId/favorite',
     validateObjectId,
-    controllerExceptionWrapper(resumesController.updateIsFavorite)
+    controllerExceptionWrapper(resumesController.updateResumeIsFavorite)
   );
 
 module.exports = router;

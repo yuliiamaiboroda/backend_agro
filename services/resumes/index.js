@@ -1,6 +1,12 @@
 const { ResumeModel } = require('../../models');
 const vacanciesService = require('../vacancies');
-// const { renameIdField } = require('../../helpers/utils');
+const {
+  renameIdField,
+  NotFoundError,
+  IsAlreadyViewedError,
+  removeCloudinaryFileByURL,
+} = require('../../helpers/utils');
+const { UPDATE_DEFAULT_CONFIG } = require('../../helpers/constants');
 
 const createResume = async resume => {
   const {
@@ -43,7 +49,7 @@ const getAllResumes = async ({
   if (position) {
     const vacancies = await vacanciesService.getVacanciesTitles();
     const vacancyTitleList = vacancies
-      .reduce((acc, { title }) => [...acc, title``], [])
+      .reduce((acc, { title }) => [...acc, title], [])
       .filter((title, index, list) => list.indexOf(title) === index);
     matchQuery.position = vacancyTitleList.includes(position)
       ? position
@@ -53,6 +59,7 @@ const getAllResumes = async ({
   const resumes = await ResumeModel.aggregate()
     .match(matchQuery)
     .addFields({
+      id: '$_id',
       isReviewed: {
         $cond: {
           if: {
@@ -70,7 +77,11 @@ const getAllResumes = async ({
       },
     })
     .sort({ createdAt: sort })
-    .project({ name: 1, position: 1, comment: 1, isFavorite: 1, isReviewed: 1 })
+    .project({
+      _id: 0,
+      viewedBy: 0,
+      agreement: 0,
+    })
     .skip(Number(skip))
     .limit(Number(limit));
 
@@ -81,7 +92,66 @@ const getAllResumes = async ({
   return { resumes, total, skip: Number(skip), limit: Number(limit) };
 };
 
+const getResumeById = async resumeId => {
+  const resume = await ResumeModel.findById(resumeId, {
+    agreement: 0,
+    viewedBy: 0,
+  });
+
+  return renameIdField(resume);
+};
+
+const removeResumeById = async resumeId => {
+  const resume = await ResumeModel.findByIdAndDelete(resumeId);
+
+  if (!resume) throw new NotFoundError();
+
+  await removeCloudinaryFileByURL(resume.resumeFileURL);
+
+  return renameIdField(resume);
+};
+
+const updateResumeIsViewed = async ({ resumeId, userId }) => {
+  const resume = await ResumeModel.findById(resumeId);
+
+  if (!resume) throw new NotFoundError();
+
+  const isViewedResume = resume.viewedBy.some(
+    userIdItem => userIdItem.valueOf() === userId.valueOf()
+  );
+
+  if (isViewedResume) throw new IsAlreadyViewedError();
+
+  const updatedResume = await ResumeModel.findByIdAndUpdate(
+    resumeId,
+    {
+      $push: { viewedBy: userId },
+    },
+    { ...UPDATE_DEFAULT_CONFIG, select: '-viewedBy -agreement' }
+  );
+
+  return renameIdField(updatedResume);
+};
+
+const updateResumeIsFavorite = async resumeId => {
+  const resume = await ResumeModel.findById(resumeId);
+
+  if (!resume) throw new NotFoundError();
+
+  const updatedResume = await ResumeModel.findByIdAndUpdate(
+    resumeId,
+    { isFavorite: !resume.isFavorite },
+    { runValidators: true }
+  );
+
+  return updatedResume;
+};
+
 module.exports = {
   createResume,
   getAllResumes,
+  getResumeById,
+  removeResumeById,
+  updateResumeIsViewed,
+  updateResumeIsFavorite,
 };

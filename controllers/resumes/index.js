@@ -1,7 +1,3 @@
-const { updateViews } = require('./update-views');
-const { getCertainById } = require('./get-certain-by-id');
-const { removeById } = require('./remove-by-id');
-const { updateIsFavorite } = require('./update-is-favorite');
 const resumesService = require('../../services/resumes');
 
 const createResume = async (req, res) => {
@@ -40,11 +36,39 @@ const getAllResumes = async (req, res) => {
   res.status(200).json(resumes);
 };
 
+const getResumeById = async (req, res) => {
+  const { resumeId } = req.params;
+  const resume = await resumesService.getResumeById(resumeId);
+  res.status(200).json(resume);
+};
+
+const removeResumeById = async (req, res) => {
+  const { resumeId } = req.params;
+  await resumesService.removeResumeById(resumeId);
+  res.status(204).send();
+};
+
+const updateResumeIsViewed = async (req, res) => {
+  const { resumeId } = req.params;
+  const { _id: userId } = req.user;
+  await resumesService.updateResumeIsViewed({
+    resumeId,
+    userId,
+  });
+  res.status(204).send();
+};
+
+const updateResumeIsFavorite = async (req, res) => {
+  const { resumeId } = req.params;
+  await resumesService.updateResumeIsFavorite(resumeId);
+  res.status(200).send();
+};
+
 module.exports = {
   createResume,
-  updateViews,
   getAllResumes,
-  getCertainById,
-  removeById,
-  updateIsFavorite,
+  getResumeById,
+  removeResumeById,
+  updateResumeIsViewed,
+  updateResumeIsFavorite,
 };
