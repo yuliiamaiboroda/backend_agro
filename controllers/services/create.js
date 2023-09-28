@@ -1,6 +1,7 @@
-const { ServicesModel } = require("../../models");
-const { FileRequiredError } = require("../../helpers/utils");
+const { ServicesModel } = require('../../models');
+const { FileRequiredError } = require('../../helpers/utils');
 
+// added
 const create = async (req, res, next) => {
   const { title, description, price, contactMail, contactPhone } = req.body;
 

@@ -1,6 +1,6 @@
-const { ServicesModel } = require("../../models");
-const { removeCloudinaryFileByURL } = require("../../helpers/utils");
-
+const { ServicesModel } = require('../../models');
+const { removeCloudinaryFileByURL } = require('../../helpers/utils');
+// added
 const updateById = async (req, res, next) => {
   const { serviceId } = req.params;
   const { title, description, price, contactMail, contactPhone } = req.body;
@@ -20,7 +20,7 @@ const updateById = async (req, res, next) => {
       contactMail,
       contactPhone,
     },
-    { returnDocument: "after", runValidators: true }
+    { returnDocument: 'after', runValidators: true }
   );
   res.status(200).json(updatedService);
 };

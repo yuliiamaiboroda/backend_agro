@@ -1,9 +1,10 @@
-const { ServicesModel } = require("../../models");
+const { ServicesModel } = require('../../models');
 const {
   NotFoundError,
   removeCloudinaryFileByURL,
-} = require("../../helpers/utils");
+} = require('../../helpers/utils');
 
+// added
 const removeById = async (req, res, next) => {
   const { serviceId } = req.params;
 

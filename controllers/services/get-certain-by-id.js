@@ -1,6 +1,7 @@
-const { ServicesModel } = require("../../models");
-const { NotFoundError } = require("../../helpers/utils");
+const { ServicesModel } = require('../../models');
+const { NotFoundError } = require('../../helpers/utils');
 
+// added
 const getCertainById = async (req, res, next) => {
   const { serviceId } = req.params;
 
