@@ -1,10 +1,10 @@
 # Dynamic Content Control API and User Interaction Service
 
 Welcome to the Dynamic Content Control API and User Interaction Service! This
-API provides seamless integration for managing dynamic content on your website
-and staying in touch with your users. Whether you want to update website content
-in real-time, collect user feedback, or receive resumes, this service has got
-you covered.
+API provides seamless integration for managing dynamic content of services,
+vacancies and products on your website and staying in touch with your users.
+Whether you want to update website content in real-time, collect user feedback,
+or receive resumes, this service has got you covered.
 
 ## Introduction
 
