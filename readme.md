@@ -71,7 +71,7 @@ npm install
 npm run start:dev
 ```
 
-For production environments...
+For production environments.
 
 ```sh
 npm install
