@@ -21,7 +21,8 @@ const getProductById = async id => {
   return renameIdField(product);
 };
 
-const createProduct = async ({ title, description, imageURL }) => {
+const createProduct = async ({ title, description, file }) => {
+  const imageURL = file ? file.path : null;
   if (!imageURL) throw new FileRequiredError();
 
   const product = await ProductsModel.create({ title, description, imageURL });
@@ -29,7 +30,8 @@ const createProduct = async ({ title, description, imageURL }) => {
   return renameIdField(product);
 };
 
-const updateProductById = async (id, { title, description, imageURL }) => {
+const updateProductById = async (id, { title, description, file }) => {
+  const imageURL = file ? file.path : null;
   if (imageURL) {
     const { imageURL: oldImageURL } = await ProductsModel.findById(id);
     await removeCloudinaryFileByURL(oldImageURL);

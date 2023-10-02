@@ -18,7 +18,7 @@ const {
 router
   .get('/', controllerExceptionWrapper(productController.getAllProducts))
   .get(
-    '/:productId',
+    '/:id',
     validateObjectId,
     controllerExceptionWrapper(productController.getProductById)
   )
@@ -30,16 +30,16 @@ router
     controllerExceptionWrapper(productController.createProduct)
   )
   .post(
-    '/:productId',
+    '/:id',
     validateObjectId,
     productUploader,
     validateBody(updateProductSchema),
     controllerExceptionWrapper(productController.updateProductById)
   )
   .delete(
-    '/:productId',
+    '/:id',
     validateObjectId,
-    controllerExceptionWrapper(productController.removeCertainProductById)
+    controllerExceptionWrapper(productController.removeProductById)
   );
 
 module.exports = router;

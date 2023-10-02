@@ -36,9 +36,9 @@ const getAllResumes = async ({
   userId,
   isFavorite,
   position,
-  sort,
-  skip,
-  limit,
+  sort = 'desc',
+  skip = 0,
+  limit = 20,
 }) => {
   const matchQuery = {};
 
@@ -92,8 +92,8 @@ const getAllResumes = async ({
   return { resumes, total, skip: Number(skip), limit: Number(limit) };
 };
 
-const getResumeById = async resumeId => {
-  const resume = await ResumeModel.findById(resumeId, {
+const getResumeById = async id => {
+  const resume = await ResumeModel.findById(id, {
     agreement: 0,
     viewedBy: 0,
   });
@@ -101,8 +101,8 @@ const getResumeById = async resumeId => {
   return renameIdField(resume);
 };
 
-const removeResumeById = async resumeId => {
-  const resume = await ResumeModel.findByIdAndDelete(resumeId);
+const removeResumeById = async id => {
+  const resume = await ResumeModel.findByIdAndDelete(id);
 
   if (!resume) throw new NotFoundError();
 
@@ -111,7 +111,7 @@ const removeResumeById = async resumeId => {
   return renameIdField(resume);
 };
 
-const updateResumeIsViewed = async ({ resumeId, userId }) => {
+const updateResumeIsViewed = async (resumeId, userId) => {
   const resume = await ResumeModel.findById(resumeId);
 
   if (!resume) throw new NotFoundError();
@@ -133,13 +133,13 @@ const updateResumeIsViewed = async ({ resumeId, userId }) => {
   return renameIdField(updatedResume);
 };
 
-const updateResumeIsFavorite = async resumeId => {
-  const resume = await ResumeModel.findById(resumeId);
+const updateResumeIsFavorite = async id => {
+  const resume = await ResumeModel.findById(id);
 
   if (!resume) throw new NotFoundError();
 
   const updatedResume = await ResumeModel.findByIdAndUpdate(
-    resumeId,
+    id,
     { isFavorite: !resume.isFavorite },
     { runValidators: true }
   );

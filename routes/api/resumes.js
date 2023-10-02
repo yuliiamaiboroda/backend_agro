@@ -23,22 +23,22 @@ router
   .use(authUser, checkAccessRight(ROLES_LIST.applyManager))
   .get('/', controllerExceptionWrapper(resumesController.getAllResumes))
   .get(
-    '/:resumeId',
+    '/:id',
     validateObjectId,
     controllerExceptionWrapper(resumesController.getResumeById)
   )
   .delete(
-    '/:resumeId',
+    '/:id',
     validateObjectId,
     controllerExceptionWrapper(resumesController.removeResumeById)
   )
   .post(
-    '/:resumeId/views',
+    '/:id/views',
     validateObjectId,
     controllerExceptionWrapper(resumesController.updateResumeIsViewed)
   )
   .post(
-    '/:resumeId/favorite',
+    '/:id/favorite',
     validateObjectId,
     controllerExceptionWrapper(resumesController.updateResumeIsFavorite)
   );
