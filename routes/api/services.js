@@ -1,57 +1,43 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const { controllerExceptionWrapper } = require("../../helpers/utils");
+const { controllerExceptionWrapper } = require('../../helpers/utils');
 const {
   authUser,
   checkAccessRight,
   validateObjectId,
   validateBody,
-} = require("../../middlewares");
-const {
-  getAll,
-  create,
-  getCertainById,
-  removeById,
-  updateById,
-} = require("../../controllers/services");
-const { ROLES_LIST } = require("../../helpers/constants");
+} = require('../../middlewares');
+const serviceController = require('../../controllers/services');
+const { ROLES_LIST } = require('../../helpers/constants');
 const {
   servicesUploader,
-} = require("../../middlewares/upload-services-image.middleware");
-const { createServiceSchema, updateServiceSchema } = require("../../helpers/schemas");
+} = require('../../middlewares/upload-services-image.middleware');
+const {
+  createServiceSchema,
+  updateServiceSchema,
+} = require('../../helpers/schemas');
 
 router
-  .get("/getAll", controllerExceptionWrapper(getAll))
-  .post(
-    "/create",
-    authUser,
-    checkAccessRight(ROLES_LIST.servicesManager),
+  .get('/', controllerExceptionWrapper(serviceController.getAllServices))
+  .get('/:id', controllerExceptionWrapper(serviceController.getServiceById))
+  .use(authUser, checkAccessRight(ROLES_LIST.servicesManager))
+  .delete(
+    '/:id',
+    validateObjectId,
+    controllerExceptionWrapper(serviceController.removeServiceById)
+  )
+  .put(
+    '/',
     servicesUploader,
     validateBody(createServiceSchema),
-    controllerExceptionWrapper(create)
+    controllerExceptionWrapper(serviceController.createService)
   )
-  .get(
-    "/:serviceId",
-    authUser,
-    validateObjectId,
-    controllerExceptionWrapper(getCertainById)
-  )
-  .delete(
-    "/:serviceId",
-    authUser,
-    checkAccessRight(ROLES_LIST.servicesManager),
-    validateObjectId,
-    controllerExceptionWrapper(removeById)
-  )
-  .patch(
-    "/:serviceId",
-    authUser,
-    checkAccessRight(ROLES_LIST.servicesManager),
+  .post(
+    '/:id',
     validateObjectId,
     servicesUploader,
     validateBody(updateServiceSchema),
-    controllerExceptionWrapper(updateById)
+    controllerExceptionWrapper(serviceController.updateServiceById)
   );
 
 module.exports = router;
-

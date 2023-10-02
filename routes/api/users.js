@@ -31,7 +31,7 @@ router
     validateObjectId,
     controllerExceptionWrapper(userController.removeUserById)
   )
-  .patch(
+  .post(
     '/:id',
     validateObjectId,
     validateBody(updateUserSchema),

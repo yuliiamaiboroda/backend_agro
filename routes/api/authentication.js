@@ -19,7 +19,7 @@ router
     '/refresh',
     controllerExceptionWrapper(authenticationController.refreshUser)
   )
-  .patch(
+  .post(
     '/restore-password',
     validateBody(restorePasswordSchema),
     controllerExceptionWrapper(authenticationController.restorePassword)
