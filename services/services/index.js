@@ -41,20 +41,19 @@ const getServiceById = async id => {
 };
 
 const removeServiceById = async id => {
-  const service = await ServicesModel.findById(id);
+  const service = await ServicesModel.findByIdAndDelete(id);
 
   if (!service) throw new NotFoundError();
 
   await removeCloudinaryFileByURL(service.imageURL);
-  await ServicesModel.findByIdAndRemove(id);
 
   return { message: 'Service deleted' };
 };
 
-const updateServiceById = async (id, body, imageURL = null) => {
+const updateServiceById = async (id, body, file = null) => {
   const { title, description, price, contactMail, contactPhone } = body;
 
-  if (imageURL) {
+  if (file) {
     const { imageURL: oldImageURL } = await ServicesModel.findById(id);
     await removeCloudinaryFileByURL(oldImageURL);
   }
@@ -64,7 +63,7 @@ const updateServiceById = async (id, body, imageURL = null) => {
     {
       title,
       description,
-      imageURL,
+      imageURL: file?.path,
       price,
       contactMail,
       contactPhone,
