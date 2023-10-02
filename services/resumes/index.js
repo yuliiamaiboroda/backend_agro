@@ -36,9 +36,9 @@ const getAllResumes = async ({
   userId,
   isFavorite,
   position,
-  sort,
-  skip,
-  limit,
+  sort = 'desc',
+  skip = 0,
+  limit = 20,
 }) => {
   const matchQuery = {};
 
@@ -111,8 +111,8 @@ const removeResumeById = async id => {
   return renameIdField(resume);
 };
 
-const updateResumeIsViewed = async ({ id, userId }) => {
-  const resume = await ResumeModel.findById(id);
+const updateResumeIsViewed = async (resumeId, userId) => {
+  const resume = await ResumeModel.findById(resumeId);
 
   if (!resume) throw new NotFoundError();
 
@@ -123,7 +123,7 @@ const updateResumeIsViewed = async ({ id, userId }) => {
   if (isViewedResume) throw new IsAlreadyViewedError();
 
   const updatedResume = await ResumeModel.findByIdAndUpdate(
-    id,
+    resumeId,
     {
       $push: { viewedBy: userId },
     },

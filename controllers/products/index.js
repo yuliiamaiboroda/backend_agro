@@ -13,25 +13,18 @@ const getProductById = async (req, res) => {
 };
 
 const createProduct = async (req, res) => {
-  const { title, description } = req.body;
-  const imageURL = req.file ? req.file.path : undefined;
   const product = await productsService.createProduct({
-    title,
-    description,
-    imageURL,
+    ...req.body,
+    file: req.file,
   });
 
   res.status(201).json(product);
 };
 
 const updateProductById = async (req, res) => {
-  const { title, description } = req.body;
-  const imageURL = req.file ? req.file.path : undefined;
-
   const product = await productsService.updateProductById(req.params.id, {
-    title,
-    description,
-    imageURL,
+    ...req.body,
+    file: req.file,
   });
 
   res.status(200).json(product);

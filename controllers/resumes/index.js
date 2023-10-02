@@ -17,21 +17,10 @@ const createResume = async (req, res) => {
 
 const getAllResumes = async (req, res) => {
   const { _id: userId } = req.user;
-  const {
-    isFavorite,
-    position,
-    sort = 'desc',
-    skip = 0,
-    limit = 20,
-  } = req.query;
 
   const resumes = await resumesService.getAllResumes({
     userId,
-    isFavorite,
-    position,
-    sort,
-    skip,
-    limit,
+    ...req.query,
   });
   res.status(200).json(resumes);
 };
@@ -51,10 +40,7 @@ const removeResumeById = async (req, res) => {
 const updateResumeIsViewed = async (req, res) => {
   const { id } = req.params;
   const { _id: userId } = req.user;
-  await resumesService.updateResumeIsViewed({
-    id,
-    userId,
-  });
+  await resumesService.updateResumeIsViewed(id, userId);
   res.status(204).send();
 };
 
