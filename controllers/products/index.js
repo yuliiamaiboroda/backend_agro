@@ -7,7 +7,7 @@ const getAllProducts = async (req, res) => {
 };
 
 const getProductById = async (req, res) => {
-  const product = await productsService.getProductById(req.params.productId);
+  const product = await productsService.getProductById(req.params.id);
 
   res.status(200).json(product);
 };
@@ -28,16 +28,17 @@ const updateProductById = async (req, res) => {
   const { title, description } = req.body;
   const imageURL = req.file ? req.file.path : undefined;
 
-  const product = await productsService.updateProductById(
-    req.params.productId,
-    { title, description, imageURL }
-  );
+  const product = await productsService.updateProductById(req.params.id, {
+    title,
+    description,
+    imageURL,
+  });
 
   res.status(200).json(product);
 };
 
-const removeCertainProductById = async (req, res) => {
-  await productsService.removeProductById(req.params.productId);
+const removeProductById = async (req, res) => {
+  await productsService.removeProductById(req.params.id);
 
   res.status(204).send();
 };
@@ -47,5 +48,5 @@ module.exports = {
   getProductById,
   createProduct,
   updateProductById,
-  removeCertainProductById,
+  removeProductById,
 };

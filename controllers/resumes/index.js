@@ -37,30 +37,30 @@ const getAllResumes = async (req, res) => {
 };
 
 const getResumeById = async (req, res) => {
-  const { resumeId } = req.params;
-  const resume = await resumesService.getResumeById(resumeId);
+  const { id } = req.params;
+  const resume = await resumesService.getResumeById(id);
   res.status(200).json(resume);
 };
 
 const removeResumeById = async (req, res) => {
-  const { resumeId } = req.params;
-  await resumesService.removeResumeById(resumeId);
+  const { id } = req.params;
+  await resumesService.removeResumeById(id);
   res.status(204).send();
 };
 
 const updateResumeIsViewed = async (req, res) => {
-  const { resumeId } = req.params;
+  const { id } = req.params;
   const { _id: userId } = req.user;
   await resumesService.updateResumeIsViewed({
-    resumeId,
+    id,
     userId,
   });
   res.status(204).send();
 };
 
 const updateResumeIsFavorite = async (req, res) => {
-  const { resumeId } = req.params;
-  await resumesService.updateResumeIsFavorite(resumeId);
+  const { id } = req.params;
+  await resumesService.updateResumeIsFavorite(id);
   res.status(200).send();
 };
 
