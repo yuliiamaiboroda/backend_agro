@@ -1,12 +1,3 @@
-### Команди:
-
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно
-  виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними
-  виправленнями простих помилок
-
 # Dynamic Content Control API and User Interaction Service
 
 Welcome to the Dynamic Content Control API and User Interaction Service! This
@@ -123,3 +114,38 @@ populate it with the following environment variables:
 
 Ensure these variables are properly set in your .env file to enable secure and
 seamless functionality within your application.
+
+## Other commands
+
+---
+
+**Start the server in production mode.**
+
+```sh
+npm start
+```
+
+**Start the server in development mode.**
+
+```sh
+npm run start:dev
+```
+
+**Run eslint code checks. This should be done before each PR, and all linting
+errors must be fixed.**
+
+```sh
+npm run lint
+```
+
+**Similar to linting check, but automatically fixes simple errors.**
+
+```sh
+npm lint:fix
+```
+
+## License
+
+---
+
+MIT
