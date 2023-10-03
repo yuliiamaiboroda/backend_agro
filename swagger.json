@@ -1,0 +1,59 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "REST API for Ahrokhimpromtsentr",
+    "version": "0.1.0",
+    "description": "Simple REST API for managing dynamic content of services, vacancies and products on your website and staying in touch with your users.",
+    "license": {
+      "name": "license: MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "contact": {
+      "name": "YIY-Soft",
+      "url": "https://yiy-soft.com",
+      "email": "yiy.soft@gmail.com"
+    }
+  },
+  "consumes": ["application/json", "multipart/form-data"],
+  "produces": ["application/json"],
+  "servers": [
+    {
+      "url": "http://localhost:3001",
+      "description": "Development server"
+    },
+    {
+      "url": "ahrokhimpromtsentr.cyclic.app",
+      "description": "Production server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "Endpoints for working with authentication"
+    },
+    {
+      "name": "Users",
+      "description": "Endpoints for working with users"
+    },
+    {
+      "name": "Vacancies",
+      "description": "Endpoints for working with vacancies"
+    },
+    {
+      "name": "Products",
+      "description": "Endpoints for working with products"
+    },
+    {
+      "name": "Services",
+      "description": "Endpoints for working with services"
+    },
+    {
+      "name": "Feedbacks",
+      "description": "Endpoints for working with feedbacks"
+    },
+    {
+      "name": "Resumes",
+      "description": "Endpoints for working with resumes"
+    }
+  ]
+}
