@@ -198,7 +198,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CurrentUserResponse"
+                  "$ref": "#/components/schemas/USER_SCHEMA_WITHOUT_ID"
                 }
               }
             }
@@ -307,7 +307,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateNewUserRequest"
+                "$ref": "#/components/schemas/USER_SCHEMA_WITHOUT_ID"
               }
             }
           }
@@ -318,7 +318,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateNewUserResponse"
+                  "$ref": "#/components/schemas/USER_SCHEMA"
                 }
               }
             }
@@ -364,10 +364,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetUserByIdResponse"
+                  "$ref": "#/components/schemas/USER_SCHEMA"
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request (id validation error)"
           },
           "401": {
             "description": "Not authorized"
@@ -377,6 +380,97 @@
           },
           "404": {
             "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Delete user by id. Roles required: admin",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful delete user by id"
+          },
+          "400": {
+            "description": "Bad request (id validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Users"],
+        "summary": "Update user by id. Roles required: admin",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "User object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateUserRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful update user by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/USER_SCHEMA"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (id or/and validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict. User with this email already exists"
           },
           "500": {
             "description": "Server error"
@@ -393,6 +487,64 @@
       "ROLES_LIST": {
         "type": "string",
         "enum": ["admin", "applyManager", "servicesManager", "productsManager"]
+      },
+
+      "USER_SCHEMA": {
+        "type": "object",
+        "required": ["email", "name", "surname", "role", "id"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "User id"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "name": {
+            "type": "string",
+            "description": "Users name",
+            "example": "Oleksii"
+          },
+          "surname": {
+            "type": "string",
+            "description": "Users surname",
+            "example": "Oleksiiv"
+          },
+          "role": {
+            "$ref": "#/components/schemas/ROLES_LIST",
+            "example": "admin"
+          }
+        }
+      },
+
+      "USER_SCHEMA_WITHOUT_ID": {
+        "type": "object",
+        "required": ["email", "name", "surname", "role"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User email",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "name": {
+            "type": "string",
+            "description": "Users name",
+            "example": "Oleksii"
+          },
+          "surname": {
+            "type": "string",
+            "description": "Users surname",
+            "example": "Oleksiiv"
+          },
+          "role": {
+            "$ref": "#/components/schemas/ROLES_LIST",
+            "example": "admin"
+          }
+        }
       },
 
       "LoginRequest": {
@@ -427,30 +579,7 @@
             "description": "Bearer token"
           },
           "user": {
-            "type": "object",
-            "properties": {
-              "email": {
-                "type": "string",
-                "description": "Users email",
-                "format": "email",
-                "example": "example@example.com"
-              },
-              "name": {
-                "type": "string",
-                "description": "Users name",
-                "example": "Oleksii"
-              },
-              "surname": {
-                "type": "string",
-                "description": "Users surname",
-                "example": "Oleksiiv"
-              },
-              "role": {
-                "type": "string",
-                "description": "Users role",
-                "example": "admin"
-              }
-            }
+            "$ref": "#/components/schemas/USER_SCHEMA_WITHOUT_ID"
           }
         }
       },
@@ -487,33 +616,6 @@
         "example": "your new password sent via email"
       },
 
-      "CurrentUserResponse": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "description": "Users email",
-            "format": "email",
-            "example": "example@example.com"
-          },
-          "name": {
-            "type": "string",
-            "description": "Users name",
-            "example": "Oleksii"
-          },
-          "surname": {
-            "type": "string",
-            "description": "Users surname",
-            "example": "Oleksiiv"
-          },
-          "role": {
-            "type": "string",
-            "description": "Users role",
-            "example": "admin"
-          }
-        }
-      },
-
       "UpdateOwnPasswordRequest": {
         "type": "object",
         "required": ["oldPassword", "newPassword"],
@@ -540,47 +642,14 @@
       "GetAllUsersResponse": {
         "type": "array",
         "items": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string",
-              "description": "User id"
-            },
-            "email": {
-              "type": "string",
-              "description": "User email",
-              "format": "email",
-              "example": "example@example.com"
-            },
-            "name": {
-              "type": "string",
-              "description": "Users name",
-              "example": "Oleksii"
-            },
-            "surname": {
-              "type": "string",
-              "description": "Users surname",
-              "example": "Oleksiiv"
-            },
-            "role": {
-              "type": "string",
-              "description": "Users role",
-              "example": "admin"
-            }
-          }
+          "$ref": "#/components/schemas/USER_SCHEMA"
         }
       },
 
-      "CreateNewUserRequest": {
+      "UpdateUserRequest": {
+        "allOf": [{ "$ref": "#/components/schemas/USER_SCHEMA_WITHOUT_ID" }],
         "type": "object",
-        "required": ["email", "password", "name", "surname", "role"],
         "properties": {
-          "email": {
-            "type": "string",
-            "description": "User email",
-            "format": "email",
-            "example": "example@example.com"
-          },
           "password": {
             "type": "string",
             "description": "Your password must include at least one capital letter, one small letter, and one number.",
@@ -588,82 +657,6 @@
             "pattern": "^\\d*(?=.*[a-z])(?=.*[A-Z])\\S+\\D*\\d*$",
             "minLength": 7,
             "maxLength": 32
-          },
-          "name": {
-            "type": "string",
-            "description": "Users name",
-            "example": "Oleksii"
-          },
-          "surname": {
-            "type": "string",
-            "description": "Users surname",
-            "example": "Oleksiiv"
-          },
-          "role": {
-            "$ref": "#/components/schemas/ROLES_LIST",
-            "example": "admin"
-          }
-        }
-      },
-
-      "CreateNewUserResponse": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "User id"
-          },
-          "email": {
-            "type": "string",
-            "description": "User email",
-            "format": "email",
-            "example": "example@example.com"
-          },
-          "name": {
-            "type": "string",
-            "description": "Users name",
-            "example": "Oleksii"
-          },
-          "surname": {
-            "type": "string",
-            "description": "Users surname",
-            "example": "Oleksiiv"
-          },
-          "role": {
-            "type": "string",
-            "description": "Users role",
-            "example": "admin"
-          }
-        }
-      },
-
-      "GetUserByIdResponse": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "User id"
-          },
-          "email": {
-            "type": "string",
-            "description": "User email",
-            "format": "email",
-            "example": "example@example.com"
-          },
-          "name": {
-            "type": "string",
-            "description": "Users name",
-            "example": "Oleksii"
-          },
-          "surname": {
-            "type": "string",
-            "description": "Users surname",
-            "example": "Oleksiiv"
-          },
-          "role": {
-            "type": "string",
-            "description": "Users role",
-            "example": "admin"
           }
         }
       },
