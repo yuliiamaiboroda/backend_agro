@@ -489,37 +489,6 @@
         "enum": ["admin", "applyManager", "servicesManager", "productsManager"]
       },
 
-      "USER_SCHEMA": {
-        "type": "object",
-        "required": ["email", "name", "surname", "role", "id"],
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "User id"
-          },
-          "email": {
-            "type": "string",
-            "description": "User email",
-            "format": "email",
-            "example": "example@example.com"
-          },
-          "name": {
-            "type": "string",
-            "description": "Users name",
-            "example": "Oleksii"
-          },
-          "surname": {
-            "type": "string",
-            "description": "Users surname",
-            "example": "Oleksiiv"
-          },
-          "role": {
-            "$ref": "#/components/schemas/ROLES_LIST",
-            "example": "admin"
-          }
-        }
-      },
-
       "USER_SCHEMA_WITHOUT_ID": {
         "type": "object",
         "required": ["email", "name", "surname", "role"],
@@ -543,6 +512,18 @@
           "role": {
             "$ref": "#/components/schemas/ROLES_LIST",
             "example": "admin"
+          }
+        }
+      },
+
+      "USER_SCHEMA": {
+        "allOf": [{ "$ref": "#/components/schemas/USER_SCHEMA_WITHOUT_ID" }],
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "User id"
           }
         }
       },
