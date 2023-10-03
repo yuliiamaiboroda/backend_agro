@@ -107,6 +107,7 @@
         }
       }
     },
+
     "/api/auth/refresh": {
       "post": {
         "tags": ["Authentication"],
@@ -144,6 +145,7 @@
         }
       }
     },
+
     "/api/auth/restore-password": {
       "post": {
         "tags": ["Authentication"],
@@ -183,8 +185,89 @@
         }
       }
     },
-    "/api/auth/logout": {}
+
+    "/api/auth/current-user": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Current user",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful get current user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentUserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/auth/update-password": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "User update own password",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "description": "Update password's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOwnPasswordRequest"
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "Successful update password"
+          },
+          "400": {
+            "description": "Bad request (validation error)"
+          },
+          "401": {
+            "description": "Not authorized / A wrong password was entered"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/auth/logout": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "User logout",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "Successful logout"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    }
   },
+
   "components": {
     "schemas": {
       "LoginRequest": {
@@ -210,6 +293,7 @@
           }
         }
       },
+
       "LoginResponse": {
         "type": "object",
         "properties": {
@@ -245,6 +329,7 @@
           }
         }
       },
+
       "RefreshResponse": {
         "type": "object",
         "properties": {
@@ -254,6 +339,7 @@
           }
         }
       },
+
       "RestorePasswordRequest": {
         "type": "object",
         "required": ["email"],
@@ -269,24 +355,75 @@
           }
         }
       },
+
       "RestorePasswordResponse": {
         "type": "string",
         "description": "Successful sent new password via email",
         "example": "your new password sent via email"
       },
-      "CurrentUserResponse": {}
-    }
-  },
-  "securitySchemes": {
-    "Bearer": {
-      "type": "http",
-      "scheme": "bearer",
-      "bearerFormat": "JWT"
+
+      "CurrentUserResponse": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Users email",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "name": {
+            "type": "string",
+            "description": "Users name",
+            "example": "Oleksii"
+          },
+          "surname": {
+            "type": "string",
+            "description": "Users surname",
+            "example": "Oleksiiv"
+          },
+          "role": {
+            "type": "string",
+            "description": "Users role",
+            "example": "admin"
+          }
+        }
+      },
+
+      "UpdateOwnPasswordRequest": {
+        "type": "object",
+        "required": ["oldPassword", "newPassword"],
+        "properties": {
+          "oldPassword": {
+            "type": "string",
+            "description": "Your password must include at least one capital letter, one small letter, and one number.",
+            "example": "123World",
+            "pattern": "^\\d*(?=.*[a-z])(?=.*[A-Z])\\S+\\D*\\d*$",
+            "minLength": 7,
+            "maxLength": 32
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "Your password must include at least one capital letter, one small letter, and one number.",
+            "example": "World123",
+            "pattern": "^\\d*(?=.*[a-z])(?=.*[A-Z])\\S+\\D*\\d*$",
+            "minLength": 7,
+            "maxLength": 32
+          }
+        }
+      }
     },
-    "cookieAuth": {
-      "type": "http",
-      "in": "cookie",
-      "name": "jwt"
+
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "cookieAuth": {
+        "type": "http",
+        "in": "cookie",
+        "name": "jwt"
+      }
     }
   }
 }
