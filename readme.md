@@ -26,9 +26,6 @@ feedback and resumes from your users.
 - **Resume Submission:** Receive resumes from potential candidates directly
   through the API.
 
-This text you see here is \*actually- written in Markdown! To get a feel for
-Markdown's syntax, type some text into the left window and watch the results in
-the right.
 
 ## Tech
 
