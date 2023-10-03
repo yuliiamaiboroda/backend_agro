@@ -33,27 +33,27 @@
     },
     {
       "name": "Users",
-      "description": "Endpoints for working with users"
+      "description": "Endpoints for working with users. Roles required: admin."
     },
     {
       "name": "Vacancies",
-      "description": "Endpoints for working with vacancies"
+      "description": "Endpoints for working with vacancies. Roles required: admin or applyManager."
     },
     {
       "name": "Products",
-      "description": "Endpoints for working with products"
+      "description": "Endpoints for working with products. Roles required: admin or productsManager."
     },
     {
       "name": "Services",
-      "description": "Endpoints for working with services"
+      "description": "Endpoints for working with services. Roles required: admin or servicesManager."
     },
     {
       "name": "Feedbacks",
-      "description": "Endpoints for working with feedbacks"
+      "description": "Endpoints for working with feedbacks. Roles required: admin."
     },
     {
       "name": "Resumes",
-      "description": "Endpoints for working with resumes"
+      "description": "Endpoints for working with resumes. Roles required: admin or applyManager."
     }
   ],
   "paths": {
@@ -265,11 +265,136 @@
           }
         }
       }
-    }
+    },
+
+    "/api/users/": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get array of all users. Roles required: admin",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful get all users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllUsersResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+
+      "put": {
+        "tags": ["Users"],
+        "summary": "Create new user. Roles required: admin",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [],
+        "requestBody": {
+          "description": "User object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNewUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful create new user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateNewUserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "409": {
+            "description": "Conflict. User with this email already exists"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/users/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get user by id. Roles required: admin",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful get user by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserByIdResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/": {}
   },
 
   "components": {
     "schemas": {
+      "ROLES_LIST": {
+        "type": "string",
+        "enum": ["admin", "applyManager", "servicesManager", "productsManager"]
+      },
+
       "LoginRequest": {
         "type": "object",
         "required": ["email", "password"],
@@ -410,7 +535,140 @@
             "maxLength": 32
           }
         }
-      }
+      },
+
+      "GetAllUsersResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "User id"
+            },
+            "email": {
+              "type": "string",
+              "description": "User email",
+              "format": "email",
+              "example": "example@example.com"
+            },
+            "name": {
+              "type": "string",
+              "description": "Users name",
+              "example": "Oleksii"
+            },
+            "surname": {
+              "type": "string",
+              "description": "Users surname",
+              "example": "Oleksiiv"
+            },
+            "role": {
+              "type": "string",
+              "description": "Users role",
+              "example": "admin"
+            }
+          }
+        }
+      },
+
+      "CreateNewUserRequest": {
+        "type": "object",
+        "required": ["email", "password", "name", "surname", "role"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User email",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "Your password must include at least one capital letter, one small letter, and one number.",
+            "example": "123World",
+            "pattern": "^\\d*(?=.*[a-z])(?=.*[A-Z])\\S+\\D*\\d*$",
+            "minLength": 7,
+            "maxLength": 32
+          },
+          "name": {
+            "type": "string",
+            "description": "Users name",
+            "example": "Oleksii"
+          },
+          "surname": {
+            "type": "string",
+            "description": "Users surname",
+            "example": "Oleksiiv"
+          },
+          "role": {
+            "$ref": "#/components/schemas/ROLES_LIST",
+            "example": "admin"
+          }
+        }
+      },
+
+      "CreateNewUserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "User id"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "name": {
+            "type": "string",
+            "description": "Users name",
+            "example": "Oleksii"
+          },
+          "surname": {
+            "type": "string",
+            "description": "Users surname",
+            "example": "Oleksiiv"
+          },
+          "role": {
+            "type": "string",
+            "description": "Users role",
+            "example": "admin"
+          }
+        }
+      },
+
+      "GetUserByIdResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "User id"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "name": {
+            "type": "string",
+            "description": "Users name",
+            "example": "Oleksii"
+          },
+          "surname": {
+            "type": "string",
+            "description": "Users surname",
+            "example": "Oleksiiv"
+          },
+          "role": {
+            "type": "string",
+            "description": "Users role",
+            "example": "admin"
+          }
+        }
+      },
+
+      "": {}
     },
 
     "securitySchemes": {
