@@ -78,6 +78,7 @@
             "description": "Successful login. Returns a cookie named jwt.You need to include this cookie in refresh requests",
             "headers": {
               "Set-Cookie": {
+                "description": "Returns a cookie named jwt.You need to include this cookie in refresh requests",
                 "schema": {
                   "type": "string",
                   "example": "jwt=abcde12345",
@@ -105,7 +106,84 @@
           }
         }
       }
-    }
+    },
+    "/api/auth/refresh": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "User refresh via refresh token",
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful refresh user.Returns a cookie named jwt.You need to include this cookie in refresh requests",
+            "headers": {
+              "Set-Cookie": {
+                "description": "Returns a cookie named jwt.You need to include this cookie in refresh requests",
+                "schema": {
+                  "type": "string",
+                  "example": "jwt=abcde12345",
+                  "path": "/",
+                  "HttpOnly": true
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/auth/restore-password": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "User restore password via email",
+        "parameters": [],
+        "requestBody": {
+          "description": "Restore password's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RestorePasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful sent new password via email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestorePasswordResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (validation error)"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {}
   },
   "components": {
     "schemas": {
@@ -135,7 +213,7 @@
       "LoginResponse": {
         "type": "object",
         "properties": {
-          "access_token": {
+          "accessToken": {
             "type": "string",
             "description": "Bearer token"
           },
@@ -166,7 +244,37 @@
             }
           }
         }
-      }
+      },
+      "RefreshResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "Bearer token"
+          }
+        }
+      },
+      "RestorePasswordRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Your email should be a valid blend of Latin letters, numbers, and signs, devoid of hyphens at the beginning or end, with a minimum of two characters preceding the (@) symbol.",
+            "minLength": 10,
+            "maxLength": 63,
+            "pattern": "^(\\w+([.-]?\\w+){1,})*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$",
+            "format": "email",
+            "example": "example@example.com"
+          }
+        }
+      },
+      "RestorePasswordResponse": {
+        "type": "string",
+        "description": "Successful sent new password via email",
+        "example": "your new password sent via email"
+      },
+      "CurrentUserResponse": {}
     }
   },
   "securitySchemes": {
