@@ -1,5 +1,5 @@
 {
-  "openapi": "3.1.0",
+  "openapi": "3.0.3",
   "info": {
     "title": "REST API for Ahrokhimpromtsentr",
     "version": "0.1.0",
@@ -55,5 +55,130 @@
       "name": "Resumes",
       "description": "Endpoints for working with resumes"
     }
-  ]
+  ],
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "User login",
+        "parameters": [],
+        "requestBody": {
+          "description": "Login's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful login. Returns a cookie named jwt.You need to include this cookie in refresh requests",
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "jwt=abcde12345",
+                  "path": "/",
+                  "HttpOnly": true
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (validation error)"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Your email should be a valid blend of Latin letters, numbers, and signs, devoid of hyphens at the beginning or end, with a minimum of two characters preceding the (@) symbol.",
+            "minLength": 10,
+            "maxLength": 63,
+            "pattern": "^(\\w+([.-]?\\w+){1,})*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "Your password must include at least one capital letter, one small letter, and one number.",
+            "example": "123World",
+            "pattern": "^\\d*(?=.*[a-z])(?=.*[A-Z])\\S+\\D*\\d*$",
+            "minLength": 7,
+            "maxLength": 32
+          }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "Bearer token"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "description": "Users email",
+                "format": "email",
+                "example": "example@example.com"
+              },
+              "name": {
+                "type": "string",
+                "description": "Users name",
+                "example": "Oleksii"
+              },
+              "surname": {
+                "type": "string",
+                "description": "Users surname",
+                "example": "Oleksiiv"
+              },
+              "role": {
+                "type": "string",
+                "description": "Users role",
+                "example": "admin"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "securitySchemes": {
+    "Bearer": {
+      "type": "http",
+      "scheme": "bearer",
+      "bearerFormat": "JWT"
+    },
+    "cookieAuth": {
+      "type": "http",
+      "in": "cookie",
+      "name": "jwt"
+    }
+  }
 }
