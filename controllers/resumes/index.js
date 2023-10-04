@@ -47,7 +47,7 @@ const updateResumeIsViewed = async (req, res) => {
 const updateResumeIsFavorite = async (req, res) => {
   const { id } = req.params;
   await resumesService.updateResumeIsFavorite(id);
-  res.status(200).send();
+  res.status(204).send();
 };
 
 module.exports = {
