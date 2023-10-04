@@ -782,6 +782,9 @@
           },
           "500": {
             "description": "Server error"
+          },
+          "503": {
+            "description": "File storage failed"
           }
         }
       }
@@ -872,6 +875,9 @@
           },
           "500": {
             "description": "Server error"
+          },
+          "503": {
+            "description": "File storage failed"
           }
         }
       },
@@ -1134,6 +1140,9 @@
           },
           "404": {
             "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
           }
         }
       }
@@ -1170,6 +1179,303 @@
           },
           "404": {
             "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/resumes": {
+      "get": {
+        "tags": ["Resumes"],
+        "summary": "Get all resumes. Roles required: admin or applyManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "isFavorite",
+            "in": "query",
+            "description": "Filter via favorite status",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sort via newest first or oldest first",
+            "required": false,
+            "example": "desc",
+            "schema": {
+              "type": "string",
+              "enam": ["desc", "asc"],
+              "default": "desc",
+              "description": "The DESC keyword is used to sort the query result set in descending order. The ASC keyword is used to sort the query result set in ascending order."
+            }
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Number of feedbacks to skip",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of feedbacks to take",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "position",
+            "in": "query",
+            "description": "Filter by position",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful get all resumes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllResumesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (query error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin and applyManager has access to this endpoint"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Resumes"],
+        "summary": "Create new resume.",
+        "parameters": [],
+        "requestBody": {
+          "description": "Resume object",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateResumeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful create new resume",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/RESUME_SCHEMA_WITHOUT_ID" }
+                  ],
+                  "type": "object",
+                  "required": ["id", "isFavorite", "isReviewed"],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Resume id"
+                    },
+                    "isFavorite": {
+                      "type": "boolean",
+                      "description": "Favorite status"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request validation error"
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "503": {
+            "description": "File storage failed"
+          }
+        }
+      }
+    },
+
+    "/api/resumes/{id}": {
+      "get": {
+        "tags": ["Resumes"],
+        "summary": "Get resume by id. Roles required: admin or applyManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Resume id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful get resume by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RESUME_SCHEMA"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (id validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin and applyManager has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Resumes"],
+        "summary": "Delete resume by id. Roles required: admin or applyManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Resume id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful delete resume by id"
+          },
+          "400": {
+            "description": "Bad request (id validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin and applyManager has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/resumes/{id}/views": {
+      "post": {
+        "tags": ["Resumes"],
+        "summary": "Add view to resume. Roles required: admin or applyManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Resume id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful add view to feedback"
+          },
+          "400": {
+            "description": "Bad request (id validation error or The item has already been reviewed)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin and applyManager has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/resumes/{id}/favorite": {
+      "post": {
+        "tags": ["Resumes"],
+        "summary": "Add favorite to resume. Roles required: admin or applyManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Resume id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful add favorite to resume"
+          },
+          "400": {
+            "description": "Bad request (id validation error )"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin and applyManager has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
           }
         }
       }
@@ -1429,7 +1735,7 @@
             "type": "boolean",
             "description": "Agreement with terms and conditions",
             "example": true,
-            "valid": [true]
+            "valid": true
           }
         }
       },
@@ -1439,7 +1745,7 @@
           { "$ref": "#/components/schemas/FEEDBACK_SCHEMA_WITHOUT_ID" }
         ],
         "type": "object",
-        "required": ["id"],
+        "required": ["id", "isFavorite", "isReviewed"],
         "properties": {
           "id": {
             "type": "string",
@@ -1452,6 +1758,82 @@
           "isReviewed": {
             "type": "boolean",
             "description": "Favorite status"
+          }
+        }
+      },
+
+      "RESUME_SCHEMA_WITHOUT_ID": {
+        "type": "object",
+        "required": [
+          "name",
+          "phone",
+          "email",
+          "position",
+          "comment",
+          "resumeFileURL"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Your name. Must contain only letters and spaces.",
+            "minLength": 2,
+            "maxLength": 62,
+            "pattern": "^[a-zA-Zа-яА-ЯіІїЇєЄ ]*$",
+            "example": "John Doe"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Contact phone must contain only +380 and 9 numbers after Ukraine country code",
+            "example": "+380123456789",
+            "pattern": "^\\+380\\d{9}$"
+          },
+          "email": {
+            "type": "string",
+            "description": "Your email should be a valid blend of Latin letters, numbers, and signs, devoid of hyphens at the beginning or end, with a minimum of two characters preceding the (@) symbol.",
+            "minLength": 10,
+            "maxLength": 63,
+            "pattern": "^(\\w+([.-]?\\w+){1,})*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "position": {
+            "type": "string",
+            "description": "The position you are applying for. Must contain only letters, numbers and hyphens and apostrophes.",
+            "pattern": "^(?![-' ]+$)[a-zA-Zа-яА-ЯіІїЇєЄ0-9-'‘ʼ.,/ ]+$",
+            "example": "Software Engineer",
+            "minLength": 2,
+            "maxLength": 62
+          },
+          "comment": {
+            "type": "string",
+            "description": "Your comment",
+            "minLength": 2,
+            "maxLength": 2000
+          }
+        }
+      },
+
+      "RESUME_SCHEMA": {
+        "allOf": [{ "$ref": "#/components/schemas/RESUME_SCHEMA_WITHOUT_ID" }],
+        "type": "object",
+        "required": ["id", "isFavorite", "isReviewed", "resumeFileURL"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Resume id"
+          },
+          "isFavorite": {
+            "type": "boolean",
+            "description": "Favorite status"
+          },
+          "isReviewed": {
+            "type": "boolean",
+            "description": "Favorite status"
+          },
+          "resumeFileURL": {
+            "type": ["string", null],
+            "description": "Resume file url on cloudinary",
+            "example": "https://res.cloudinary.com/dkz3xh7qj/image/upload/v1660973979/rentacar/rentacar_resume.pdf"
           }
         }
       },
@@ -1724,6 +2106,92 @@
           "limit": {
             "type": "integer",
             "example": 10
+          }
+        }
+      },
+
+      "GetAllResumesResponse": {
+        "type": "object",
+        "properties": {
+          "resumes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RESUME_SCHEMA"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "example": 10
+          },
+          "skip": {
+            "type": "integer",
+            "example": 0
+          },
+          "limit": {
+            "type": "integer",
+            "example": 10
+          }
+        }
+      },
+
+      "CreateResumeRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "phone",
+          "email",
+          "position",
+          "comment",
+          "agreement"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Your name. Must contain only letters and spaces.",
+            "minLength": 2,
+            "maxLength": 62,
+            "pattern": "^[a-zA-Zа-яА-ЯіІїЇєЄ ]*$",
+            "example": "John Doe"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Contact phone must contain only +380 and 9 numbers after Ukraine country code",
+            "example": "+380123456789",
+            "pattern": "^\\+380\\d{9}$"
+          },
+          "email": {
+            "type": "string",
+            "description": "Your email should be a valid blend of Latin letters, numbers, and signs, devoid of hyphens at the beginning or end, with a minimum of two characters preceding the (@) symbol.",
+            "minLength": 10,
+            "maxLength": 63,
+            "pattern": "^(\\w+([.-]?\\w+){1,})*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "position": {
+            "type": "string",
+            "description": "The position you are applying for. Must contain only letters, numbers and hyphens and apostrophes.",
+            "pattern": "^(?![-' ]+$)[a-zA-Zа-яА-ЯіІїЇєЄ0-9-'‘ʼ.,/ ]+$",
+            "example": "Software Engineer",
+            "minLength": 2,
+            "maxLength": 62
+          },
+          "comment": {
+            "type": "string",
+            "description": "Your comment",
+            "minLength": 2,
+            "maxLength": 2000
+          },
+          "agreement": {
+            "type": "boolean",
+            "description": "Agreement with terms and conditions",
+            "example": true,
+            "valid": true
+          },
+          "resume": {
+            "type": "string",
+            "description": "Your resume. Only PDF format is allowed",
+            "format": "binary"
           }
         }
       },
