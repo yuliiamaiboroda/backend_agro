@@ -913,6 +913,268 @@
       }
     },
 
+    "/api/feedback/": {
+      "get": {
+        "tags": ["Feedbacks"],
+        "summary": "Get array of all feedbacks. Roles required: admin",
+        "parameters": [
+          {
+            "name": "isFavorite",
+            "in": "query",
+            "description": "Filter via favorite status",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sort via newest first or oldest first",
+            "required": false,
+            "example": "desc",
+            "schema": {
+              "type": "string",
+              "enam": ["desc", "asc"],
+              "default": "desc",
+              "description": "The DESC keyword is used to sort the query result set in descending order. The ASC keyword is used to sort the query result set in ascending order."
+            }
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Number of feedbacks to skip",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of feedbacks to take",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful get array of all feedbacks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllFeedbacksResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (query error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Feedbacks"],
+        "summary": "Create new feedback.",
+        "parameters": [],
+        "requestBody": {
+          "description": "Feedback object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FEEDBACK_SCHEMA_WITHOUT_ID"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful create new feedback",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FEEDBACK_SCHEMA"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request validation error"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/feedback/{id}": {
+      "get": {
+        "tags": ["Feedbacks"],
+        "summary": "Get feedback by id. Roles required: admin",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Feedback id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful get feedback by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FEEDBACK_SCHEMA"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (id validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Feedbacks"],
+        "summary": "Delete feedback by id. Roles required: admin",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Feedback id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful delete feedback by id"
+          },
+          "400": {
+            "description": "Bad request (id validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/feedback/{id}/views": {
+      "post": {
+        "tags": ["Feedbacks"],
+        "summary": "Add view to feedback. Roles required: admin",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Feedback id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful add view to feedback"
+          },
+          "400": {
+            "description": "Bad request (id validation error or The item has already been reviewed)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+
+    "/api/feedback/{id}/favorite": {
+      "post": {
+        "tags": ["Feedbacks"],
+        "summary": "Add favorite to feedback. Roles required: admin",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Feedback id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful add favorite to feedback"
+          },
+          "400": {
+            "description": "Bad request (id validation error )"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+
     "/": {}
   },
 
@@ -1120,6 +1382,76 @@
           "id": {
             "type": "string",
             "description": "Service id"
+          }
+        }
+      },
+
+      "FEEDBACK_SCHEMA_WITHOUT_ID": {
+        "type": "object",
+        "required": [
+          "name",
+          "contactMail",
+          "contactPhone",
+          "comment",
+          "agreement"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Your name. Must contain only letters and spaces.",
+            "minLength": 4,
+            "maxLength": 30,
+            "pattern": "^[a-zA-Zа-яА-ЯіІїЇєЄ ]*$",
+            "example": "John Doe"
+          },
+          "contactMail": {
+            "type": "string",
+            "description": "Your email should be a valid blend of Latin letters, numbers, and signs, devoid of hyphens at the beginning or end, with a minimum of two characters preceding the (@) symbol.",
+            "minLength": 10,
+            "maxLength": 63,
+            "pattern": "^(\\w+([.-]?\\w+){1,})*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "contactPhone": {
+            "type": "string",
+            "description": "Contact phone must contain only +380 and 9 numbers after Ukraine country code",
+            "example": "+380123456789",
+            "pattern": "^\\+380\\d{9}$"
+          },
+          "comment": {
+            "type": "string",
+            "description": "Your comment",
+            "minLength": 2,
+            "maxLength": 2000
+          },
+          "agreement": {
+            "type": "boolean",
+            "description": "Agreement with terms and conditions",
+            "example": true,
+            "valid": [true]
+          }
+        }
+      },
+
+      "FEEDBACK_SCHEMA": {
+        "allOf": [
+          { "$ref": "#/components/schemas/FEEDBACK_SCHEMA_WITHOUT_ID" }
+        ],
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Feedback id"
+          },
+          "isFavorite": {
+            "type": "boolean",
+            "description": "Favorite status"
+          },
+          "isReviewed": {
+            "type": "boolean",
+            "description": "Favorite status"
           }
         }
       },
@@ -1368,6 +1700,30 @@
             "type": "string",
             "description": "Service image",
             "format": "binary"
+          }
+        }
+      },
+
+      "GetAllFeedbacksResponse": {
+        "type": "object",
+        "properties": {
+          "feedbacks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FEEDBACK_SCHEMA"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "example": 10
+          },
+          "skip": {
+            "type": "integer",
+            "example": 0
+          },
+          "limit": {
+            "type": "integer",
+            "example": 10
           }
         }
       },
