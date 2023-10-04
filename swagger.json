@@ -479,6 +479,251 @@
       }
     },
 
+    "/api/vacancies/": {
+      "get": {
+        "tags": ["Vacancies"],
+        "summary": "Get array of all vacancies.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful get array of all vacancies",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllVacanciesResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Vacancies"],
+        "summary": "Create new vacancy. Roles required: admin or applyManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [],
+        "requestBody": {
+          "description": "Vacancy object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VACANCY_SCHEMA_WITHOUT_ID"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful create new vacancy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VACANCY_SCHEMA"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin or applyManager has access to this endpoint"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/vacancies/category/{categoryName}": {
+      "get": {
+        "tags": ["Vacancies"],
+        "summary": "Get array of all vacancies by category.",
+        "parameters": [
+          {
+            "name": "categoryName",
+            "in": "path",
+            "description": "Category name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/VACANCY_CATEGORY_LIST"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful get array of all vacancies by category",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllVacanciesResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/vacancies/titles": {
+      "get": {
+        "tags": ["Vacancies"],
+        "summary": "Get array of all vacancies titles",
+        "responses": {
+          "200": {
+            "description": "Successful get array of all vacancies titles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetVacanciesTittlesResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/vacancies/{id}": {
+      "get": {
+        "tags": ["Vacancies"],
+        "summary": "Get vacancy by id.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Vacancy id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful get vacancy by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VACANCY_SCHEMA"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Vacancies"],
+        "summary": "Delete vacancy by id. Roles required: admin or applyManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Vacancy id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful delete vacancy by id"
+          },
+          "400": {
+            "description": "Bad request (id validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin or applyManager has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Vacancies"],
+        "summary": "Update vacancy by id. Roles required: admin or applyManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Vacancy id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Vacancy object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VACANCY_SCHEMA_WITHOUT_ID"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful update vacancy by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VACANCY_SCHEMA"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (id or/and validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin or applyManager has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
     "/": {}
   },
 
@@ -487,6 +732,11 @@
       "ROLES_LIST": {
         "type": "string",
         "enum": ["admin", "applyManager", "servicesManager", "productsManager"]
+      },
+
+      "VACANCY_CATEGORY_LIST": {
+        "type": "string",
+        "enum": ["irrelevant-vacancies", "all-vacancies", "actual-vacancies"]
       },
 
       "USER_SCHEMA_WITHOUT_ID": {
@@ -524,6 +774,96 @@
           "id": {
             "type": "string",
             "description": "User id"
+          }
+        }
+      },
+
+      "VACANCY_SCHEMA_WITHOUT_ID": {
+        "type": "object",
+        "required": [
+          "category",
+          "title",
+          "description",
+          "sallary",
+          "education",
+          "contactMail",
+          "contactPhone",
+          "location"
+        ],
+        "properties": {
+          "category": {
+            "$ref": "#/components/schemas/VACANCY_CATEGORY_LIST",
+            "example": "irrelevant-vacancies"
+          },
+          "title": {
+            "type": "string",
+            "description": "Vacancy title must contain only letters, numbers, hyphens and apostrophes",
+            "example": "Agronom",
+            "minLength": 5,
+            "maxLength": 30,
+            "pattern": "^(?![-' ]+$)[a-zA-Zа-яА-ЯіІїЇєЄ0-9-'‘ʼ,./ ]+$"
+          },
+          "description": {
+            "type": "string",
+            "description": "Vacancy description",
+            "example": "We need an agronom",
+            "minLength": 10,
+            "maxLength": 120
+          },
+          "sallary": {
+            "type": "string",
+            "description": "Vacancy sallary must contain oly numbers and '-' between numbers",
+            "example": "10000",
+            "minLength": 4,
+            "maxLength": 15,
+            "pattern": "^\\d+(-\\d+)*$"
+          },
+          "education": {
+            "type": "string",
+            "description": "Education required for this vacancy",
+            "example": "Bachelor",
+            "maxLength": 60
+          },
+          "contactMail": {
+            "type": "string",
+            "description": "Your email should be a valid blend of Latin letters, numbers, and signs, devoid of hyphens at the beginning or end, with a minimum of two characters preceding the (@) symbol.",
+            "minLength": 10,
+            "maxLength": 63,
+            "pattern": "^(\\w+([.-]?\\w+){1,})*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "contactPhone": {
+            "type": "string",
+            "description": "Contact phone must contain only +380 and 9 numbers after Ukraine country code",
+            "example": "+380123456789",
+            "pattern": "^\\+380\\d{9}$"
+          },
+          "workExperienceRequired": {
+            "type": "string",
+            "description": "Work experience must contain only numbers and '-' between numbers. No spaces are allowed.",
+            "pattern": "^\\d+(-\\d+)*$",
+            "example": "5-10"
+          },
+          "location": {
+            "type": "string",
+            "description": "Vacancy location must contain only letters without spaces",
+            "minLength": 3,
+            "maxLength": 60,
+            "pattern": "^([a-zA-Z-А-Яа-яЁёЇїІіЄєҐґ',]+)*$",
+            "example": "Kyiv"
+          }
+        }
+      },
+
+      "VACANCY_SCHEMA": {
+        "allOf": [{ "$ref": "#/components/schemas/VACANCY_SCHEMA_WITHOUT_ID" }],
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Vacancy id"
           }
         }
       },
@@ -638,6 +978,31 @@
             "pattern": "^\\d*(?=.*[a-z])(?=.*[A-Z])\\S+\\D*\\d*$",
             "minLength": 7,
             "maxLength": 32
+          }
+        }
+      },
+
+      "GetAllVacanciesResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/VACANCY_SCHEMA"
+        }
+      },
+
+      "GetVacanciesTittlesResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Vacancy title",
+              "example": "Agronom"
+            },
+            "id": {
+              "type": "string",
+              "description": "User id"
+            }
           }
         }
       },
