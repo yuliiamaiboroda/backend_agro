@@ -26,7 +26,6 @@ feedback and resumes from your users.
 - **Resume Submission:** Receive resumes from potential candidates directly
   through the API.
 
-
 ## Tech
 
 ---
@@ -54,24 +53,46 @@ Experience.
   reliable solution for sending notifications, confirmations, and other email
   communications.
 
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your
+local machine for development and testing purposes.
+
+## Prerequisites
+
+- Node.js and npm installed on your machine.
+
 ## Installation
 
----
+- Clone the repository:
 
-REST API requires [Node.js](https://nodejs.org/) v18.14.2+ to run.
+```sh
+gh repo clone yuliiamaiboroda/backend_agro
+```
 
-Install the dependencies and devDependencies and start the server.
+- Change into the project directory:
 
 ```sh
 cd backend_agro
-npm install
-npm run start:dev
 ```
 
-For production environments.
+- Install dependencies:
 
 ```sh
 npm install
+```
+
+- Start the development server:
+
+```sh
+npm run start:dev
+```
+
+-Use [http://localhost:3001](http://localhost:3001) to interact with REST API.
+
+- For production environments.
+
+```sh
 npm start
 ```
 
@@ -112,9 +133,17 @@ populate it with the following environment variables:
 Ensure these variables are properly set in your .env file to enable secure and
 seamless functionality within your application.
 
-## Other commands
+## Documentation
 
----
+Powered by [Swagger.io(OpenAPI)](https://swagger.io/specification/)
+
+- **In development mode:**
+  [http://localhost:3001/api/docs](http://localhost:3001/api/docs)
+
+- **in production mode:**
+  [ahrokhimpromtsentr.cyclic.app/api/docs](ahrokhimpromtsentr.cyclic.app/api/docs)
+
+## Other commands
 
 **Start the server in production mode.**
 
