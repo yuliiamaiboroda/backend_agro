@@ -11,7 +11,7 @@ const {
   verifyRefreshToken,
   createAccessToken,
   createRefreshToken,
-} = require('../../services/auth');
+} = require('../tokens');
 const crypto = require('crypto');
 const { UPDATE_DEFAULT_CONFIG } = require('../../helpers/constants');
 

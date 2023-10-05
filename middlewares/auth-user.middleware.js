@@ -1,6 +1,6 @@
-const { UnauthorizedError } = require("../helpers/utils/");
-const { UserModel } = require("../models");
-const { verifyToken } = require("../services/auth");
+const { UnauthorizedError } = require('../helpers/utils/');
+const { UserModel } = require('../models');
+const { verifyToken } = require('../services/tokens');
 
 const authUser = async (req, res, next) => {
   try {
@@ -8,8 +8,8 @@ const authUser = async (req, res, next) => {
     if (!authorization) {
       throw new UnauthorizedError();
     }
-    const [bearer, token] = authorization.split(" ");
-    if (bearer !== "Bearer" || !token) {
+    const [bearer, token] = authorization.split(' ');
+    if (bearer !== 'Bearer' || !token) {
       throw new UnauthorizedError();
     }
     try {
