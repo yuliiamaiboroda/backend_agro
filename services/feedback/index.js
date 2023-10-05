@@ -19,7 +19,6 @@ const createFeeback = async body => {
   });
 
   const feedback = await FeedbackModel.findById(newFeedback._id, {
-    agreement: 0,
     viewedBy: 0,
     createdAt: 0,
     isFavorite: 0,
@@ -60,8 +59,12 @@ const getAllFeedbacks = async (id, query) => {
     .project({
       name: 1,
       comment: 1,
+      contactMail: 1,
+      contactPhone: 1,
+      agreement: 1,
       isReviewed: 1,
       isFavorite: 1,
+      createdAt: 1,
       _id: 0,
       id: 1,
     })
@@ -81,7 +84,9 @@ const getAllFeedbacks = async (id, query) => {
 };
 
 const getFeedbackById = async id => {
-  const feedback = await FeedbackModel.findById(id, { viewedBy: 0 });
+  const feedback = await FeedbackModel.findById(id, {
+    viewedBy: 0,
+  });
 
   if (!feedback) throw new NotFoundError();
 
