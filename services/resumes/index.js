@@ -8,28 +8,27 @@ const {
 } = require('../../helpers/utils');
 const { UPDATE_DEFAULT_CONFIG } = require('../../helpers/constants');
 
-const createResume = async resume => {
-  const {
-    _id: id,
+const createResume = async ({
+  name,
+  phone,
+  email,
+  position,
+  comment,
+  agreement,
+  file,
+}) => {
+  const resumeFileURL = file ? file.path : null;
+  const resume = await ResumeModel.create({
     name,
     phone,
     email,
     position,
     comment,
-    isFavorite,
-    createdAt,
-  } = await ResumeModel.create(resume);
+    agreement,
+    resumeFileURL,
+  });
 
-  return {
-    id,
-    name,
-    phone,
-    email,
-    position,
-    comment,
-    isFavorite,
-    createdAt,
-  };
+  return renameIdField(resume);
 };
 
 const getAllResumes = async ({

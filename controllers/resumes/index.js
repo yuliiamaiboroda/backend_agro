@@ -1,16 +1,9 @@
 const resumesService = require('../../services/resumes');
 
 const createResume = async (req, res) => {
-  const { name, phone, email, position, comment, agreement } = req.body;
-  const resumeFileURL = req.file ? req.file.path : null;
   const resume = await resumesService.createResume({
-    name,
-    phone,
-    email,
-    position,
-    comment,
-    agreement,
-    resumeFileURL,
+    ...req.body,
+    file: req.file,
   });
   res.status(201).json(resume);
 };
@@ -26,27 +19,22 @@ const getAllResumes = async (req, res) => {
 };
 
 const getResumeById = async (req, res) => {
-  const { id } = req.params;
-  const resume = await resumesService.getResumeById(id);
+  const resume = await resumesService.getResumeById(req.params.id);
   res.status(200).json(resume);
 };
 
 const removeResumeById = async (req, res) => {
-  const { id } = req.params;
-  await resumesService.removeResumeById(id);
+  await resumesService.removeResumeById(req.params.id);
   res.status(204).send();
 };
 
 const updateResumeIsViewed = async (req, res) => {
-  const { id } = req.params;
-  const { _id: userId } = req.user;
-  await resumesService.updateResumeIsViewed(id, userId);
+  await resumesService.updateResumeIsViewed(req.params.id, req.user._id);
   res.status(204).send();
 };
 
 const updateResumeIsFavorite = async (req, res) => {
-  const { id } = req.params;
-  await resumesService.updateResumeIsFavorite(id);
+  await resumesService.updateResumeIsFavorite(req.params.id);
   res.status(204).send();
 };
 
