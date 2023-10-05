@@ -32,10 +32,10 @@ const createVacancySchema = Joi.object({
   description: Joi.string()
     .trim()
     .min(10)
-    .max(120)
+    .max(2000)
     .required()
     .messages(
-      new FieldErrors("description").string().min(10).max(120).required().get()
+      new FieldErrors("description").string().min(10).max(2000).required().get()
     ),
   sallary: Joi.string()
     .trim()

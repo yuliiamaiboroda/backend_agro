@@ -21,17 +21,34 @@ const getProductById = async id => {
   return renameIdField(product);
 };
 
-const createProduct = async ({ title, description, file }) => {
-  const imageURL = file ? file.path : null;
+const createProduct = async ({
+  title,
+  description,
+  file,
+  price,
+  contactMail,
+  contactPhone,
+}) => {
+  const imageURL = file ? file.path : undefined;
   if (!imageURL) throw new FileRequiredError();
 
-  const product = await ProductsModel.create({ title, description, imageURL });
+  const product = await ProductsModel.create({
+    title,
+    description,
+    imageURL,
+    price,
+    contactMail,
+    contactPhone,
+  });
 
   return renameIdField(product);
 };
 
-const updateProductById = async (id, { title, description, file }) => {
-  const imageURL = file ? file.path : null;
+const updateProductById = async (
+  id,
+  { title, description, file, price, contactMail, contactPhone }
+) => {
+  const imageURL = file ? file.path : undefined;
   if (imageURL) {
     const { imageURL: oldImageURL } = await ProductsModel.findById(id);
     await removeCloudinaryFileByURL(oldImageURL);
@@ -43,6 +60,9 @@ const updateProductById = async (id, { title, description, file }) => {
       title,
       description,
       imageURL,
+      price,
+      contactMail,
+      contactPhone,
     },
     UPDATE_DEFAULT_CONFIG
   );
