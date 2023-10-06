@@ -141,7 +141,7 @@ Powered by [Swagger.io(OpenAPI)](https://swagger.io/specification/)
   [http://localhost:3001/api/docs](http://localhost:3001/api/docs)
 
 - **in production mode:**
-  [ahrokhimpromtsentr.cyclic.app/api/docs](ahrokhimpromtsentr.cyclic.app/api/docs)
+  [https://ahrokhimpromtsentr.cyclic.app/api/docs](https://ahrokhimpromtsentr.cyclic.app/api/docs)
 
 ## Other commands
 
