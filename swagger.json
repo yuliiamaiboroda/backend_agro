@@ -732,6 +732,224 @@
       }
     },
 
+    "/api/products/": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Get array of all products",
+        "responses": {
+          "200": {
+            "description": "Successful get array of all products",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllProductsRrsponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Products"],
+        "summary": "Create new product. Roles required: admin or productManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [],
+        "requestBody": {
+          "description": "Product object",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful create new product",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateProductResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin or productManager has access to this endpoint"
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "503": {
+            "description": "File storage failed"
+          }
+        }
+      }
+    },
+
+    "/api/products/{id}": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Get product by id.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Product id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful get product by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/PRODUCT_SCHEMA" }],
+                  "type": "object",
+                  "properties": {
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2022-01-01T00:00:00.000Z"
+                    },
+                    "imageURL": {
+                      "type": "string",
+                      "description": "Product image url on cloudinary",
+                      "example": "https://res.cloudinary.com/dkz3xh7qj/image/upload/v1660973979/rentacar/rentacar_product.jpg"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Products"],
+        "summary": "Update product by id. Roles required: admin or productManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Product id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Product object",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateServiceAndProductsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful update product by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/PRODUCT_SCHEMA" }],
+                  "type": "object",
+                  "properties": {
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2022-01-01T00:00:00.000Z"
+                    },
+                    "imageURL": {
+                      "type": "string",
+                      "description": "Product image url on cloudinary",
+                      "example": "https://res.cloudinary.com/dkz3xh7qj/image/upload/v1660973979/rentacar/rentacar_product.jpg"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (id or/and validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin or productManager has access to this endpoint"
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "503": {
+            "description": "File storage failed"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Products"],
+        "summary": "Delete product by id. Roles required: admin or productManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Product id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful delete product by id"
+          },
+          "400": {
+            "description": "Bad request (id validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin or productManager has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
     "/api/services/": {
       "get": {
         "tags": ["Services"],
@@ -869,7 +1087,7 @@
           "content": {
             "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateServiceRequest"
+                "$ref": "#/components/schemas/UpdateServiceAndProductsRequest"
               }
             }
           }
@@ -1563,9 +1781,7 @@
           }
         }
       }
-    },
-
-    "/": {}
+    }
   },
 
   "components": {
@@ -1649,7 +1865,7 @@
             "description": "Vacancy description",
             "example": "We need an agronom",
             "minLength": 10,
-            "maxLength": 120
+            "maxLength": 2000
           },
           "sallary": {
             "type": "string",
@@ -1705,6 +1921,67 @@
           "id": {
             "type": "string",
             "description": "Vacancy id"
+          }
+        }
+      },
+
+      "PRODUCT_SCHEMA_WITHOUT_ID": {
+        "type": "object",
+        "required": [
+          "title",
+          "description",
+          "price",
+          "contactMail",
+          "contactPhone"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Product title",
+            "example": "Grain",
+            "minLength": 2,
+            "maxLength": 32
+          },
+          "description": {
+            "type": "string",
+            "description": "Product description",
+            "example": "Grain from our farm",
+            "minLength": 2,
+            "maxLength": 2000
+          },
+          "price": {
+            "type": "string",
+            "description": "Product price",
+            "example": "Open to discussion",
+            "minLength": 2,
+            "maxLength": 32
+          },
+          "contactMail": {
+            "type": "string",
+            "description": "Your email should be a valid blend of Latin letters, numbers, and signs, devoid of hyphens at the beginning or end, with a minimum of two characters preceding the (@) symbol.",
+            "minLength": 10,
+            "maxLength": 63,
+            "pattern": "^(\\w+([.-]?\\w+){1,})*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "contactPhone": {
+            "type": "string",
+            "description": "Contact phone must contain only +380 and 9 numbers after Ukraine country code",
+            "example": "+380123456789",
+            "pattern": "^\\+380\\d{9}$"
+          }
+        }
+      },
+
+      "PRODUCT_SCHEMA": {
+        "allOf": [{ "$ref": "#/components/schemas/PRODUCT_SCHEMA_WITHOUT_ID" }],
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Product id"
           }
         }
       },
@@ -2061,6 +2338,56 @@
         }
       },
 
+      "GetAllProductsRrsponse": {
+        "type": "array",
+        "items": {
+          "allOf": [{ "$ref": "#/components/schemas/PRODUCT_SCHEMA" }],
+          "type": "object",
+          "properties": {
+            "createdAt": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2022-01-01T00:00:00.000Z"
+            },
+            "imageURL": {
+              "type": "string",
+              "description": "Product image url on cloudinary",
+              "example": "https://res.cloudinary.com/dkz3xh7qj/image/upload/v1660973979/rentacar/rentacar_product.jpg"
+            }
+          }
+        }
+      },
+
+      "CreateProductRequest": {
+        "allOf": [{ "$ref": "#/components/schemas/PRODUCT_SCHEMA_WITHOUT_ID" }],
+        "type": "object",
+        "required": ["image"],
+        "properties": {
+          "image": {
+            "type": "string",
+            "description": "Service image",
+            "format": "binary"
+          }
+        }
+      },
+
+      "CreateProductResponse": {
+        "allOf": [{ "$ref": "#/components/schemas/PRODUCT_SCHEMA" }],
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2022-01-01T00:00:00.000Z"
+          },
+          "imageURL": {
+            "type": "string",
+            "description": "Product image url on cloudinary",
+            "example": "https://res.cloudinary.com/dkz3xh7qj/image/upload/v1660973979/rentacar/rentacar_product.jpg"
+          }
+        }
+      },
+
       "GetALLServicesResponse": {
         "type": "array",
         "items": {
@@ -2131,7 +2458,7 @@
         }
       },
 
-      "UpdateServiceRequest": {
+      "UpdateServiceAndProductsRequest": {
         "type": "object",
         "properties": {
           "title": {
@@ -2294,9 +2621,7 @@
             "format": "binary"
           }
         }
-      },
-
-      "": {}
+      }
     },
 
     "securitySchemes": {
