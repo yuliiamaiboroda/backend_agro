@@ -88,7 +88,7 @@ npm install
 npm run start:dev
 ```
 
--Use [http://localhost:3001](http://localhost:3001) to interact with REST API.
+- Use [http://localhost:3001](http://localhost:3001) to interact with REST API.
 
 - For production environments.
 
