@@ -1,51 +1,45 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const { controllerExceptionWrapper } = require("../../helpers/utils");
+const productController = require('../../controllers/products');
+const { controllerExceptionWrapper } = require('../../helpers/utils');
 const {
   createProductSchema,
   updateProductSchema,
-} = require("../../helpers/schemas");
-const { ROLES_LIST } = require("../../helpers/constants");
-const {
-  getAll,
-  getCertainById,
-  create,
-  updateById,
-  removeById,
-} = require("../../controllers/products");
+} = require('../../helpers/schemas');
+const { ROLES_LIST } = require('../../helpers/constants');
 const {
   authUser,
   validateBody,
   productUploader,
   checkAccessRight,
   validateObjectId,
-} = require("../../middlewares");
+} = require('../../middlewares');
 
 router
-  .get("/all", controllerExceptionWrapper(getAll))
+  .get('/', controllerExceptionWrapper(productController.getAllProducts))
   .get(
-    "/certain/:productId",
+    '/:id',
     validateObjectId,
-    controllerExceptionWrapper(getCertainById)
+    controllerExceptionWrapper(productController.getProductById)
   )
   .use(authUser, checkAccessRight(ROLES_LIST.productsManager))
-  .post(
-    "/certain",
+  .put(
+    '/',
     productUploader,
     validateBody(createProductSchema),
-    controllerExceptionWrapper(create)
+    controllerExceptionWrapper(productController.createProduct)
   )
-  .patch(
-    "/certain/:productId",
+  .post(
+    '/:id',
     validateObjectId,
     productUploader,
     validateBody(updateProductSchema),
-    controllerExceptionWrapper(updateById)
+    controllerExceptionWrapper(productController.updateProductById)
   )
   .delete(
-    "/certain/:productId",
+    '/:id',
     validateObjectId,
-    controllerExceptionWrapper(removeById)
+    controllerExceptionWrapper(productController.removeProductById)
   );
 
 module.exports = router;

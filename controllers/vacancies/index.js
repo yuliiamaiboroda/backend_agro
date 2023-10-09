@@ -1,19 +1,58 @@
-const { updateById } = require("./update-by-id");
-const { create } = require("./create");
-const { removeById } = require("./remove-by-id");
+const vacanciesServices = require("../../services/vacancies");
 
-const { getAll } = require("./get-all");
-const { getCertainById } = require("./get-certain-by-id");
+const getAllVacancies = async (req, res) => {
+  const vacancies = await vacanciesServices.getAllVacancies();
 
-const { getByCategory } = require("./get-by-category");
-const { getTitles } = require("./get-titles");
+  res.status(200).json(vacancies);
+};
+
+const createVacancy = async (req, res) => {
+  const vacancy = await vacanciesServices.createVacancy(req.body);
+
+  res.status(201).json(vacancy);
+};
+
+const getVacancyById = async (req, res) => {
+  const vacancy = await vacanciesServices.getVacancyById(req.params.id);
+
+  res.status(200).json(vacancy);
+};
+
+const getVacanciesByCategory = async (req, res) => {
+  const vacancies = await vacanciesServices.getVacanciesByCategory(
+    req.params.categoryName
+  );
+
+  res.status(200).json(vacancies);
+};
+
+const getVacanciesTitles = async (req, res) => {
+  const titles = await vacanciesServices.getVacanciesTitles();
+
+  res.status(200).json(titles);
+};
+
+const removeVacancyById = async (req, res) => {
+  await vacanciesServices.removeVacancyById(req.params.id);
+
+  res.status(204).send();
+};
+
+const updateVacancyById = async (req, res) => {
+  const vacancy = await vacanciesServices.updateVacancyById(
+    req.params.id,
+    req.body
+  );
+
+  res.status(200).json(vacancy);
+};
 
 module.exports = {
-  create,
-  getAll,
-  removeById,
-  updateById,
-  getCertainById,
-  getByCategory,
-  getTitles,
+  createVacancy,
+  getAllVacancies,
+  removeVacancyById,
+  updateVacancyById,
+  getVacancyById,
+  getVacanciesByCategory,
+  getVacanciesTitles,
 };

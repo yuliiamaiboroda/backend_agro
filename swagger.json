@@ -1,0 +1,2640 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "REST API for Ahrokhimpromtsentr",
+    "version": "0.1.0",
+    "description": "Simple REST API for managing dynamic content of services, vacancies and products on your website and staying in touch with your users.",
+    "license": {
+      "name": "license: MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "contact": {
+      "name": "YIY-Soft",
+      "url": "https://yiy-soft.com",
+      "email": "yiy.soft@gmail.com"
+    }
+  },
+  "consumes": ["application/json", "multipart/form-data"],
+  "produces": ["application/json"],
+  "servers": [
+    {
+      "url": "http://localhost:3001",
+      "description": "Development server"
+    },
+    {
+      "url": "https://ahrokhimpromtsentr.cyclic.app",
+      "description": "Production server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Authentication",
+      "description": "Endpoints for working with authentication"
+    },
+    {
+      "name": "Users",
+      "description": "Endpoints for working with users. Roles required: admin."
+    },
+    {
+      "name": "Vacancies",
+      "description": "Endpoints for working with vacancies. Roles required: admin or applyManager."
+    },
+    {
+      "name": "Products",
+      "description": "Endpoints for working with products. Roles required: admin or productsManager."
+    },
+    {
+      "name": "Services",
+      "description": "Endpoints for working with services. Roles required: admin or servicesManager."
+    },
+    {
+      "name": "Feedbacks",
+      "description": "Endpoints for working with feedbacks. Roles required: admin."
+    },
+    {
+      "name": "Resumes",
+      "description": "Endpoints for working with resumes. Roles required: admin or applyManager."
+    }
+  ],
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "User login",
+        "parameters": [],
+        "requestBody": {
+          "description": "Login's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful login. Returns a cookie named jwt.You need to include this cookie in refresh requests",
+            "headers": {
+              "Set-Cookie": {
+                "description": "Returns a cookie named jwt.You need to include this cookie in refresh requests",
+                "schema": {
+                  "type": "string",
+                  "example": "jwt=abcde12345",
+                  "path": "/",
+                  "HttpOnly": true
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (validation error)"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/auth/refresh": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "User refresh via refresh token",
+        "security": [{ "cookieAuth": [] }],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful refresh user.Returns a cookie named jwt.You need to include this cookie in refresh requests",
+            "headers": {
+              "Set-Cookie": {
+                "description": "Returns a cookie named jwt.You need to include this cookie in refresh requests",
+                "schema": {
+                  "type": "string",
+                  "example": "jwt=abcde12345",
+                  "path": "/",
+                  "HttpOnly": true
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/auth/restore-password": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "User restore password via email",
+        "parameters": [],
+        "requestBody": {
+          "description": "Restore password's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RestorePasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful sent new password via email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RestorePasswordResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (validation error)"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/auth/current-user": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Current user",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful get current user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/USER_SCHEMA_WITHOUT_ID"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/auth/update-password": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "User update own password",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "description": "Update password's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateOwnPasswordRequest"
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "Successful update password"
+          },
+          "400": {
+            "description": "Bad request (validation error)"
+          },
+          "401": {
+            "description": "Not authorized / A wrong password was entered"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/auth/logout": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "User logout",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "Successful logout"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/users/": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get array of all users. Roles required: admin",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful get all users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllUsersResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+
+      "put": {
+        "tags": ["Users"],
+        "summary": "Create new user. Roles required: admin",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [],
+        "requestBody": {
+          "description": "User object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/USER_SCHEMA_WITHOUT_ID"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful create new user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/USER_SCHEMA"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "409": {
+            "description": "Conflict. User with this email already exists"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/users/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get user by id. Roles required: admin",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful get user by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/USER_SCHEMA" }],
+                  "type": "object",
+                  "properties": {
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2022-01-01T00:00:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (id validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Delete user by id. Roles required: admin",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful delete user by id"
+          },
+          "400": {
+            "description": "Bad request (id validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Users"],
+        "summary": "Update user by id. Roles required: admin",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "User object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateUserRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful update user by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/USER_SCHEMA"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (id or/and validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "409": {
+            "description": "Conflict. User with this email already exists"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/vacancies/": {
+      "get": {
+        "tags": ["Vacancies"],
+        "summary": "Get array of all vacancies.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful get array of all vacancies",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllVacanciesResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Vacancies"],
+        "summary": "Create new vacancy. Roles required: admin or applyManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [],
+        "requestBody": {
+          "description": "Vacancy object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VACANCY_SCHEMA_WITHOUT_ID"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful create new vacancy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VACANCY_SCHEMA"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin or applyManager has access to this endpoint"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/vacancies/category/{categoryName}": {
+      "get": {
+        "tags": ["Vacancies"],
+        "summary": "Get array of all vacancies by category.",
+        "parameters": [
+          {
+            "name": "categoryName",
+            "in": "path",
+            "description": "Category name",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/VACANCY_CATEGORY_LIST"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful get array of all vacancies by category",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllVacanciesResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/vacancies/titles": {
+      "get": {
+        "tags": ["Vacancies"],
+        "summary": "Get array of all vacancies titles",
+        "responses": {
+          "200": {
+            "description": "Successful get array of all vacancies titles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetVacanciesTittlesResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/vacancies/{id}": {
+      "get": {
+        "tags": ["Vacancies"],
+        "summary": "Get vacancy by id.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Vacancy id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful get vacancy by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VACANCY_SCHEMA"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Vacancies"],
+        "summary": "Delete vacancy by id. Roles required: admin or applyManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Vacancy id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful delete vacancy by id"
+          },
+          "400": {
+            "description": "Bad request (id validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin or applyManager has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Vacancies"],
+        "summary": "Update vacancy by id. Roles required: admin or applyManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Vacancy id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Vacancy object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VACANCY_SCHEMA_WITHOUT_ID"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful update vacancy by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VACANCY_SCHEMA"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (id or/and validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin or applyManager has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/products/": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Get array of all products",
+        "responses": {
+          "200": {
+            "description": "Successful get array of all products",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllProductsRrsponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Products"],
+        "summary": "Create new product. Roles required: admin or productManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [],
+        "requestBody": {
+          "description": "Product object",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProductRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful create new product",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateProductResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin or productManager has access to this endpoint"
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "503": {
+            "description": "File storage failed"
+          }
+        }
+      }
+    },
+
+    "/api/products/{id}": {
+      "get": {
+        "tags": ["Products"],
+        "summary": "Get product by id.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Product id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful get product by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/PRODUCT_SCHEMA" }],
+                  "type": "object",
+                  "properties": {
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2022-01-01T00:00:00.000Z"
+                    },
+                    "imageURL": {
+                      "type": "string",
+                      "description": "Product image url on cloudinary",
+                      "example": "https://res.cloudinary.com/dkz3xh7qj/image/upload/v1660973979/rentacar/rentacar_product.jpg"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Products"],
+        "summary": "Update product by id. Roles required: admin or productManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Product id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Product object",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateServiceAndProductsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful update product by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/PRODUCT_SCHEMA" }],
+                  "type": "object",
+                  "properties": {
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2022-01-01T00:00:00.000Z"
+                    },
+                    "imageURL": {
+                      "type": "string",
+                      "description": "Product image url on cloudinary",
+                      "example": "https://res.cloudinary.com/dkz3xh7qj/image/upload/v1660973979/rentacar/rentacar_product.jpg"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (id or/and validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin or productManager has access to this endpoint"
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "503": {
+            "description": "File storage failed"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Products"],
+        "summary": "Delete product by id. Roles required: admin or productManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Product id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful delete product by id"
+          },
+          "400": {
+            "description": "Bad request (id validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin or productManager has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/services/": {
+      "get": {
+        "tags": ["Services"],
+        "summary": "Get array of all services",
+        "responses": {
+          "200": {
+            "description": "Successful get array of all services",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetALLServicesResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Services"],
+        "summary": "Create new service. Roles required: admin or servicesManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [],
+        "requestBody": {
+          "description": "Service object",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateServiceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful create new service",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/SERVICE_SCHEMA" }],
+                  "type": "object",
+                  "properties": {
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2022-01-01T00:00:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (validation error"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin or servicesManager has access to this endpoint"
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "503": {
+            "description": "File storage failed"
+          }
+        }
+      }
+    },
+
+    "/api/services/{id}": {
+      "get": {
+        "tags": ["Services"],
+        "summary": "Get service by id.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Service id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful get service by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/SERVICE_SCHEMA" }],
+                  "type": "object",
+                  "properties": {
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2022-01-01T00:00:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Services"],
+        "summary": "Update service by id. Roles required: admin or servicesManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Service id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Service object",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateServiceAndProductsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful update service by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/SERVICE_SCHEMA" }],
+                  "type": "object",
+                  "properties": {
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2022-01-01T00:00:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (id or/and validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin or servicesManager has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "503": {
+            "description": "File storage failed"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Services"],
+        "summary": "Delete service by id. Roles required: admin or servicesManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Service id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful delete service by id"
+          },
+          "400": {
+            "description": "Bad request (id validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin or servicesManager has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/feedback/": {
+      "get": {
+        "tags": ["Feedbacks"],
+        "summary": "Get array of all feedbacks. Roles required: admin",
+        "parameters": [
+          {
+            "name": "isFavorite",
+            "in": "query",
+            "description": "Filter via favorite status",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sort via newest first or oldest first",
+            "required": false,
+            "example": "desc",
+            "schema": {
+              "type": "string",
+              "enam": ["desc", "asc"],
+              "default": "desc",
+              "description": "The DESC keyword is used to sort the query result set in descending order. The ASC keyword is used to sort the query result set in ascending order."
+            }
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Number of feedbacks to skip",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of feedbacks to take",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful get array of all feedbacks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllFeedbacksResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (query error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Feedbacks"],
+        "summary": "Create new feedback.",
+        "parameters": [],
+        "requestBody": {
+          "description": "Feedback object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FEEDBACK_SCHEMA_WITHOUT_ID"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful create new feedback",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/FEEDBACK_SCHEMA_WITHOUT_ID"
+                    }
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request validation error"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/feedback/{id}": {
+      "get": {
+        "tags": ["Feedbacks"],
+        "summary": "Get feedback by id. Roles required: admin",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Feedback id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful get feedback by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/FEEDBACK_SCHEMA_WITHOUT_ID"
+                    }
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2022-01-01T00:00:00.000Z"
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "Feedback id"
+                    },
+                    "isFavorite": {
+                      "type": "boolean",
+                      "description": "Favorite status"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (id validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Feedbacks"],
+        "summary": "Delete feedback by id. Roles required: admin",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Feedback id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful delete feedback by id"
+          },
+          "400": {
+            "description": "Bad request (id validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/feedback/{id}/views": {
+      "post": {
+        "tags": ["Feedbacks"],
+        "summary": "Add view to feedback. Roles required: admin",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Feedback id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful add view to feedback"
+          },
+          "400": {
+            "description": "Bad request (id validation error or The item has already been reviewed)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/feedback/{id}/favorite": {
+      "post": {
+        "tags": ["Feedbacks"],
+        "summary": "Add favorite to feedback. Roles required: admin",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Feedback id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful add favorite to feedback"
+          },
+          "400": {
+            "description": "Bad request (id validation error )"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/resumes": {
+      "get": {
+        "tags": ["Resumes"],
+        "summary": "Get all resumes. Roles required: admin or applyManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "isFavorite",
+            "in": "query",
+            "description": "Filter via favorite status",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sort via newest first or oldest first",
+            "required": false,
+            "example": "desc",
+            "schema": {
+              "type": "string",
+              "enam": ["desc", "asc"],
+              "default": "desc",
+              "description": "The DESC keyword is used to sort the query result set in descending order. The ASC keyword is used to sort the query result set in ascending order."
+            }
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Number of feedbacks to skip",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of feedbacks to take",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "position",
+            "in": "query",
+            "description": "Filter by position",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful get all resumes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/GetAllResumesResponse" }
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2022-01-01T00:00:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (query error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin and applyManager has access to this endpoint"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Resumes"],
+        "summary": "Create new resume.",
+        "parameters": [],
+        "requestBody": {
+          "description": "Resume object",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateResumeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful create new resume",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    { "$ref": "#/components/schemas/RESUME_SCHEMA_WITHOUT_ID" }
+                  ],
+                  "type": "object",
+                  "required": ["id", "isFavorite", "isReviewed"],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Resume id"
+                    },
+                    "isFavorite": {
+                      "type": "boolean",
+                      "description": "Favorite status"
+                    },
+                    "isReviewed": {
+                      "type": "boolean",
+                      "description": "Review status"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request validation error"
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "503": {
+            "description": "File storage failed"
+          }
+        }
+      }
+    },
+
+    "/api/resumes/{id}": {
+      "get": {
+        "tags": ["Resumes"],
+        "summary": "Get resume by id. Roles required: admin or applyManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Resume id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful get resume by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [{ "$ref": "#/components/schemas/RESUME_SCHEMA" }],
+                  "type": "object",
+                  "properties": {
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2022-01-01T00:00:00.000Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (id validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin and applyManager has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Resumes"],
+        "summary": "Delete resume by id. Roles required: admin or applyManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Resume id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful delete resume by id"
+          },
+          "400": {
+            "description": "Bad request (id validation error)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin and applyManager has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/resumes/{id}/views": {
+      "post": {
+        "tags": ["Resumes"],
+        "summary": "Add view to resume. Roles required: admin or applyManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Resume id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful add view to feedback"
+          },
+          "400": {
+            "description": "Bad request (id validation error or The item has already been reviewed)"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin and applyManager has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+
+    "/api/resumes/{id}/favorite": {
+      "post": {
+        "tags": ["Resumes"],
+        "summary": "Add favorite to resume. Roles required: admin or applyManager.",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Resume id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful add favorite to resume"
+          },
+          "400": {
+            "description": "Bad request (id validation error )"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "403": {
+            "description": "Forbidden. Only admin and applyManager has access to this endpoint"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "ROLES_LIST": {
+        "type": "string",
+        "enum": ["admin", "applyManager", "servicesManager", "productsManager"]
+      },
+
+      "VACANCY_CATEGORY_LIST": {
+        "type": "string",
+        "enum": ["irrelevant-vacancies", "all-vacancies", "actual-vacancies"]
+      },
+
+      "USER_SCHEMA_WITHOUT_ID": {
+        "type": "object",
+        "required": ["email", "name", "surname", "role"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User email",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "name": {
+            "type": "string",
+            "description": "Users name",
+            "example": "Oleksii"
+          },
+          "surname": {
+            "type": "string",
+            "description": "Users surname",
+            "example": "Oleksiiv"
+          },
+          "role": {
+            "$ref": "#/components/schemas/ROLES_LIST",
+            "example": "admin"
+          }
+        }
+      },
+
+      "USER_SCHEMA": {
+        "allOf": [{ "$ref": "#/components/schemas/USER_SCHEMA_WITHOUT_ID" }],
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "User id"
+          }
+        }
+      },
+
+      "VACANCY_SCHEMA_WITHOUT_ID": {
+        "type": "object",
+        "required": [
+          "category",
+          "title",
+          "description",
+          "sallary",
+          "education",
+          "contactMail",
+          "contactPhone",
+          "location"
+        ],
+        "properties": {
+          "category": {
+            "$ref": "#/components/schemas/VACANCY_CATEGORY_LIST",
+            "example": "irrelevant-vacancies"
+          },
+          "title": {
+            "type": "string",
+            "description": "Vacancy title must contain only letters, numbers, hyphens and apostrophes",
+            "example": "Agronom",
+            "minLength": 5,
+            "maxLength": 30,
+            "pattern": "^(?![-' ]+$)[a-zA-Zа-яА-ЯіІїЇєЄ0-9-'‘ʼ,./ ]+$"
+          },
+          "description": {
+            "type": "string",
+            "description": "Vacancy description",
+            "example": "We need an agronom",
+            "minLength": 10,
+            "maxLength": 2000
+          },
+          "sallary": {
+            "type": "string",
+            "description": "Vacancy sallary must contain oly numbers and '-' between numbers",
+            "example": "10000",
+            "minLength": 4,
+            "maxLength": 15,
+            "pattern": "^\\d+(-\\d+)*$"
+          },
+          "education": {
+            "type": "string",
+            "description": "Education required for this vacancy",
+            "example": "Bachelor",
+            "maxLength": 60
+          },
+          "contactMail": {
+            "type": "string",
+            "description": "Your email should be a valid blend of Latin letters, numbers, and signs, devoid of hyphens at the beginning or end, with a minimum of two characters preceding the (@) symbol.",
+            "minLength": 10,
+            "maxLength": 63,
+            "pattern": "^(\\w+([.-]?\\w+){1,})*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "contactPhone": {
+            "type": "string",
+            "description": "Contact phone must contain only +380 and 9 numbers after Ukraine country code",
+            "example": "+380123456789",
+            "pattern": "^\\+380\\d{9}$"
+          },
+          "workExperienceRequired": {
+            "type": "string",
+            "description": "Work experience must contain only numbers and '-' between numbers. No spaces are allowed.",
+            "pattern": "^\\d+(-\\d+)*$",
+            "example": "5-10"
+          },
+          "location": {
+            "type": "string",
+            "description": "Vacancy location must contain only letters without spaces",
+            "minLength": 3,
+            "maxLength": 60,
+            "pattern": "^([a-zA-Z-А-Яа-яЁёЇїІіЄєҐґ',]+)*$",
+            "example": "Kyiv"
+          }
+        }
+      },
+
+      "VACANCY_SCHEMA": {
+        "allOf": [{ "$ref": "#/components/schemas/VACANCY_SCHEMA_WITHOUT_ID" }],
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Vacancy id"
+          }
+        }
+      },
+
+      "PRODUCT_SCHEMA_WITHOUT_ID": {
+        "type": "object",
+        "required": [
+          "title",
+          "description",
+          "price",
+          "contactMail",
+          "contactPhone"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Product title",
+            "example": "Grain",
+            "minLength": 2,
+            "maxLength": 32
+          },
+          "description": {
+            "type": "string",
+            "description": "Product description",
+            "example": "Grain from our farm",
+            "minLength": 2,
+            "maxLength": 2000
+          },
+          "price": {
+            "type": "string",
+            "description": "Product price",
+            "example": "Open to discussion",
+            "minLength": 2,
+            "maxLength": 32
+          },
+          "contactMail": {
+            "type": "string",
+            "description": "Your email should be a valid blend of Latin letters, numbers, and signs, devoid of hyphens at the beginning or end, with a minimum of two characters preceding the (@) symbol.",
+            "minLength": 10,
+            "maxLength": 63,
+            "pattern": "^(\\w+([.-]?\\w+){1,})*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "contactPhone": {
+            "type": "string",
+            "description": "Contact phone must contain only +380 and 9 numbers after Ukraine country code",
+            "example": "+380123456789",
+            "pattern": "^\\+380\\d{9}$"
+          }
+        }
+      },
+
+      "PRODUCT_SCHEMA": {
+        "allOf": [{ "$ref": "#/components/schemas/PRODUCT_SCHEMA_WITHOUT_ID" }],
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Product id"
+          }
+        }
+      },
+
+      "SERVICE_SCHEMA_WITHOUT_ID": {
+        "type": "object",
+        "required": [
+          "title",
+          "description",
+          "price",
+          "contactMail",
+          "contactPhone",
+          "imageURL"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Service title",
+            "example": "Rent a car",
+            "minLength": 2,
+            "maxLength": 30
+          },
+          "description": {
+            "type": "string",
+            "description": "Service description",
+            "example": "Rent a new car",
+            "minLength": 2,
+            "maxLength": 2000
+          },
+          "price": {
+            "type": "string",
+            "description": "Service price",
+            "example": "Open to discussion",
+            "minLength": 2,
+            "maxLength": 32
+          },
+          "contactMail": {
+            "type": "string",
+            "description": "Your email should be a valid blend of Latin letters, numbers, and signs, devoid of hyphens at the beginning or end, with a minimum of two characters preceding the (@) symbol.",
+            "minLength": 10,
+            "maxLength": 63,
+            "pattern": "^(\\w+([.-]?\\w+){1,})*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "contactPhone": {
+            "type": "string",
+            "description": "Contact phone must contain only +380 and 9 numbers after Ukraine country code",
+            "example": "+380123456789",
+            "pattern": "^\\+380\\d{9}$"
+          },
+          "imageURL": {
+            "type": "string",
+            "description": "Service image url on cloudinary",
+            "example": "https://res.cloudinary.com/dkz3xh7qj/image/upload/v1660973979/rentacar/rentacar_service.jpg"
+          }
+        }
+      },
+
+      "SERVICE_SCHEMA": {
+        "allOf": [{ "$ref": "#/components/schemas/SERVICE_SCHEMA_WITHOUT_ID" }],
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Service id"
+          }
+        }
+      },
+
+      "FEEDBACK_SCHEMA_WITHOUT_ID": {
+        "type": "object",
+        "required": [
+          "name",
+          "contactMail",
+          "contactPhone",
+          "comment",
+          "agreement"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Your name. Must contain only letters and spaces.",
+            "minLength": 4,
+            "maxLength": 30,
+            "pattern": "^[a-zA-Zа-яА-ЯіІїЇєЄ ]*$",
+            "example": "John Doe"
+          },
+          "contactMail": {
+            "type": "string",
+            "description": "Your email should be a valid blend of Latin letters, numbers, and signs, devoid of hyphens at the beginning or end, with a minimum of two characters preceding the (@) symbol.",
+            "minLength": 10,
+            "maxLength": 63,
+            "pattern": "^(\\w+([.-]?\\w+){1,})*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "contactPhone": {
+            "type": "string",
+            "description": "Contact phone must contain only +380 and 9 numbers after Ukraine country code",
+            "example": "+380123456789",
+            "pattern": "^\\+380\\d{9}$"
+          },
+          "comment": {
+            "type": "string",
+            "description": "Your comment",
+            "minLength": 2,
+            "maxLength": 2000
+          },
+          "agreement": {
+            "type": "boolean",
+            "description": "Agreement with terms and conditions",
+            "example": true,
+            "valid": true
+          }
+        }
+      },
+
+      "FEEDBACK_SCHEMA": {
+        "allOf": [
+          { "$ref": "#/components/schemas/FEEDBACK_SCHEMA_WITHOUT_ID" }
+        ],
+        "type": "object",
+        "required": ["id", "isFavorite", "isReviewed"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Feedback id"
+          },
+          "isFavorite": {
+            "type": "boolean",
+            "description": "Favorite status"
+          },
+          "isReviewed": {
+            "type": "boolean",
+            "description": "Favorite status"
+          }
+        }
+      },
+
+      "RESUME_SCHEMA_WITHOUT_ID": {
+        "type": "object",
+        "required": [
+          "name",
+          "phone",
+          "email",
+          "position",
+          "comment",
+          "resumeFileURL"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Your name. Must contain only letters and spaces.",
+            "minLength": 2,
+            "maxLength": 62,
+            "pattern": "^[a-zA-Zа-яА-ЯіІїЇєЄ ]*$",
+            "example": "John Doe"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Contact phone must contain only +380 and 9 numbers after Ukraine country code",
+            "example": "+380123456789",
+            "pattern": "^\\+380\\d{9}$"
+          },
+          "email": {
+            "type": "string",
+            "description": "Your email should be a valid blend of Latin letters, numbers, and signs, devoid of hyphens at the beginning or end, with a minimum of two characters preceding the (@) symbol.",
+            "minLength": 10,
+            "maxLength": 63,
+            "pattern": "^(\\w+([.-]?\\w+){1,})*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "position": {
+            "type": "string",
+            "description": "The position you are applying for. Must contain only letters, numbers and hyphens and apostrophes.",
+            "pattern": "^(?![-' ]+$)[a-zA-Zа-яА-ЯіІїЇєЄ0-9-'‘ʼ.,/ ]+$",
+            "example": "Software Engineer",
+            "minLength": 2,
+            "maxLength": 62
+          },
+          "comment": {
+            "type": "string",
+            "description": "Your comment",
+            "minLength": 2,
+            "maxLength": 2000
+          }
+        }
+      },
+
+      "RESUME_SCHEMA": {
+        "allOf": [{ "$ref": "#/components/schemas/RESUME_SCHEMA_WITHOUT_ID" }],
+        "type": "object",
+        "required": ["id", "isFavorite", "isReviewed", "resumeFileURL"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Resume id"
+          },
+          "isFavorite": {
+            "type": "boolean",
+            "description": "Favorite status"
+          },
+          "isReviewed": {
+            "type": "boolean",
+            "description": "Favorite status"
+          },
+          "resumeFileURL": {
+            "type": ["string", null],
+            "description": "Resume file url on cloudinary",
+            "example": "https://res.cloudinary.com/dkz3xh7qj/image/upload/v1660973979/rentacar/rentacar_resume.pdf"
+          }
+        }
+      },
+
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Your email should be a valid blend of Latin letters, numbers, and signs, devoid of hyphens at the beginning or end, with a minimum of two characters preceding the (@) symbol.",
+            "minLength": 10,
+            "maxLength": 63,
+            "pattern": "^(\\w+([.-]?\\w+){1,})*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "Your password must include at least one capital letter, one small letter, and one number.",
+            "example": "123World",
+            "pattern": "^\\d*(?=.*[a-z])(?=.*[A-Z])\\S+\\D*\\d*$",
+            "minLength": 7,
+            "maxLength": 32
+          }
+        }
+      },
+
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "Bearer token"
+          },
+          "user": {
+            "$ref": "#/components/schemas/USER_SCHEMA_WITHOUT_ID"
+          }
+        }
+      },
+
+      "RefreshResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "Bearer token"
+          }
+        }
+      },
+
+      "RestorePasswordRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Your email should be a valid blend of Latin letters, numbers, and signs, devoid of hyphens at the beginning or end, with a minimum of two characters preceding the (@) symbol.",
+            "minLength": 10,
+            "maxLength": 63,
+            "pattern": "^(\\w+([.-]?\\w+){1,})*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$",
+            "format": "email",
+            "example": "example@example.com"
+          }
+        }
+      },
+
+      "RestorePasswordResponse": {
+        "type": "string",
+        "description": "Successful sent new password via email",
+        "example": "your new password sent via email"
+      },
+
+      "UpdateOwnPasswordRequest": {
+        "type": "object",
+        "required": ["oldPassword", "newPassword"],
+        "properties": {
+          "oldPassword": {
+            "type": "string",
+            "description": "Your password must include at least one capital letter, one small letter, and one number.",
+            "example": "123World",
+            "pattern": "^\\d*(?=.*[a-z])(?=.*[A-Z])\\S+\\D*\\d*$",
+            "minLength": 7,
+            "maxLength": 32
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "Your password must include at least one capital letter, one small letter, and one number.",
+            "example": "World123",
+            "pattern": "^\\d*(?=.*[a-z])(?=.*[A-Z])\\S+\\D*\\d*$",
+            "minLength": 7,
+            "maxLength": 32
+          }
+        }
+      },
+
+      "GetAllUsersResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/USER_SCHEMA"
+        }
+      },
+
+      "UpdateUserRequest": {
+        "allOf": [{ "$ref": "#/components/schemas/USER_SCHEMA_WITHOUT_ID" }],
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "description": "Your password must include at least one capital letter, one small letter, and one number.",
+            "example": "123World",
+            "pattern": "^\\d*(?=.*[a-z])(?=.*[A-Z])\\S+\\D*\\d*$",
+            "minLength": 7,
+            "maxLength": 32
+          }
+        }
+      },
+
+      "GetAllVacanciesResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/VACANCY_SCHEMA"
+        }
+      },
+
+      "GetVacanciesTittlesResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Vacancy title",
+              "example": "Agronom"
+            },
+            "id": {
+              "type": "string",
+              "description": "User id"
+            }
+          }
+        }
+      },
+
+      "GetAllProductsRrsponse": {
+        "type": "array",
+        "items": {
+          "allOf": [{ "$ref": "#/components/schemas/PRODUCT_SCHEMA" }],
+          "type": "object",
+          "properties": {
+            "createdAt": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2022-01-01T00:00:00.000Z"
+            },
+            "imageURL": {
+              "type": "string",
+              "description": "Product image url on cloudinary",
+              "example": "https://res.cloudinary.com/dkz3xh7qj/image/upload/v1660973979/rentacar/rentacar_product.jpg"
+            }
+          }
+        }
+      },
+
+      "CreateProductRequest": {
+        "allOf": [{ "$ref": "#/components/schemas/PRODUCT_SCHEMA_WITHOUT_ID" }],
+        "type": "object",
+        "required": ["image"],
+        "properties": {
+          "image": {
+            "type": "string",
+            "description": "Service image",
+            "format": "binary"
+          }
+        }
+      },
+
+      "CreateProductResponse": {
+        "allOf": [{ "$ref": "#/components/schemas/PRODUCT_SCHEMA" }],
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2022-01-01T00:00:00.000Z"
+          },
+          "imageURL": {
+            "type": "string",
+            "description": "Product image url on cloudinary",
+            "example": "https://res.cloudinary.com/dkz3xh7qj/image/upload/v1660973979/rentacar/rentacar_product.jpg"
+          }
+        }
+      },
+
+      "GetALLServicesResponse": {
+        "type": "array",
+        "items": {
+          "allOf": [{ "$ref": "#/components/schemas/SERVICE_SCHEMA" }],
+          "type": "object",
+          "properties": {
+            "createdAt": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2022-01-01T00:00:00.000Z"
+            }
+          }
+        }
+      },
+
+      "CreateServiceRequest": {
+        "type": "object",
+        "required": [
+          "title",
+          "description",
+          "price",
+          "contactMail",
+          "contactPhone",
+          "image"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Service title",
+            "example": "Rent a car",
+            "minLength": 2,
+            "maxLength": 30
+          },
+          "description": {
+            "type": "string",
+            "description": "Service description",
+            "example": "Rent a new car",
+            "minLength": 2,
+            "maxLength": 2000
+          },
+          "price": {
+            "type": "string",
+            "description": "Service price",
+            "example": "Open to discussion",
+            "minLength": 2,
+            "maxLength": 32
+          },
+          "contactMail": {
+            "type": "string",
+            "description": "Your email should be a valid blend of Latin letters, numbers, and signs, devoid of hyphens at the beginning or end, with a minimum of two characters preceding the (@) symbol.",
+            "minLength": 10,
+            "maxLength": 63,
+            "pattern": "^(\\w+([.-]?\\w+){1,})*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "contactPhone": {
+            "type": "string",
+            "description": "Contact phone must contain only +380 and 9 numbers after Ukraine country code",
+            "example": "+380123456789",
+            "pattern": "^\\+380\\d{9}$"
+          },
+          "image": {
+            "type": "string",
+            "description": "Service image",
+            "format": "binary"
+          }
+        }
+      },
+
+      "UpdateServiceAndProductsRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Service title",
+            "example": "Rent a car",
+            "minLength": 2,
+            "maxLength": 30
+          },
+          "description": {
+            "type": "string",
+            "description": "Service description",
+            "example": "Rent a new car",
+            "minLength": 2,
+            "maxLength": 2000
+          },
+          "price": {
+            "type": "string",
+            "description": "Service price",
+            "example": "Open to discussion",
+            "minLength": 2,
+            "maxLength": 32
+          },
+          "contactMail": {
+            "type": "string",
+            "description": "Your email should be a valid blend of Latin letters, numbers, and signs, devoid of hyphens at the beginning or end, with a minimum of two characters preceding the (@) symbol.",
+            "minLength": 10,
+            "maxLength": 63,
+            "pattern": "^(\\w+([.-]?\\w+){1,})*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "contactPhone": {
+            "type": "string",
+            "description": "Contact phone must contain only +380 and 9 numbers after Ukraine country code",
+            "example": "+380123456789",
+            "pattern": "^\\+380\\d{9}$"
+          },
+          "image": {
+            "type": "string",
+            "description": "Service image",
+            "format": "binary"
+          }
+        }
+      },
+
+      "GetAllFeedbacksResponse": {
+        "type": "object",
+        "properties": {
+          "feedbacks": {
+            "type": "array",
+            "items": {
+              "allOf": [{ "$ref": "#/components/schemas/FEEDBACK_SCHEMA" }],
+              "type": "object",
+              "properties": {
+                "createdAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "example": "2022-01-01T00:00:00.000Z"
+                }
+              }
+            }
+          },
+          "total": {
+            "type": "integer",
+            "example": 10
+          },
+          "skip": {
+            "type": "integer",
+            "example": 0
+          },
+          "limit": {
+            "type": "integer",
+            "example": 10
+          }
+        }
+      },
+
+      "GetAllResumesResponse": {
+        "type": "object",
+        "properties": {
+          "resumes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RESUME_SCHEMA"
+            }
+          },
+          "total": {
+            "type": "integer",
+            "example": 10
+          },
+          "skip": {
+            "type": "integer",
+            "example": 0
+          },
+          "limit": {
+            "type": "integer",
+            "example": 10
+          }
+        }
+      },
+
+      "CreateResumeRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "phone",
+          "email",
+          "position",
+          "comment",
+          "agreement"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Your name. Must contain only letters and spaces.",
+            "minLength": 2,
+            "maxLength": 62,
+            "pattern": "^[a-zA-Zа-яА-ЯіІїЇєЄ ]*$",
+            "example": "John Doe"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Contact phone must contain only +380 and 9 numbers after Ukraine country code",
+            "example": "+380123456789",
+            "pattern": "^\\+380\\d{9}$"
+          },
+          "email": {
+            "type": "string",
+            "description": "Your email should be a valid blend of Latin letters, numbers, and signs, devoid of hyphens at the beginning or end, with a minimum of two characters preceding the (@) symbol.",
+            "minLength": 10,
+            "maxLength": 63,
+            "pattern": "^(\\w+([.-]?\\w+){1,})*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "position": {
+            "type": "string",
+            "description": "The position you are applying for. Must contain only letters, numbers and hyphens and apostrophes.",
+            "pattern": "^(?![-' ]+$)[a-zA-Zа-яА-ЯіІїЇєЄ0-9-'‘ʼ.,/ ]+$",
+            "example": "Software Engineer",
+            "minLength": 2,
+            "maxLength": 62
+          },
+          "comment": {
+            "type": "string",
+            "description": "Your comment",
+            "minLength": 2,
+            "maxLength": 2000
+          },
+          "agreement": {
+            "type": "boolean",
+            "description": "Agreement with terms and conditions",
+            "example": true,
+            "valid": true
+          },
+          "resume": {
+            "type": "string",
+            "description": "Your resume. Only PDF format is allowed",
+            "format": "binary"
+          }
+        }
+      }
+    },
+
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "cookieAuth": {
+        "type": "http",
+        "in": "cookie",
+        "name": "jwt"
+      }
+    }
+  }
+}

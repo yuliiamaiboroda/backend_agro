@@ -1,42 +1,42 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const { controllerExceptionWrapper } = require("../../helpers/utils");
+const { controllerExceptionWrapper } = require('../../helpers/utils');
 const {
   validateBody,
   authUser,
   checkAccessRight,
   validateObjectId,
-} = require("../../middlewares");
-const { sendFeedBackSchema } = require("../../helpers/schemas");
-const feedbackController = require("../../controllers/feedback");
+} = require('../../middlewares');
+const { sendFeedBackSchema } = require('../../helpers/schemas');
+const feedbackController = require('../../controllers/feedback');
 
 router
-  .post(
-    "/",
+  .put(
+    '/',
     validateBody(sendFeedBackSchema),
-    controllerExceptionWrapper(feedbackController.create)
+    controllerExceptionWrapper(feedbackController.createFeedback)
   )
   .use(authUser, checkAccessRight())
-  .get("/all", controllerExceptionWrapper(feedbackController.getAll))
+  .get('/', controllerExceptionWrapper(feedbackController.getAllFeedbacks))
   .get(
-    "/:id",
+    '/:id',
     validateObjectId,
-    controllerExceptionWrapper(feedbackController.getCertainById)
+    controllerExceptionWrapper(feedbackController.getFeedbackById)
   )
   .delete(
-    "/:id",
+    '/:id',
     validateObjectId,
-    controllerExceptionWrapper(feedbackController.removeById)
+    controllerExceptionWrapper(feedbackController.removeFeedbackById)
   )
-  .patch(
-    "/:id",
+  .post(
+    '/:id/views',
     validateObjectId,
-    controllerExceptionWrapper(feedbackController.updateViews)
+    controllerExceptionWrapper(feedbackController.updateFeedbackIsViewed)
   )
-  .patch(
-    "/favorite/:id",
+  .post(
+    '/:id/favorite',
     validateObjectId,
-    controllerExceptionWrapper(feedbackController.updateIsFavorite)
+    controllerExceptionWrapper(feedbackController.updateFeedbackIsFavorite)
   );
 
 module.exports = router;

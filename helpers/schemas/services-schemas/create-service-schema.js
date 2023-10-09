@@ -1,5 +1,5 @@
-const Joi = require("joi");
-const { FieldErrors } = require("../../utils");
+const Joi = require('joi');
+const { FieldErrors } = require('../../utils');
 
 const createServiceSchema = Joi.object({
   title: Joi.string()
@@ -7,21 +7,21 @@ const createServiceSchema = Joi.object({
     .max(32)
     .required()
     .messages(
-      new FieldErrors("title").string().min(2).max(32).required().get()
+      new FieldErrors('title').string().min(2).max(32).required().get()
     ),
   description: Joi.string()
     .min(2)
     .max(2000)
     .required()
     .messages(
-      new FieldErrors("description").string().min(2).max(2000).required().get()
+      new FieldErrors('description').string().min(2).max(2000).required().get()
     ),
   price: Joi.string()
     .min(2)
     .max(32)
     .required()
     .messages(
-      new FieldErrors("title").string().min(2).max(32).required().get()
+      new FieldErrors('price').string().min(2).max(32).required().get()
     ),
   contactMail: Joi.string()
     .trim()
@@ -31,12 +31,12 @@ const createServiceSchema = Joi.object({
     .email()
     .required()
     .messages(
-      new FieldErrors("email")
+      new FieldErrors('email')
         .string()
         .pattern(
-          "latin letters",
-          "numbers and signs",
-          "at the beginning or end of the email there can be no hyphen, there must be at least 2 characters before the (@)"
+          'latin letters',
+          'numbers and signs',
+          'at the beginning or end of the email there can be no hyphen, there must be at least 2 characters before the (@)'
         )
         .min(10)
         .max(63)
@@ -49,12 +49,12 @@ const createServiceSchema = Joi.object({
     .pattern(/^\+380\d{9}$/)
     .required()
     .messages(
-      new FieldErrors("number")
+      new FieldErrors('number')
         .string()
-        .pattern("starts with +380", "9 numbers after country code")
+        .pattern('starts with +380', '9 numbers after country code')
         .required()
         .get()
     ),
-}).messages(new FieldErrors("service").object().extraFields().get());
+}).messages(new FieldErrors('service').object().extraFields().get());
 
 module.exports = { createServiceSchema };
