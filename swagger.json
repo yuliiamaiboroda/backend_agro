@@ -1467,7 +1467,7 @@
       }
     },
 
-    "/api/resumes": {
+    "/api/resumes/": {
       "get": {
         "tags": ["Resumes"],
         "summary": "Get all resumes. Roles required: admin or applyManager.",
