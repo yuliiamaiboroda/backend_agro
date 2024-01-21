@@ -7,15 +7,15 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const { globalErrorHandler } = require('./middlewares');
 
+const { REACT_APP_URL, NEXT_APP_URL } = process.env;
+
+if (!REACT_APP_URL || !NEXT_APP_URL) {
+  throw new Error('REACT_APP_URL or NEXT_APP_URL is not defined');
+}
+
 const corsOptions = {
   //  To allow requests from client
-  origin: [
-    'http://localhost:3000',
-    'http://127.0.0.1',
-    'http://104.142.122.231',
-    'https://yuliiamaiboroda.github.io',
-    'https://ahrokhimpromtsentr.vercel.app',
-  ],
+  origin: [REACT_APP_URL, NEXT_APP_URL],
   credentials: true,
   exposedHeaders: ['set-cookie'],
 };
