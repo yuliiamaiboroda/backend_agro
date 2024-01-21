@@ -72,10 +72,6 @@ const removeUserById = async id => {
 
   if (!user) throw new NotFoundError();
 
-  const listOfAdmins = await UserModel.find({ role: ROLES_LIST.admin });
-
-  if (listOfAdmins.length <= 1) throw new DeleteTheLastAdminAccountError();
-
   await UserModel.findByIdAndRemove(id);
 };
 
