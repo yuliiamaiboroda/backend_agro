@@ -170,6 +170,22 @@ npm run lint
 npm lint:fix
 ```
 
+## Started app in docker
+
+---
+
+>**NOTE:** This instruction will only work for the first deployment
+
+**To start working with the project, you need to run the following command**
+
+```sh 
+./init.sh
+```
+**To start the container docker, use the following command**
+```sh
+docker-compose up -d
+````
+
 ## License
 
 ---
