@@ -15,7 +15,12 @@ if (!REACT_APP_URL || !NEXT_APP_URL) {
 
 const corsOptions = {
   //  To allow requests from client
-  origin: [REACT_APP_URL, NEXT_APP_URL],
+  origin: [
+    REACT_APP_URL,
+    NEXT_APP_URL,
+    'https://ahrohimpromcentr.com',
+    'https://ahrohimpromcentr.com/*',
+  ],
   credentials: true,
   exposedHeaders: ['set-cookie'],
 };
