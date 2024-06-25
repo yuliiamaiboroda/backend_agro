@@ -1,0 +1,56 @@
+services:
+  db:
+    platform: linux/x86_64
+    image: mongo:latest
+    restart: on-failure
+    command: mongod --auth
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data/mongo:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD
+      - MONGO_INITDB_DATABASE
+    labels:
+      - "traefik.enable=false"
+    networks:
+      - traefik
+      - internal
+
+  api:
+    image: node:lts-alpine
+    restart: on-failure
+    volumes:
+      - ./:/app
+    depends_on:
+      - db
+    networks:
+      - traefik
+      - internal
+    
+  admin:
+    image: node:lts-alpine
+    restart: on-failure
+    volumes:
+      - ./admin:/app
+    depends_on:
+      - api
+    networks:
+      - traefik
+  
+  frontend:
+    image: node:lts-alpine
+    restart: on-failure
+    volumes:
+      - ./frontend:/app
+    networks:
+      - traefik
+
+networks:
+  internal:
+    driver: bridge
+  traefik:
+    external: true
+
+

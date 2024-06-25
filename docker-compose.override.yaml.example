@@ -1,0 +1,54 @@
+
+services:
+  api:
+    working_dir: /app
+    expose:
+      - ${PORT:-3001}
+    labels:
+      - "traefik.docker.network=traefik"
+      - "traefik.enable=true"
+      - "traefik.port=${PORT:-3001}"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-api.rule=Host(`api.${APP_HOST}`)"
+    command: sh -c "npm ci && npm run start:dev"
+
+  frontend:
+    working_dir: /app
+    expose:
+      - 3000
+    labels:
+      - "traefik.docker.network=traefik"
+      - "traefik.enable=true"
+      - "traefik.port=3000"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-frontend.rule=Host(`${APP_HOST}`)"
+    command: sh -c "npm ci && npm run dev"
+
+  admin:
+    working_dir: /app
+    expose:
+      - 3000
+    labels:
+      - "traefik.docker.network=traefik"
+      - "traefik.enable=true"
+      - "traefik.port=3000"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-admin.rule=Host(`${APP_HOST}`) && PathPrefix(`/admin-panel-agro`)"
+    command: sh -c "npm ci && HOST=0.0.0.0 npm run start"
+
+  traefik:
+    image: traefik:v2.11
+    restart: on-failure
+    environment:
+      - TRAEFIK_PROVIDERS_FILE_DIRECTORY=/etc/traefik
+      - TRAEFIK_ENTRYPOINTS_WEB_ADDRESS=:80
+      - TRAEFIK_API=true
+      - TRAEFIK_API_INSECURE=true
+      - TRAEFIK_PROVIDERS_DOCKER=true
+      - TRAEFIK_PROVIDERS_DOCKER_NETWORK=traefik
+    ports:
+      - "8080:80"
+      - "8081:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=false"

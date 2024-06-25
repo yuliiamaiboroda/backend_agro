@@ -1,0 +1,8 @@
+[submodule "ahrokhimpromtsentr"]
+	path = frontend
+	url = git@github.com:yuliiamaiboroda/ahrokhimpromtsentr.git
+	branch = dev
+[submodule "admin-panel-agro"]
+	path = admin
+	url = git@github.com:yuliiamaiboroda/admin-panel-agro.git
+	branch = dev
